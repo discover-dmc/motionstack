@@ -15,7 +15,7 @@ Claude Code plugin marketplace providing comprehensive coverage of modern web te
 
 ```bash
 # Add marketplace to Claude Code
-/plugin marketplace add freshtechbro/claudedesignskills
+/plugin marketplace add discover-dmc/claudedesignskills
 
 # Install individual plugins
 /plugin install threejs-webgl
@@ -101,7 +101,7 @@ Install directly from the marketplace:
 
 ```bash
 # Add marketplace
-/plugin marketplace add freshtechbro/claudedesignskills
+/plugin marketplace add discover-dmc/claudedesignskills
 
 # Browse and install plugins
 /plugin install threejs-webgl
