@@ -2,13 +2,13 @@
   "name": "modern-web-design",
   "version": "1.0.0",
   "description": "Modern web design trends, principles, and implementation patterns for 2025-2026. Use this skill when designing websites, creating interactive experiences, implementing design systems, ensuring accessibility, or building performance-first interfaces. Triggers on tasks involving modern design trends, micro-interactions, scrollytelling, bold minimalism, cursor UX, glassmorphism, native platform features (container queries, view transitions, popover, anchor positioning), accessibility compliance, performance optimization, or design system architecture. References animation skills (GSAP, Framer Motion, React Spring), 3D skills (Three.js, R3F, Babylon.js), and component libraries for implementation guidance.",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "design",
     "trends",
@@ -16,7 +16,7 @@
     "web"
   ],
   "category": "design",
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

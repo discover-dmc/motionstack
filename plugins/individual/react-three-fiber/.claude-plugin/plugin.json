@@ -2,13 +2,13 @@
   "name": "react-three-fiber",
   "version": "1.0.0",
   "description": "Build declarative 3D scenes with React Three Fiber (R3F) - a React renderer for Three.js. Use when building interactive 3D experiences in React applications with component-based architecture, state management, and reusable abstractions. Ideal for product configurators, portfolios, games, data visualization, and immersive web experiences.",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "react",
     "threejs",
@@ -17,7 +17,7 @@
     "webgl"
   ],
   "category": "3d-graphics",
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

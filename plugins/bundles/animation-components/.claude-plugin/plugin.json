@@ -2,13 +2,13 @@
   "name": "animation-components",
   "version": "1.0.0",
   "description": "Comprehensive animation and component libraries with React Spring, Magic UI, React Bits, AOS, Anime.js, and Lottie",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "bundle",
     "animation",
@@ -25,7 +25,7 @@
     "animejs",
     "lottie-animations"
   ],
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

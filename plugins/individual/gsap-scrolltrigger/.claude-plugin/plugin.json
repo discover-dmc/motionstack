@@ -2,13 +2,13 @@
   "name": "gsap-scrolltrigger",
   "version": "1.0.0",
   "description": "Comprehensive skill for GSAP (GreenSock Animation Platform) and ScrollTrigger plugin. Use this skill when creating web animations, scroll-driven experiences, timelines, tweens, scroll-triggered animations, pinning, scrubbing, parallax effects, or animating DOM elements, SVG, Canvas, WebGL, or Three.js. Triggers on tasks involving GSAP, ScrollTrigger, smooth animations, scroll effects, or animation sequencing.",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "gsap",
     "animation",
@@ -16,7 +16,7 @@
     "scrolltrigger"
   ],
   "category": "animation",
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

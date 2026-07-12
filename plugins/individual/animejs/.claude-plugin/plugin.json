@@ -2,13 +2,13 @@
   "name": "animejs",
   "version": "1.0.0",
   "description": "Versatile JavaScript animation engine for DOM, CSS, SVG, and JavaScript objects. Use when creating timeline-based animations, stagger effects, SVG morphing/drawing, keyframe sequences, draggable elements, scroll-linked animations, or complex choreographed animations. Triggers on tasks involving Anime.js, Anime.js v4, animate(), createTimeline, stagger, SVG path animations, morphing, createDraggable, createScope, onScroll, or multi-step animation choreography. Alternative to GSAP for SVG-heavy animations and React-independent projects.",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "animejs",
     "timeline",
@@ -16,7 +16,7 @@
     "animation"
   ],
   "category": "animation",
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

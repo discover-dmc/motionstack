@@ -108,6 +108,14 @@ class MarketplaceValidator:
                 if not plugin_path.exists():
                     self.errors.append(f"Plugin '{plugin.get('name', 'unknown')}': Source path not found - {source}")
 
+        author = plugin.get("author")
+        if author is not None and not isinstance(author, dict):
+            self.errors.append(f"marketplace.json plugins[{index}] '{plugin.get('name')}': 'author' must be an object, not a string")
+
+        repository = plugin.get("repository")
+        if repository is not None and not isinstance(repository, str):
+            self.errors.append(f"marketplace.json plugins[{index}] '{plugin.get('name')}': 'repository' must be a string URL, not an object")
+
     def _validate_individual_plugins(self):
         """Validate all individual plugins"""
         print("📦 Validating individual plugins...")
@@ -173,6 +181,27 @@ class MarketplaceValidator:
             # Validate name matches directory
             if manifest.get("name") != plugin_name:
                 self.errors.append(f"{plugin_name}: plugin.json name '{manifest.get('name')}' doesn't match directory name")
+
+            # Schema checks: catch the class of bug that silently broke installs before
+            # (path fields without './' prefix, author as a string instead of an object)
+            for path_field in ("skills", "commands", "agents"):
+                value = manifest.get(path_field)
+                if value is None:
+                    continue
+                paths = value if isinstance(value, list) else [value]
+                for p in paths:
+                    if not isinstance(p, str) or not p.startswith("./"):
+                        self.errors.append(
+                            f"{plugin_name}: plugin.json '{path_field}' path '{p}' must be relative and start with './'"
+                        )
+
+            author = manifest.get("author")
+            if author is not None and not isinstance(author, dict):
+                self.errors.append(f"{plugin_name}: plugin.json 'author' must be an object ({{\"name\": ...}}), not a string")
+
+            repository = manifest.get("repository")
+            if repository is not None and not isinstance(repository, str):
+                self.errors.append(f"{plugin_name}: plugin.json 'repository' must be a string URL, not an object")
 
             # Check for skills directory
             skills_dir = plugin_dir / "skills"

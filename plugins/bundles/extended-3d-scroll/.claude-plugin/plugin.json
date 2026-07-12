@@ -2,13 +2,13 @@
   "name": "extended-3d-scroll",
   "version": "1.0.0",
   "description": "Extended 3D graphics and smooth scroll stack with A-Frame, lightweight effects, PlayCanvas, PixiJS, Locomotive Scroll, and Barba.js",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "bundle",
     "3d",
@@ -26,7 +26,7 @@
     "locomotive-scroll",
     "barba-js"
   ],
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

@@ -108,20 +108,17 @@ class BundleGenerator:
             "name": self.bundle_name,
             "version": "1.0.0",
             "description": self.bundle_config["description"],
-            "author": "Motionstack",
+            "author": {"name": "Motionstack", "url": "https://github.com/discover-dmc/motionstack"},
             "license": "MIT",
             "homepage": "https://github.com/discover-dmc/motionstack",
-            "repository": {
-                "type": "git",
-                "url": "https://github.com/discover-dmc/motionstack.git"
-            },
+            "repository": "https://github.com/discover-dmc/motionstack",
             "keywords": self.bundle_config["tags"],
             "category": self.bundle_config["category"],
             "bundle": True,
             "includes": self.bundle_config["skills"],
-            "skills": "skills/",
-            "commands": "commands/",
-            "agents": "agents/"
+            "skills": "./skills/",
+            "commands": "./commands/",
+            "agents": "./agents/"
         }
 
         manifest_path = self.bundle_dir / ".claude-plugin" / "plugin.json"

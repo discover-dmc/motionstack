@@ -2,13 +2,13 @@
   "name": "authoring-motion",
   "version": "1.0.0",
   "description": "Professional 3D authoring and motion graphics pipeline with Blender, Spline, Rive, and Substance 3D",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "bundle",
     "authoring",
@@ -24,7 +24,7 @@
     "rive-interactive",
     "substance-3d-texturing"
   ],
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

@@ -2,13 +2,13 @@
   "name": "core-3d-animation",
   "version": "1.0.0",
   "description": "Complete core 3D and animation stack with Three.js, GSAP, React Three Fiber, Motion, and Babylon.js",
-  "author": "Motionstack",
+  "author": {
+    "name": "Motionstack",
+    "url": "https://github.com/discover-dmc/motionstack"
+  },
   "license": "MIT",
   "homepage": "https://github.com/discover-dmc/motionstack",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/discover-dmc/motionstack.git"
-  },
+  "repository": "https://github.com/discover-dmc/motionstack",
   "keywords": [
     "bundle",
     "3d",
@@ -25,7 +25,7 @@
     "motion-framer",
     "babylonjs-engine"
   ],
-  "skills": "skills/",
-  "commands": "commands/",
-  "agents": "agents/"
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
 }

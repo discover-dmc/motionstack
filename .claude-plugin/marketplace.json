@@ -24,7 +24,10 @@
         "ar",
         "3d"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -39,7 +42,10 @@
         "components",
         "animation"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -54,7 +60,10 @@
         "svg",
         "animation"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -69,7 +78,10 @@
         "webgl",
         "game-engine"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -84,7 +96,10 @@
         "routing",
         "spa"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -100,7 +115,10 @@
         "pipeline",
         "3d"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -115,7 +133,10 @@
         "scroll",
         "scrolltrigger"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -131,7 +152,10 @@
         "lightweight",
         "3d"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -146,7 +170,10 @@
         "parallax",
         "scroll"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -161,7 +188,10 @@
         "json",
         "animation"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -176,7 +206,10 @@
         "ux",
         "web"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -191,7 +224,10 @@
         "react",
         "animation"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -207,7 +243,10 @@
         "canvas",
         "sprites"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -222,7 +261,10 @@
         "game-engine",
         "3d"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -237,7 +279,10 @@
         "animation",
         "spring"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -253,7 +298,10 @@
         "r3f",
         "webgl"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -268,7 +316,10 @@
         "state-machine",
         "animation"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -283,7 +334,10 @@
         "animation",
         "scroll"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -298,7 +352,10 @@
         "3d",
         "visual-editor"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -313,7 +370,10 @@
         "pbr",
         "materials"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -329,7 +389,10 @@
         "graphics",
         "webgpu"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -344,7 +407,10 @@
         "3d",
         "animation"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -368,7 +434,10 @@
         "animejs",
         "lottie-animations"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -391,7 +460,10 @@
         "rive-interactive",
         "substance-3d-texturing"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -415,7 +487,10 @@
         "motion-framer",
         "babylonjs-engine"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -440,7 +515,10 @@
         "locomotive-scroll",
         "barba-js"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     },
     {
@@ -461,7 +539,10 @@
         "web3d-integration-patterns",
         "modern-web-design"
       ],
-      "author": "Motionstack",
+      "author": {
+        "name": "Motionstack",
+        "url": "https://github.com/discover-dmc/motionstack"
+      },
       "license": "MIT"
     }
   ]
