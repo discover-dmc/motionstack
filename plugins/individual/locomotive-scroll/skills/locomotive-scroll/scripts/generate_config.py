@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """
-Locomotive Scroll Configuration Generator
+Locomotive Scroll Configuration Generator (v4 API)
 
-Generates Locomotive Scroll configuration code with customizable options.
+Generates Locomotive Scroll v4 configuration code with customizable options
+(el/smooth/lerp/tablet/smartphone, data-scroll-container markup). Locomotive
+Scroll v5 (current, Jan 2026) is a rewrite built on Lenis with a different
+options shape (lenisOptions.*) and no container/section markup — see
+SKILL.md's "v5 (Current)" sections for that pattern. This generator still
+targets v4 for teams maintaining v4 projects.
 
 Usage:
     ./generate_config.py                    # Interactive mode
@@ -75,7 +80,9 @@ PRESETS = {
 
 def print_header():
     print("=" * 60)
-    print("Locomotive Scroll Configuration Generator")
+    print("Locomotive Scroll Configuration Generator (v4 API)")
+    print("v5 is current (Jan 2026) and uses a different options shape.")
+    print("See SKILL.md's v5 sections for the current pattern.")
     print("=" * 60)
     print()
 

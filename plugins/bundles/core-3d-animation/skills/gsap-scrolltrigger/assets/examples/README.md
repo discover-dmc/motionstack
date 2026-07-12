@@ -109,7 +109,7 @@ gsap.to(".bg", {
 **Use Cases**: Headlines, storytelling, attention-grabbing reveals
 
 ```javascript
-// Requires SplitText plugin (Club GreenSock)
+// Requires SplitText plugin (free, bundled in the gsap npm package)
 const split = new SplitText(".text", { type: "lines" });
 
 gsap.from(split.lines, {
@@ -312,8 +312,10 @@ if (window.innerWidth < 768) {
   // Use simpler animations or CSS-only
 }
 
-// Or use ScrollTrigger.matchMedia()
-ScrollTrigger.matchMedia({
+// Or use gsap.matchMedia() (ScrollTrigger.matchMedia is deprecated)
+let mm = gsap.matchMedia();
+
+mm.add({
   "(min-width: 800px)": function() {
     // Desktop animations
   },

@@ -1,6 +1,6 @@
 ---
 name: scroll-reveal-libraries
-description: Simple scroll-triggered reveal animations using AOS (Animate On Scroll). Use this skill when building marketing pages, landing pages, or content-heavy sites requiring basic fade/slide effects without complex animation orchestration. Triggers on tasks involving scroll animations, scroll-triggered reveals, AOS, simple animations, or basic scroll effects. Alternative to GSAP ScrollTrigger and Locomotive Scroll for simpler use cases. Compare with motion-framer for React-specific animations.
+description: Simple scroll-triggered reveal animations using AOS (Animate On Scroll), a library that has had no release since 2018. Use this skill when maintaining an existing AOS-based codebase, or building marketing pages, landing pages, or content-heavy sites requiring basic fade/slide effects without complex animation orchestration. Triggers on tasks involving scroll animations, scroll-triggered reveals, AOS, simple animations, or basic scroll effects. For new projects, native CSS scroll-driven animations (animation-timeline: view()) now cover the same simple-reveal use case with no dependency; see modern-web-design skill. Alternative to GSAP ScrollTrigger and Locomotive Scroll for simpler use cases. Compare with motion-framer for React-specific animations.
 ---
 
 # Scroll Reveal Libraries
@@ -9,11 +9,15 @@ description: Simple scroll-triggered reveal animations using AOS (Animate On Scr
 
 This skill covers AOS (Animate On Scroll), a lightweight CSS-driven library for scroll-triggered animations. AOS excels at simple fade, slide, and zoom effects activated when elements enter the viewport.
 
+**Maintenance Status (as of 2026)**: AOS is effectively unmaintained. Latest stable is `2.3.4`, published 2018; the `aos@next` 3.0 beta (`3.0.0-beta.6`) has been stalled since 2018 too and should not be used for new projects. The repo isn't archived and has occasional doc commits, but 370+ issues sit open with no release cadence. Treat AOS as a legacy option for existing codebases, not a first choice for new work.
+
+**Native alternative for simple cases**: For basic fade/slide-on-scroll reveals, native CSS scroll-driven animations (`animation-timeline: view()`) now cover AOS's core use case with zero JavaScript and no dependency risk. Support is broad in Chrome/Edge/Safari; Firefox ships it behind a flag (Nightly has it enabled). See `modern-web-design` skill for the native pattern and its `@supports` fallback. Reach for AOS only when a project needs IE-era browser reach, the data-attribute API for non-technical content editors, or one of AOS's 28 named animation presets out of the box.
+
 **Key Features**:
 - **Minimal Setup**: Single JavaScript file + CSS
 - **Data Attribute API**: Configure animations in HTML
 - **Performance**: CSS-driven, GPU-accelerated animations
-- **50+ Built-in Animations**: Fades, slides, zooms, flips
+- **28 Built-in Animations**: Fades, slides, zooms, flips
 - **Framework Agnostic**: Works with vanilla JS, React, Vue, etc.
 
 **When to Use**:
@@ -27,6 +31,7 @@ This skill covers AOS (Animate On Scroll), a lightweight CSS-driven library for 
 - Physics-based animations → Use React Spring or Framer Motion
 - Precise scroll-synced animations → Use GSAP ScrollTrigger
 - Heavy interactive animations → Use Framer Motion
+- Simple fade/slide reveal with no legacy-browser requirement → Consider native CSS `animation-timeline: view()` instead (see `modern-web-design` skill), avoiding the dependency entirely
 
 ## Core Concepts
 
@@ -35,12 +40,12 @@ This skill covers AOS (Animate On Scroll), a lightweight CSS-driven library for 
 **CDN (Quickest)**:
 ```html
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
   <!-- Content with data-aos attributes -->
 
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init();
   </script>
@@ -49,10 +54,12 @@ This skill covers AOS (Animate On Scroll), a lightweight CSS-driven library for 
 
 **NPM/Yarn (Recommended)**:
 ```bash
-npm install aos@next
+npm install aos@2.3.4
 # or
-yarn add aos@next
+yarn add aos@2.3.4
 ```
+
+Pin the exact version. `aos@next` resolves to the stalled 3.0 beta (no release since 2018) — don't use it in production.
 
 ```javascript
 import AOS from 'aos';
@@ -769,23 +776,21 @@ Create custom animations with CSS:
 
 ## Comparison with Alternatives
 
-### AOS vs GSAP ScrollTrigger
+### AOS vs GSAP ScrollTrigger vs Native CSS
 
-| Feature | AOS | GSAP ScrollTrigger |
-|---------|-----|-------------------|
-| **Complexity** | Simple, data-attribute based | Advanced, JavaScript API |
-| **Use Case** | Simple reveals | Complex timelines |
-| **File Size** | ~13KB | ~27KB (GSAP) + ScrollTrigger |
-| **Performance** | CSS-driven | JavaScript-driven |
-| **Learning Curve** | Minutes | Hours |
-| **Customization** | Limited | Extensive |
-| **Best For** | Marketing pages | Interactive experiences |
+| Feature | AOS | Native CSS `animation-timeline: view()` | GSAP ScrollTrigger |
+|---------|-----|------------------------------------------|-------------------|
+| **Complexity** | Simple, data-attribute based | Simple, CSS-only | Advanced, JavaScript API |
+| **Use Case** | Simple reveals | Simple reveals | Complex timelines |
+| **File Size** | ~13KB | 0KB (native) | ~27KB (GSAP) + ScrollTrigger |
+| **Performance** | CSS-driven | CSS-driven, compositor-only | JavaScript-driven |
+| **Browser support** | All (JS-polyfilled) | Chrome/Edge/Safari; Firefox behind a flag | All |
+| **Maintenance risk** | Unmaintained since 2018 | N/A (browser feature) | Actively maintained |
+| **Best For** | Legacy projects, editor-driven `data-aos` markup | New projects targeting modern browsers | Interactive experiences |
 
-**Use AOS when**:
-- Simple fade/slide/zoom effects
-- Quick implementation needed
-- Minimal JavaScript preferred
-- Basic scroll reveals sufficient
+**Use native CSS scroll-driven animations when**: starting a new project, targeting evergreen browsers, and the effect is a simple fade/slide/scale on scroll. It ships zero bytes of JS and needs no dependency updates.
+
+**Use AOS when**: maintaining an existing AOS-based codebase, or needing guaranteed cross-browser support (including Firefox without a flag) without adopting GSAP.
 
 **Use GSAP ScrollTrigger when**:
 - Complex animation sequences
@@ -806,14 +811,13 @@ Create custom animations with CSS:
 ### References
 - `references/aos_api.md` - Complete AOS API reference
 - `references/animation_catalog.md` - All built-in animations with demos
-- `references/integration_patterns.md` - Framework integration guides
 
 ### Starter Assets
-- `assets/starter_aos/` - Complete AOS starter template
-- `assets/examples/` - Production-ready patterns
+- `assets/README.md` - Framework integration guides (React, Next.js, Vue), quick-start templates, and production-ready patterns
 
 ## Related Skills
 
+- **modern-web-design**: For native CSS scroll-driven animations (`animation-timeline: view()`), the dependency-free default for simple reveals in new projects
 - **gsap-scrolltrigger**: For complex scroll-driven animations
 - **motion-framer**: For React-specific animations with physics
 - **locomotive-scroll**: For smooth scrolling with parallax

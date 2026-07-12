@@ -239,7 +239,9 @@ Animations automatically adapt for mobile devices:
 **Manual Responsive Control**:
 
 ```javascript
-ScrollTrigger.matchMedia({
+let mm = gsap.matchMedia();
+
+mm.add({
   // Desktop
   "(min-width: 800px)": function() {
     // Desktop-only animations

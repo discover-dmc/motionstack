@@ -309,28 +309,14 @@ assets/
 
 ## Browser Support
 
-**Modern Browsers** (recommended):
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
+**Baseline widely available, use directly, no fallback needed**: CSS Grid, custom properties, `clamp()`, `:has()`, container queries, native CSS nesting, `color-mix()`/OKLCH, Popover API, `<dialog>`.
 
-**Fallbacks provided for**:
-- CSS Grid → Flexbox
-- CSS custom properties → Fallback values
-- Modern CSS functions → Static values
+**Check target browsers before relying on**: CSS anchor positioning (Chrome, Safari, Firefox 132+/147+), scroll-driven animations (`animation-timeline`, Firefox still behind a flag), cross-document View Transitions (Firefox unsupported).
 
-**Progressive Enhancement**:
+**Progressive enhancement still applies to the Firefox gaps above**:
 ```css
-/* Fallback */
-.container {
-  padding: 2rem; /* Static value */
-}
-
-/* Enhanced */
-@supports (padding: clamp(1rem, 5vw, 3rem)) {
-  .container {
-    padding: clamp(1rem, 5vw, 3rem);
-  }
+@supports (animation-timeline: scroll()) {
+  .parallax { animation-timeline: scroll(); }
 }
 ```
 
@@ -364,4 +350,4 @@ All assets follow the Apache 2.0 license (same as the skill).
 
 ---
 
-*Last updated: 2024*
+*Last updated: 2026*

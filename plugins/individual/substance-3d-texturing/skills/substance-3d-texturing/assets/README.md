@@ -257,6 +257,10 @@ material.metalnessMap = ormTexture; // Reads from Blue channel
 - Not visible in Substance UI preset dropdown
 - Use via Python scripts or plugins
 
+**Exported map names use OpenPBR naming instead of baseColor/normal/metallic (Painter 12.1+):**
+- OpenPBR 1.1 is the default material workflow since Painter 12.1, and Export Textures auto-selects OpenPBR naming for OpenPBR shaders
+- Switch the naming-convention dropdown back to metallic/roughness before exporting with these templates
+
 **Wrong channel order:**
 - Verify glTF spec: G=Roughness, B=Metallic
 - Unreal uses different packing: R=AO, G=Roughness, B=Metallic

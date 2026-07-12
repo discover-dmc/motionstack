@@ -497,7 +497,7 @@ tl.to(".box1", { x: 500, rotation: 360 })
 ### 7.1 Text Reveal (Line by Line)
 
 ```javascript
-// Using SplitText (Club GreenSock plugin)
+// Using SplitText (free plugin, bundled in the gsap npm package)
 const split = new SplitText(".text-reveal", { type: "lines" });
 
 gsap.from(split.lines, {
@@ -512,7 +512,7 @@ gsap.from(split.lines, {
 ### 7.2 Scrambled Text Effect
 
 ```javascript
-// Using ScrambleText (Club GreenSock plugin)
+// Using ScrambleText (free plugin, bundled in the gsap npm package)
 gsap.to(".scramble", {
   duration: 2,
   scrambleText: {
@@ -927,8 +927,10 @@ images[0].onload = render;
 ### 13.1 Different Animations per Breakpoint
 
 ```javascript
-// Use ScrollTrigger.matchMedia for responsive animations
-ScrollTrigger.matchMedia({
+// Use gsap.matchMedia() for responsive animations (ScrollTrigger.matchMedia is deprecated)
+let mm = gsap.matchMedia();
+
+mm.add({
   // Desktop
   "(min-width: 800px)": function() {
     gsap.to(".element", {

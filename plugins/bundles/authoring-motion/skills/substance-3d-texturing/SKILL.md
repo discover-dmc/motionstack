@@ -9,6 +9,8 @@ description: Comprehensive skill for Adobe Substance 3D Painter texturing and ma
 
 Master PBR (Physically Based Rendering) texture creation and export workflows for web and real-time engines. This skill covers Substance 3D Painter workflows from material creation through web-optimized texture export, with Python automation for batch processing and integration with WebGL/WebGPU engines.
 
+As of Substance 3D Painter 12.1 (2026), OpenPBR 1.1 is the default material workflow inside Painter, and the Export Textures window can auto-select an OpenPBR map-naming convention. For web engines (Three.js, Babylon.js, glTF), keep exporting with the classic **metallic/roughness** workflow described below — it is what glTF 2.0 and WebGL/WebGPU PBR materials expect. If a project uses an OpenPBR shader, verify the naming-convention dropdown in Export Textures is set to the metallic/roughness scheme before exporting for web.
+
 **Key capabilities:**
 - PBR material authoring (metallic/roughness workflow)
 - Web-optimized texture export (glTF, Three.js, Babylon.js)

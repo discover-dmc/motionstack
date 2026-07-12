@@ -516,8 +516,12 @@ gsap.to(".container", {
 
 ### Conditional Animations (Media Queries)
 
+Use `gsap.matchMedia()` (not the deprecated `ScrollTrigger.matchMedia()`); it wraps the callbacks in a `gsap.context()` automatically for cleanup.
+
 ```javascript
-ScrollTrigger.matchMedia({
+let mm = gsap.matchMedia();
+
+mm.add({
   // Desktop
   "(min-width: 800px)": function() {
     gsap.to(".box", {

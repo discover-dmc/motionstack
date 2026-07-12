@@ -1,6 +1,6 @@
 ---
 name: animated-component-libraries
-description: Pre-built animated React component collections combining Magic UI (150+ TypeScript/Tailwind/Motion components) and React Bits (90+ minimal-dependency animated components). Use this skill when building landing pages, marketing sites, dashboards, or interactive UIs requiring pre-made animated components instead of hand-crafting animations. Triggers on tasks involving animated UI components, Magic UI, React Bits, shadcn/ui integration, Tailwind CSS components, or component library selection. Alternative to manually implementing animations with Framer Motion or GSAP.
+description: Pre-built animated React component collections combining Magic UI (150+ TypeScript/Tailwind/Motion components) and React Bits (130+ minimal-dependency animated components). Use this skill when building landing pages, marketing sites, dashboards, or interactive UIs requiring pre-made animated components instead of hand-crafting animations. Triggers on tasks involving animated UI components, Magic UI, React Bits, shadcn/ui integration, Tailwind CSS components, or component library selection. Alternative to manually implementing animations with Framer Motion or GSAP.
 ---
 
 # Animated Component Libraries
@@ -11,7 +11,7 @@ This skill provides expertise in pre-built animated React component libraries, s
 
 **Magic UI** provides 150+ TypeScript components built on Tailwind CSS and Framer Motion, designed for seamless integration with shadcn/ui. Components are copy-paste ready and highly customizable.
 
-**React Bits** offers 90+ animated React components with minimal dependencies, focusing on visual effects, backgrounds, and micro-interactions. Components emphasize performance and ease of customization.
+**React Bits** offers 130+ animated React components with minimal dependencies, focusing on visual effects, backgrounds, and micro-interactions. Components emphasize performance and ease of customization.
 
 Both libraries follow modern React patterns, support TypeScript, and integrate with popular design systems.
 
@@ -28,8 +28,9 @@ Magic UI components are built on three foundational technologies:
 **Installation Methods**:
 
 ```bash
-# Via shadcn CLI (recommended)
-npx shadcn@latest add https://magicui.design/r/animated-beam
+# Via shadcn CLI (recommended, registry-namespace syntax)
+pnpm dlx shadcn@latest add @magicui/animated-beam
+# npx works too: npx shadcn@latest add @magicui/animated-beam
 
 # Manual installation
 # 1. Copy component code to components/ui/
@@ -74,12 +75,15 @@ React Bits emphasizes lightweight, standalone components with minimal dependenci
 **Installation**:
 
 ```bash
-# Manual copy-paste (primary method)
+# Via CLI (shadcn or jsrepo), pick the JS/TS + CSS/Tailwind variant per-component
+npx shadcn@latest add @react-bits/BlurText-TS-TW
+
+# Manual copy-paste (still supported)
 # Copy component files from reactbits.dev to your project
 
 # Key dependencies (install as needed):
-npm install framer-motion  # For animation-heavy components
-npm install ogl           # For WebGL components (Particles, Plasma)
+npm install motion  # For animation-heavy components (package renamed from framer-motion)
+npm install ogl      # For WebGL components (Particles, Plasma)
 ```
 
 **Component Categories**:
@@ -437,7 +441,7 @@ Magic UI components are designed to work seamlessly with shadcn/ui:
 npx shadcn@latest add button card
 
 # Install Magic UI component
-npx shadcn@latest add https://magicui.design/r/shimmer-button
+npx shadcn@latest add @magicui/shimmer-button
 
 # Use together in components
 import { Button } from "@/components/ui/button"
@@ -457,15 +461,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-### Integration with Framer Motion
+### Integration with Motion
 
-Both libraries leverage Framer Motion for animations:
+Both libraries leverage Motion (formerly Framer Motion) for animations:
 
 ```jsx
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { Magnet } from './components/Magnet'
 
-// Combine React Bits Magnet with Framer Motion gestures
+// Combine React Bits Magnet with Motion gestures
 export default function InteractiveCard() {
   return (
     <Magnet magnitude={0.4} maxDistance={180}>
@@ -487,7 +491,7 @@ export default function InteractiveCard() {
 Combine animated components with routing:
 
 ```jsx
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { useLocation, Routes, Route } from "react-router-dom"
 import { Dock } from './components/Dock'
 

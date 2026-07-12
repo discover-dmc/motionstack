@@ -42,6 +42,8 @@ Substance 3D Painter uses the **metallic/roughness** workflow (also called metal
 
 Note: Substance supports both, but metallic/roughness is recommended for web.
 
+Since Painter 12.1 (2026), OpenPBR 1.1 is the in-app default material workflow. OpenPBR targets USD/MDL rendering (Iray) rather than real-time WebGL/WebGPU, so for glTF/Three.js/Babylon.js exports keep using metallic/roughness as described in this guide.
+
 ## Core Channels
 
 ### Base Color (Albedo)

@@ -20,7 +20,7 @@ export default function ViewModelComponent({ data }) {
   const { rive, RiveComponent } = useRive({
     src: 'animation.riv',
     autoplay: true,
-    autoBind: false, // Required for ViewModels
+    autoBind: false, // default; drives manual binding via useViewModel/useViewModelInstance below
   });
 
   const viewModel = useViewModel(rive, { useDefault: true });

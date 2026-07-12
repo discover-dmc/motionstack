@@ -64,7 +64,7 @@ bpy.ops.export_scene.gltf(
     export_morph_tangent=False,  # Export shape key tangents
 
     # Image Settings
-    export_image_format='AUTO',  # 'AUTO', 'JPEG', 'PNG'
+    export_image_format='AUTO',  # 'AUTO', 'JPEG', 'PNG', 'WEBP'
     export_jpeg_quality=75,  # 0-100
     export_keep_originals=False,  # Keep original images
 
@@ -110,3 +110,9 @@ export_draco_mesh_compression_enable=False,
 export_animations=True,
 export_morph=True
 ```
+
+## Notes
+
+- `export_image_format='WEBP'` converts every texture to WebP with no PNG/JPEG fallback — confirm target engine/browser support before using it for production exports.
+- Meshopt compression (`EXT_meshopt_compression`) and KTX2/Basis Universal texture compression are not built into Blender's exporter as of 5.1. Run the exported `.glb` through `gltfpack` (https://meshoptimizer.org/gltf/) for either.
+- Blender 5.1 rewrote the glTF exporter for broader/stricter KHR extension support (KHR_materials_specular, KHR_materials_transmission, KHR_materials_volume, KHR_materials_emissive_strength, KHR_lights_punctual, KHR_texture_transform). Draco export parameters above are unchanged.

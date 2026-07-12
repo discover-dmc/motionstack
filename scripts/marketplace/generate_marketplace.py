@@ -17,7 +17,7 @@ from typing import Dict, List
 class MarketplaceGenerator:
     def __init__(self, repo_root: Path):
         self.repo_root = repo_root
-        self.plugins_dir = repo_root / ".claude" / "plugins"
+        self.plugins_dir = repo_root / "plugins"
         self.marketplace_file = repo_root / ".claude-plugin" / "marketplace.json"
 
     def generate(self):
@@ -32,17 +32,16 @@ class MarketplaceGenerator:
 
         # Create marketplace manifest
         marketplace = {
-            "name": "claude-design-skillstack",
+            "name": "motionstack",
             "owner": {
-                "name": "Claude Design Skillstack",
-                "url": "https://github.com/freshtechbro/claudedesignskills"
+                "name": "Motionstack",
+                "url": "https://github.com/discover-dmc/motionstack"
             },
             "metadata": {
-                "description": "Professional design agency skillstack for 3D/WebGL, animation, and modern web development. Comprehensive collection covering Three.js, GSAP, React Three Fiber, Framer Motion, Babylon.js, and more. Includes 22 individual plugins + 5 category bundles.",
+                "description": "Motionstack: the motion and 3D web stack for Claude Code. 22 skills and 27 plugins covering Three.js, GSAP, React Three Fiber, Motion, Anime.js, Babylon.js, and more, refreshed for 2026.",
                 "version": "1.0.0",
-                "pluginRoot": "./.claude/plugins",
-                "homepage": "https://github.com/freshtechbro/claudedesignskills",
-                "repository": "https://github.com/freshtechbro/claudedesignskills"
+                "homepage": "https://github.com/discover-dmc/motionstack",
+                "repository": "https://github.com/discover-dmc/motionstack"
             },
             "plugins": all_plugins
         }
@@ -81,13 +80,13 @@ class MarketplaceGenerator:
             # Create plugin entry for marketplace
             plugin_entry = {
                 "name": manifest["name"],
-                "source": f"./individual/{plugin_dir.name}",
+                "source": f"./plugins/individual/{plugin_dir.name}",
                 "version": manifest.get("version", "1.0.0"),
                 "description": manifest.get("description", ""),
                 "category": manifest.get("category", "general"),
                 "tags": manifest.get("keywords", []),
                 "author": manifest.get("author", ""),
-                "license": manifest.get("license", "Apache-2.0")
+                "license": manifest.get("license", "MIT")
             }
 
             plugins.append(plugin_entry)
@@ -118,7 +117,7 @@ class MarketplaceGenerator:
             # Create plugin entry for marketplace
             plugin_entry = {
                 "name": manifest["name"],
-                "source": f"./bundles/{bundle_dir.name}",
+                "source": f"./plugins/bundles/{bundle_dir.name}",
                 "version": manifest.get("version", "1.0.0"),
                 "description": manifest.get("description", ""),
                 "category": manifest.get("category", "bundle"),
@@ -126,7 +125,7 @@ class MarketplaceGenerator:
                 "bundle": True,
                 "includes": manifest.get("includes", []),
                 "author": manifest.get("author", ""),
-                "license": manifest.get("license", "Apache-2.0")
+                "license": manifest.get("license", "MIT")
             }
 
             plugins.append(plugin_entry)

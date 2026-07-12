@@ -2,25 +2,21 @@
   "name": "web3d-integration-patterns",
   "version": "1.0.0",
   "description": "Meta-skill for combining Three.js, GSAP ScrollTrigger, React Three Fiber, Motion, and React Spring for complex 3D web experiences. Use when building applications that integrate multiple 3D and animation libraries, requiring architecture patterns, state management, and performance optimization across the stack. Triggers on tasks involving library integration, multi-library architectures, scroll-driven 3D experiences, physics-based 3D animations, or complex interactive 3D applications.",
-  "author": {
-    "name": "Claude Design Skillstack",
-    "email": "oladotun.olatunji@gmail.com"
+  "author": "Motionstack",
+  "license": "MIT",
+  "homepage": "https://github.com/discover-dmc/motionstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/discover-dmc/motionstack.git"
   },
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/freshtechbro/claudedesignskills",
-  "repository": "https://github.com/freshtechbro/claudedesignskills.git",
   "keywords": [
     "integration",
     "patterns",
     "3d",
     "animation"
   ],
-  "skills": "./skills/",
-  "commands": [
-    "./commands/help.md",
-    "./commands/setup.md"
-  ],
-  "agents": [
-    "./agents/web3d-integration-patterns-specialist.md"
-  ]
+  "category": "integration",
+  "skills": "skills/",
+  "commands": "commands/",
+  "agents": "agents/"
 }

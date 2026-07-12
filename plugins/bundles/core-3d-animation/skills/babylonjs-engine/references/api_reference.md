@@ -1,6 +1,6 @@
 # Babylon.js API Reference
 
-Complete API reference for Babylon.js 7.x covering core classes, methods, and properties.
+Complete API reference for Babylon.js 9.x covering core classes, methods, and properties.
 
 ## Table of Contents
 

@@ -166,7 +166,7 @@ class VariantBuilder:
 
     def _generate_typescript(self) -> str:
         """Generate TypeScript variant code."""
-        code = "import type { Variants } from 'framer-motion'\n\n"
+        code = "import type { Variants } from 'motion/react'\n\n"
         code += "const variants: Variants = {\n"
 
         for state_name, properties in self.variants.items():

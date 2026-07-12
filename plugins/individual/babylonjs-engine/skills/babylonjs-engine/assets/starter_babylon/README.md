@@ -5,7 +5,7 @@ Production-ready Babylon.js starter with Vite, physics, PBR materials, and inter
 ## Features
 
 - ⚡️ **Vite** - Fast build tool and dev server
-- 🎮 **Babylon.js 7.x** - Latest version with WebGPU support
+- 🎮 **Babylon.js 9.x** - Latest version with WebGPU support
 - 🎯 **Physics Engine** - Havok physics integration
 - 🎨 **PBR Materials** - Physically based rendering
 - 💡 **Dynamic Lighting** - Hemispheric + Directional with shadows

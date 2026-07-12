@@ -1,6 +1,6 @@
 # Blender Python API Quick Reference
 
-Essential bpy (Blender Python) API commands for automation.
+Essential bpy (Blender Python) API commands for automation. Verified against Blender 5.1 (current stable, mid-2026); these core object/mesh/file operators are stable across recent Blender versions.
 
 ## Accessing Data
 

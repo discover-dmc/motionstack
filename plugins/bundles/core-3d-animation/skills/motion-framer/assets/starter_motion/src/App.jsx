@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import HoverCard from './components/HoverCard'
 import DraggableBox from './components/DraggableBox'
 import StaggerList from './components/StaggerList'

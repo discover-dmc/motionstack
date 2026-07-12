@@ -84,7 +84,7 @@ class PluginGenerator:
         self.skill_name = skill_name
         self.repo_root = repo_root
         self.skill_dir = repo_root / ".claude" / "skills" / skill_name
-        self.plugin_dir = repo_root / ".claude" / "plugins" / "individual" / skill_name
+        self.plugin_dir = repo_root / "plugins" / "individual" / skill_name
 
         # Load skill metadata
         self.skill_metadata = self._load_skill_metadata()
@@ -164,12 +164,12 @@ class PluginGenerator:
             "name": self.skill_name,
             "version": "1.0.0",
             "description": description,
-            "author": "Claude Design Skillstack",
-            "license": "Apache-2.0",
-            "homepage": "https://github.com/freshtechbro/claudedesignskills",
+            "author": "Motionstack",
+            "license": "MIT",
+            "homepage": "https://github.com/discover-dmc/motionstack",
             "repository": {
                 "type": "git",
-                "url": "https://github.com/freshtechbro/claudedesignskills.git"
+                "url": "https://github.com/discover-dmc/motionstack.git"
             },
             "keywords": metadata["tags"],
             "category": metadata["category"],

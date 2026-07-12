@@ -1,14 +1,14 @@
 {
   "name": "core-3d-animation",
   "version": "1.0.0",
-  "description": "Complete core 3D and animation stack with Three.js, GSAP, React Three Fiber, Framer Motion, and Babylon.js",
-  "author": {
-    "name": "Claude Design Skillstack",
-    "email": "oladotun.olatunji@gmail.com"
+  "description": "Complete core 3D and animation stack with Three.js, GSAP, React Three Fiber, Motion, and Babylon.js",
+  "author": "Motionstack",
+  "license": "MIT",
+  "homepage": "https://github.com/discover-dmc/motionstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/discover-dmc/motionstack.git"
   },
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/freshtechbro/claudedesignskills",
-  "repository": "https://github.com/freshtechbro/claudedesignskills.git",
   "keywords": [
     "bundle",
     "3d",
@@ -16,24 +16,16 @@
     "core",
     "complete-stack"
   ],
-  "skills": "./skills/",
-  "commands": [
-    "./commands/babylonjs-engine-mesh_builder.md",
-    "./commands/babylonjs-engine-scene_generator.md",
-    "./commands/gsap-scrolltrigger-generate_animation.md",
-    "./commands/gsap-scrolltrigger-timeline_builder.md",
-    "./commands/motion-framer-animation_generator.md",
-    "./commands/motion-framer-variant_builder.md",
-    "./commands/react-three-fiber-component_generator.md",
-    "./commands/react-three-fiber-scene_setup.md",
-    "./commands/threejs-webgl-setup_scene.md"
+  "category": "bundle",
+  "bundle": true,
+  "includes": [
+    "threejs-webgl",
+    "gsap-scrolltrigger",
+    "react-three-fiber",
+    "motion-framer",
+    "babylonjs-engine"
   ],
-  "agents": [
-    "./agents/babylonjs-engine-architect.md",
-    "./agents/core-3d-animation-integration.md",
-    "./agents/gsap-scrolltrigger-choreographer.md",
-    "./agents/motion-framer-choreographer.md",
-    "./agents/react-three-fiber-architect.md",
-    "./agents/threejs-webgl-architect.md"
-  ]
+  "skills": "skills/",
+  "commands": "commands/",
+  "agents": "agents/"
 }

@@ -994,6 +994,47 @@ function Modal({ isOpen, onClose, children }) {
 
 ---
 
+### 9.2 Native `<dialog>` / Popover API
+
+**Effect**: Same modal/tooltip behavior with zero JS for focus trap, light-dismiss, or top-layer stacking. Baseline widely available (2026) — prefer this over 9.1's manual focus-trap JS unless the design needs Framer Motion's spring physics.
+
+```html
+<dialog id="confirm">
+  <h2>Confirm action</h2>
+  <p>This can't be undone.</p>
+  <form method="dialog">
+    <button value="cancel">Cancel</button>
+    <button value="confirm">Confirm</button>
+  </form>
+</dialog>
+
+<button commandfor="confirm" command="show-modal">Delete</button>
+```
+
+```css
+dialog {
+  border: none;
+  border-radius: 12px;
+  padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.2s, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+  @starting-style { opacity: 0; }
+}
+dialog[open] { opacity: 1; }
+dialog::backdrop { background: rgb(0 0 0 / 0.5); }
+```
+
+For non-modal popovers (menus, tooltips), swap `<dialog>` + `showModal()` for the `popover` attribute — same light-dismiss and top-layer behavior without blocking the page:
+
+```html
+<button popovertarget="menu">Options</button>
+<div id="menu" popover>...</div>
+```
+
+**Accessibility**: `<dialog>` and `popover` both manage focus and Escape-to-close natively — no manual focus trap needed. Still label with `aria-labelledby` and return focus to the trigger on close (both do this automatically for the trigger you invoked them from).
+
+---
+
 ## Toast & Notification Interactions
 
 ### 10.1 Toast Notification

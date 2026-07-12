@@ -176,7 +176,7 @@ Create new components in `src/components/`:
 
 ```jsx
 // src/components/MyComponent.jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 export default function MyComponent() {
   return (
@@ -255,7 +255,7 @@ import MyComponent from './components/MyComponent'
 2. **Avoid layout properties** - Don't animate `width`, `height`, `top`, `left`
 3. **Reduce motion** - Respect accessibility preferences:
    ```jsx
-   import { useReducedMotion } from "framer-motion"
+   import { useReducedMotion } from "motion/react"
 
    const shouldReduceMotion = useReducedMotion()
    ```

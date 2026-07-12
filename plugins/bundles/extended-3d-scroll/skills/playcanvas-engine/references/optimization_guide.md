@@ -554,25 +554,29 @@ app.on('update', (dt) => {
 Not everything needs to update every frame.
 
 ```javascript
-var MyScript = pc.createScript('myScript');
+import { Script } from 'playcanvas';
 
-MyScript.prototype.initialize = function() {
-  this.updateTimer = 0;
-  this.updateInterval = 0.1;  // Update every 100ms instead of every frame
-};
+export class MyScript extends Script {
+  static scriptName = 'myScript';
 
-MyScript.prototype.update = function(dt) {
-  this.updateTimer += dt;
-
-  if (this.updateTimer >= this.updateInterval) {
+  initialize() {
     this.updateTimer = 0;
-    this.expensiveUpdate();
+    this.updateInterval = 0.1;  // Update every 100ms instead of every frame
   }
-};
 
-MyScript.prototype.expensiveUpdate = function() {
-  // Heavy computation here
-};
+  update(dt) {
+    this.updateTimer += dt;
+
+    if (this.updateTimer >= this.updateInterval) {
+      this.updateTimer = 0;
+      this.expensiveUpdate();
+    }
+  }
+
+  expensiveUpdate() {
+    // Heavy computation here
+  }
+}
 ```
 
 ---

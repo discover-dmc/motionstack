@@ -56,7 +56,7 @@ Replace WAVES with any other Vanta effect:
 
 ```javascript
 // Change from WAVES to BIRDS
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
 
 let vantaEffect = VANTA.BIRDS({
   el: "#vanta-bg",
@@ -425,7 +425,7 @@ document.addEventListener('visibilitychange', () => {
 All dependencies load from CDN (no build step required):
 
 - Three.js: `https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js`
-- Vanta.js: `https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js`
+- Vanta.js: `https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.waves.min.js`
 - Zdog: `https://unpkg.com/zdog@1/dist/zdog.dist.min.js`
 - Vanilla-Tilt: `https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js`
 

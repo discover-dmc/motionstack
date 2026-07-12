@@ -42,12 +42,13 @@ controls.dampingFactor = 0.05;
 {lights}
 
 // Animation Loop
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
 
-function animate() {{
+function animate(timestamp) {{
   requestAnimationFrame(animate);
 
-  const deltaTime = clock.getDelta();
+  timer.update(timestamp);
+  const deltaTime = timer.getDelta();
   controls.update();
 
   renderer.render(scene, camera);
@@ -79,7 +80,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set({camera_x}, {camera_y}, {camera_z});
 
-// Renderer (WebGPU)
+// Renderer (WebGPU, falls back to WebGL2 automatically)
 const renderer = new THREE.WebGPURenderer({{ antialias: {antialias} }});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -97,11 +98,14 @@ controls.dampingFactor = 0.05;
 {lights}
 
 // Animation Loop
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
 
-function animate() {{
-  const deltaTime = clock.getDelta();
+function animate(timestamp) {{
+  timer.update(timestamp);
+  const deltaTime = timer.getDelta();
   controls.update();
+
+  renderer.render(scene, camera);
 }}
 
 // Handle Resize

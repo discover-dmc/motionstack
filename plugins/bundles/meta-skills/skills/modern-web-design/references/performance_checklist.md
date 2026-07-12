@@ -6,11 +6,12 @@ Comprehensive performance optimization guide targeting Core Web Vitals and 60 FP
 
 **Performance Budget Targets**:
 - Largest Contentful Paint (LCP): < 2.5s
-- First Input Delay (FID): < 100ms
-- Cumulative Layout Shift (CLS): < 0.1
 - Interaction to Next Paint (INP): < 200ms
+- Cumulative Layout Shift (CLS): < 0.1
 - Time to Interactive (TTI): < 3.8s
 - First Contentful Paint (FCP): < 1.8s
+
+Note: INP replaced FID as the official Core Web Vital for responsiveness in March 2024. FID is retired — don't measure or budget for it.
 
 ---
 
@@ -72,9 +73,9 @@ new PerformanceObserver((list) => {
 
 ---
 
-### First Input Delay (FID) / Interaction to Next Paint (INP)
+### Interaction to Next Paint (INP)
 
-**Target**: FID < 100ms, INP < 200ms
+**Target**: INP < 200ms
 
 **What it measures**: Responsiveness to user interactions.
 
@@ -780,7 +781,7 @@ npm install web-vitals
 ```
 
 ```javascript
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
 
 function sendToAnalytics({ name, value, id }) {
   // Send to your analytics endpoint
@@ -790,11 +791,11 @@ function sendToAnalytics({ name, value, id }) {
   });
 }
 
-getCLS(sendToAnalytics);
-getFID(sendToAnalytics);
-getFCP(sendToAnalytics);
-getLCP(sendToAnalytics);
-getTTFB(sendToAnalytics);
+onCLS(sendToAnalytics);
+onINP(sendToAnalytics);
+onFCP(sendToAnalytics);
+onLCP(sendToAnalytics);
+onTTFB(sendToAnalytics);
 ```
 
 ### Performance Budget
@@ -863,5 +864,5 @@ getTTFB(sendToAnalytics);
 
 ---
 
-*Last updated: 2024*
+*Last updated: 2026*
 *Benchmarks based on median 4G mobile connections*

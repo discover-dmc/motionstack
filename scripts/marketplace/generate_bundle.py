@@ -23,7 +23,7 @@ from typing import Dict, List
 BUNDLES = {
     "core-3d-animation": {
         "title": "Core 3D & Animation",
-        "description": "Complete core 3D and animation stack with Three.js, GSAP, React Three Fiber, Framer Motion, and Babylon.js",
+        "description": "Complete core 3D and animation stack with Three.js, GSAP, React Three Fiber, Motion, and Babylon.js",
         "skills": ["threejs-webgl", "gsap-scrolltrigger", "react-three-fiber", "motion-framer", "babylonjs-engine"],
         "category": "bundle",
         "tags": ["bundle", "3d", "animation", "core", "complete-stack"]
@@ -64,7 +64,7 @@ class BundleGenerator:
         self.bundle_name = bundle_name
         self.repo_root = repo_root
         self.bundle_config = BUNDLES[bundle_name]
-        self.bundle_dir = repo_root / ".claude" / "plugins" / "bundles" / bundle_name
+        self.bundle_dir = repo_root / "plugins" / "bundles" / bundle_name
 
     def generate(self):
         """Generate bundle plugin"""
@@ -108,12 +108,12 @@ class BundleGenerator:
             "name": self.bundle_name,
             "version": "1.0.0",
             "description": self.bundle_config["description"],
-            "author": "Claude Design Skillstack",
-            "license": "Apache-2.0",
-            "homepage": "https://github.com/freshtechbro/claudedesignskills",
+            "author": "Motionstack",
+            "license": "MIT",
+            "homepage": "https://github.com/discover-dmc/motionstack",
             "repository": {
                 "type": "git",
-                "url": "https://github.com/freshtechbro/claudedesignskills.git"
+                "url": "https://github.com/discover-dmc/motionstack.git"
             },
             "keywords": self.bundle_config["tags"],
             "category": self.bundle_config["category"],
@@ -155,7 +155,7 @@ class BundleGenerator:
 
         for skill_name in self.bundle_config["skills"]:
             # Check if individual plugin exists
-            individual_plugin = self.repo_root / ".claude" / "plugins" / "individual" / skill_name
+            individual_plugin = self.repo_root / "plugins" / "individual" / skill_name
             individual_commands = individual_plugin / "commands"
 
             if not individual_commands.exists():
@@ -177,7 +177,7 @@ class BundleGenerator:
 
         # Copy individual agents
         for skill_name in self.bundle_config["skills"]:
-            individual_plugin = self.repo_root / ".claude" / "plugins" / "individual" / skill_name
+            individual_plugin = self.repo_root / "plugins" / "individual" / skill_name
             individual_agents = individual_plugin / "agents"
 
             if not individual_agents.exists():

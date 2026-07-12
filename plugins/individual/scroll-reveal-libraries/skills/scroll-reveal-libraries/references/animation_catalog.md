@@ -1,6 +1,6 @@
 # AOS Animation Catalog
 
-Complete catalog of all 50+ built-in animations available in AOS (Animate On Scroll).
+Complete catalog of all 28 built-in animations available in AOS (Animate On Scroll). AOS has had no release since 2018 (see `SKILL.md` maintenance note) — this catalog is stable regardless, since it hasn't changed since that release.
 
 ## Table of Contents
 

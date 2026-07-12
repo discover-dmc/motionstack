@@ -1,6 +1,6 @@
 # Motion & Framer Motion - Complete API Reference
 
-Comprehensive API documentation for Motion (v11+) and Framer Motion animation libraries.
+Comprehensive API documentation for Motion (v12+, package name `motion`, imported from `motion/react`). The legacy `framer-motion` package still works as a compatibility alias with an identical API.
 
 ## Table of Contents
 
@@ -580,7 +580,7 @@ const variants = {
 Manually control animations with imperative API.
 
 ```typescript
-import { useAnimate, stagger } from "framer-motion"
+import { useAnimate, stagger } from "motion/react"
 
 function Component() {
   const [scope, animate] = useAnimate()
@@ -621,7 +621,7 @@ controls.then(() => console.log("Complete"))
 Create a motion value that can be read, set, and animated.
 
 ```typescript
-import { useMotionValue } from "framer-motion"
+import { useMotionValue } from "motion/react"
 
 const x = useMotionValue(0)
 
@@ -645,7 +645,7 @@ x.on("animationComplete", () => {})
 Transform one motion value into another.
 
 ```typescript
-import { useMotionValue, useTransform } from "framer-motion"
+import { useMotionValue, useTransform } from "motion/react"
 
 const x = useMotionValue(0)
 
@@ -667,7 +667,7 @@ const backgroundColor = useTransform(
 Create spring-animated motion value.
 
 ```typescript
-import { useSpring, useMotionValue } from "framer-motion"
+import { useSpring, useMotionValue } from "motion/react"
 
 const x = useMotionValue(0)
 const springX = useSpring(x, { stiffness: 300, damping: 20 })
@@ -692,7 +692,7 @@ interface SpringOptions {
 Track scroll position and velocity.
 
 ```typescript
-import { useScroll } from "framer-motion"
+import { useScroll } from "motion/react"
 
 const { scrollX, scrollY, scrollXProgress, scrollYProgress } = useScroll()
 
@@ -721,7 +721,7 @@ interface ScrollOptions {
 Detect when element is in viewport.
 
 ```typescript
-import { useInView } from "framer-motion"
+import { useInView } from "motion/react"
 
 const ref = useRef(null)
 const isInView = useInView(ref, {
@@ -750,7 +750,7 @@ interface InViewOptions {
 Detect user's motion preferences.
 
 ```typescript
-import { useReducedMotion } from "framer-motion"
+import { useReducedMotion } from "motion/react"
 
 const shouldReduceMotion = useReducedMotion()
 
@@ -765,7 +765,7 @@ const shouldReduceMotion = useReducedMotion()
 Create animation controls for imperative animations.
 
 ```typescript
-import { useAnimationControls } from "framer-motion"
+import { useAnimationControls } from "motion/react"
 
 const controls = useAnimationControls()
 
@@ -781,7 +781,7 @@ controls.set({ x: 0 })
 Detect if component is present (for custom exit animations).
 
 ```typescript
-import { usePresence } from "framer-motion"
+import { usePresence } from "motion/react"
 
 const [isPresent, safeToRemove] = usePresence()
 
@@ -802,7 +802,7 @@ Enables exit animations for removed components.
 ### Basic Usage
 
 ```typescript
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "motion/react"
 
 <AnimatePresence>
   {show && (
@@ -892,7 +892,7 @@ const variants = {
 Create staggered delays for child animations.
 
 ```typescript
-import { stagger } from "framer-motion"
+import { stagger } from "motion/react"
 
 animate("li", { opacity: 1 }, { delay: stagger(0.1) })
 
@@ -909,7 +909,7 @@ stagger(0.1, {
 Animate any element imperatively.
 
 ```typescript
-import { animate } from "framer-motion"
+import { animate } from "motion/react"
 
 // Single element
 animate(element, { x: 100 }, { duration: 0.5 })
@@ -927,7 +927,7 @@ controls.pause()
 Transform values without motion values.
 
 ```typescript
-import { transform } from "framer-motion"
+import { transform } from "motion/react"
 
 const output = transform(input, [0, 100], [0, 1])
 ```
@@ -937,7 +937,7 @@ const output = transform(input, [0, 100], [0, 1])
 Mix two values.
 
 ```typescript
-import { mix } from "framer-motion"
+import { mix } from "motion/react"
 
 const output = mix(0, 100, 0.5) // 50
 ```
@@ -947,7 +947,7 @@ const output = mix(0, 100, 0.5) // 50
 Clamp value between min and max.
 
 ```typescript
-import { clamp } from "framer-motion"
+import { clamp } from "motion/react"
 
 const output = clamp(0, 100, 150) // 100
 ```
@@ -999,13 +999,13 @@ import type {
   AnimationControls,
   PanInfo,
   TapInfo
-} from "framer-motion"
+} from "motion/react"
 ```
 
 ### Custom Component with Motion
 
 ```typescript
-import { motion, HTMLMotionProps } from "framer-motion"
+import { motion, HTMLMotionProps } from "motion/react"
 
 interface Props extends HTMLMotionProps<"div"> {
   customProp: string

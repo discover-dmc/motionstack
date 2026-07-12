@@ -1,8 +1,8 @@
-# Web Design Trends 2024-2025
+# Web Design Trends 2024-2026
 
 ## Overview
 
-This document catalogs the dominant web design trends, aesthetic movements, and interaction paradigms shaping modern web experiences in 2024-2025. Updated regularly based on industry analysis, award-winning sites, and emerging patterns.
+This document catalogs the dominant web design trends, aesthetic movements, and interaction paradigms shaping modern web experiences through 2026. Updated regularly based on industry analysis, award-winning sites, and emerging patterns.
 
 ## Visual Design Trends
 
@@ -887,13 +887,31 @@ h1 {
 7. **Generative Art**: Unique visuals for each visitor
 8. **Biometric Interfaces**: Face/voice recognition for auth and personalization
 
-**Technology Shifts**:
-- WebGPU mainstream adoption (faster 3D)
-- Container queries (component-based responsive design)
-- View Transitions API (smooth SPA transitions)
-- CSS Houdini (custom CSS magic)
+**Technology Shifts** (status as of 2026 — these landed, no longer forecasts):
+- Container queries: Baseline widely available, use without fallback
+- View Transitions API (same-document): Baseline widely available; cross-document (MPA) still lacks Firefox
+- CSS anchor positioning: Baseline 2026, cross-browser — viable for tooltips/popovers without a JS positioning library
+- WebGPU: still rolling out, WebGL2 remains the safe default for production 3D
+- CSS Houdini: adoption stayed niche, most teams still reach for JS for custom paint/properties beyond what native CSS covers
 
 ---
 
-*Last updated: 2024*
+### 25. Native Platform Interactivity
+
+**Definition**: CSS/HTML features that now cover interaction patterns (tooltips, popovers, modals, entry/exit transitions) previously requiring a JS library.
+
+**What's solid (Baseline widely available)**:
+- `<dialog>` and Popover API (`popover`, `popovertarget`) — native modals/menus with built-in focus trap, light-dismiss, and top-layer stacking
+- `:has()`, native CSS nesting, container queries — component-scoped styling and responsive design without JS or preprocessors
+- `@starting-style` + `transition-behavior: allow-discrete` — CSS-only entry/exit animations, including animating `display`
+
+**What's landed but check target browsers**:
+- CSS anchor positioning (`anchor()`, `position-anchor`) — Chrome 125+, Safari 26, Firefox 132+/147+
+- Scroll-driven animations (`animation-timeline: scroll()`/`view()`) — Chrome and Safari shipped, Firefox still behind a flag; use `gsap-scrolltrigger` as the cross-browser fallback until Firefox ships
+
+**Related Skills**: `gsap-scrolltrigger` for scroll-driven animation until Firefox support lands
+
+---
+
+*Last updated: 2026*
 *Review quarterly for updates*

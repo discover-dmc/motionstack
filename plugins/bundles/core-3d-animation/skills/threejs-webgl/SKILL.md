@@ -96,7 +96,9 @@ window.addEventListener('resize', () => {
 });
 ```
 
-### WebGPU Setup (Modern Alternative)
+### WebGPU Setup (Production-Ready, Recommended for New Projects)
+
+`WebGPURenderer` has been production-ready since r171 (Sept 2025) and auto-falls back to WebGL2 when the browser lacks WebGPU support, so it is now the recommended default over `WebGLRenderer` for new projects.
 
 ```javascript
 import * as THREE from 'three/webgpu';
@@ -105,9 +107,10 @@ const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
-renderer.toneMapping = THREE.LinearToneMapping;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1;
 document.body.appendChild(renderer.domElement);
+// Pass { forceWebGL: true } to WebGPURenderer to force the WebGL2 backend
 ```
 
 ## Common Patterns
@@ -346,6 +349,8 @@ composer.addPass(bloomPass);
 composer.render();
 ```
 
+`EffectComposer` remains valid for WebGL-only pipelines. For WebGPURenderer, use `RenderPipeline` (renamed from `PostProcessing` in r183) instead — it is TSL/node-based, handles tone mapping and resize automatically, and runs on both WebGPU and the WebGL2 fallback.
+
 ## Performance Optimization
 
 ### 1. Geometry Reuse
@@ -414,13 +419,16 @@ function disposeScene() {
 
 ## Best Practices
 
-### 1. Use Animation Clocks for Consistent Timing
+### 1. Use Timer for Consistent Timing
+`THREE.Clock` was deprecated in r183; use `THREE.Timer` instead (`getDelta`/`getElapsed` stay stable across multiple reads per frame).
 ```javascript
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
+timer.connect(document); // avoids large deltas when tab is inactive
 
-function animate() {
-  const deltaTime = clock.getDelta();
-  const elapsedTime = clock.getElapsedTime();
+function animate(timestamp) {
+  timer.update(timestamp);
+  const deltaTime = timer.getDelta();
+  const elapsedTime = timer.getElapsed();
 
   // Use deltaTime for frame-independent animations
   mesh.rotation.y += deltaTime * Math.PI * 0.5; // 90° per second

@@ -10,7 +10,7 @@ Be concise and to the point. Sacrifice grammar and punctuation for clarity and c
 
 This is a **dual-purpose repository**:
 1. **Development Workspace** - Create and manage Claude skills in `.claude/skills/`
-2. **Plugin Marketplace** - Distribute skills as plugins via `.claude/plugins/` and `.claude-plugin/marketplace.json`
+2. **Plugin Marketplace** - Distribute skills as plugins via `plugins/` (repo root) and `.claude-plugin/marketplace.json`
 
 Skills are modular, self-contained packages that extend Claude's capabilities by providing specialized knowledge, workflows, and tools. Each skill acts as an "onboarding guide" for specific domains or tasks.
 
@@ -78,7 +78,7 @@ chmod +x .claude/skills/my-skill/scripts/my_script.py
 
 ```bash
 # Add marketplace to Claude Code
-/plugin marketplace add freshtechbro/claudedesignskills
+/plugin marketplace add discover-dmc/motionstack
 
 # Install individual plugin
 /plugin install threejs-webgl
@@ -101,24 +101,24 @@ claudeskills/
 ├── README.md                      # Public-facing documentation
 │
 ├── .claude/
-│   ├── skills/                    # Skill development workspace
-│   │   ├── skill-creator/         # Meta-skill for creating skills
-│   │   ├── threejs-webgl/         # ✅ Complete (22 total)
+│   └── skills/                    # Skill development workspace
+│       ├── skill-creator/         # Meta-skill for creating skills
+│       ├── threejs-webgl/         # ✅ Complete (22 total)
+│       ├── gsap-scrolltrigger/
+│       └── ...                    # (20 more skills)
+│
+├── plugins/                       # Generated plugins for distribution (repo root — NOT .claude/plugins/)
+│   ├── individual/                # 22 individual skill plugins
+│   │   ├── threejs-webgl/         # Each includes skills/, commands/, agents/
 │   │   ├── gsap-scrolltrigger/
-│   │   └── ...                    # (20 more skills)
+│   │   └── ...
 │   │
-│   └── plugins/                   # Generated plugins for distribution
-│       ├── individual/            # 22 individual skill plugins
-│       │   ├── threejs-webgl/     # Each includes skills/, commands/, agents/
-│       │   ├── gsap-scrolltrigger/
-│       │   └── ...
-│       │
-│       └── bundles/               # 5 category bundle plugins
-│           ├── core-3d-animation/
-│           ├── extended-3d-scroll/
-│           ├── animation-components/
-│           ├── authoring-motion/
-│           └── meta-skills/
+│   └── bundles/                   # 5 category bundle plugins
+│       ├── core-3d-animation/
+│       ├── extended-3d-scroll/
+│       ├── animation-components/
+│       ├── authoring-motion/
+│       └── meta-skills/
 │
 ├── .claude-plugin/
 │   └── marketplace.json           # Marketplace manifest (27 plugins)
@@ -163,7 +163,7 @@ claudeskills/
 - **Individual (22)**: Each with 1-3 slash commands + 1-2 specialized agents
 - **Bundles (5)**: core-3d-animation, extended-3d-scroll, animation-components, authoring-motion, meta-skills
 
-Each skill directory contains SKILL.md, references/, scripts/, assets/, and a packaged .zip file.
+Each skill directory contains SKILL.md, references/, scripts/, and assets/. Distribution zips are gitignored and attached to GitHub releases.
 Each plugin directory contains plugin.json manifest, skills/, commands/, and agents/.
 
 ## Common Commands
@@ -901,4 +901,4 @@ Before marking a skill complete, ensure:
 
 ## License
 
-All skills in this repository are licensed under Apache License 2.0.
+All skills in this repository are licensed under MIT License.

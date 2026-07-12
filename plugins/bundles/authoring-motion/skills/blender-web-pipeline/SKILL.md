@@ -9,6 +9,8 @@ description: Blender to web export workflows for 3D models and animations. Use t
 
 Blender Web Pipeline skill provides workflows for exporting 3D models and animations from Blender to web-optimized formats (primarily glTF 2.0). It covers Python scripting for batch processing, optimization techniques for web performance, and integration with web 3D libraries like Three.js and Babylon.js.
 
+Targets Blender 5.1 (current stable as of mid-2026; 5.2 LTS follows). Blender 5.1 rewrote the glTF exporter with first-class support for KHR extensions (KHR_materials_specular, KHR_materials_transmission, KHR_materials_volume, KHR_materials_emissive_strength, KHR_lights_punctual, KHR_texture_transform) and stricter spec compliance than 5.0 and earlier — re-test existing export pipelines after upgrading, output can differ.
+
 **When to use this skill:**
 - Exporting Blender models for web applications
 - Batch processing multiple 3D assets
@@ -493,9 +495,10 @@ for mat in bpy.data.materials:
 **Problem:** Exported .glb files are 20+ MB
 
 **Solutions:**
-- Enable Draco compression (60-90% reduction)
+- Enable Draco compression (60-90% reduction) — still Blender's only built-in mesh compression as of 5.1; Meshoptimizer (EXT_meshopt_compression) support is in progress but not yet shipped
+- For meshopt compression or KTX2/Basis Universal texture compression, run the exported .glb through `gltfpack` (https://meshoptimizer.org/gltf/) as a post-export pass — neither is native to Blender's exporter yet
 - Reduce texture resolution (2048 → 1024 or 512)
-- Use JPEG instead of PNG for textures
+- Use JPEG or WEBP instead of PNG for textures
 - Decimate geometry (target <50k triangles)
 - Remove unused materials/textures
 

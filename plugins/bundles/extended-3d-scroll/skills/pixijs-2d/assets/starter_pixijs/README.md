@@ -203,18 +203,22 @@ const sprite = pool.spawn(100, 100);
 Use ParticleContainer for thousands of sprites:
 
 ```javascript
-const particles = new PIXI.ParticleContainer(10000, {
-    position: true,
-    rotation: true,
-    scale: true,
-    tint: true
+const particles = new PIXI.ParticleContainer({
+    dynamicProperties: {
+        position: true,
+        rotation: true,
+        scale: true,
+        color: true
+    }
 });
 
 for (let i = 0; i < 10000; i++) {
-    const particle = new PIXI.Sprite(texture);
-    particle.x = Math.random() * app.screen.width;
-    particle.y = Math.random() * app.screen.height;
-    particles.addChild(particle);
+    const particle = new PIXI.Particle({
+        texture,
+        x: Math.random() * app.screen.width,
+        y: Math.random() * app.screen.height
+    });
+    particles.addParticle(particle);
 }
 
 app.stage.addChild(particles);
@@ -295,7 +299,7 @@ addSprites(50);  // Fewer sprites
 ### General Optimization
 
 1. **Use ParticleContainer** for static sprites (10x faster)
-2. **Enable cacheAsBitmap** for complex static graphics
+2. **Enable cacheAsTexture()** for complex static graphics
 3. **Minimize draw calls** with texture atlases
 4. **Cull off-screen objects** for large scenes
 5. **Pool objects** to avoid garbage collection
@@ -405,17 +409,20 @@ animatedSprite.play();
 app.stage.addChild(animatedSprite);
 ```
 
-**React Integration**:
-```javascript
-import { Stage, Container, Sprite } from '@pixi/react';
+**React Integration** (`@pixi/react` v8, install alongside `pixi.js`):
+```jsx
+import { Application, extend } from '@pixi/react';
+import { Container, Sprite } from 'pixi.js';
+
+extend({ Container, Sprite });
 
 function App() {
     return (
-        <Stage width={800} height={600}>
-            <Container>
-                <Sprite texture={texture} x={100} y={100} />
-            </Container>
-        </Stage>
+        <Application width={800} height={600}>
+            <pixiContainer>
+                <pixiSprite texture={texture} x={100} y={100} />
+            </pixiContainer>
+        </Application>
     );
 }
 ```

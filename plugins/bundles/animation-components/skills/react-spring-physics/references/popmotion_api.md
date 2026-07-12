@@ -2,6 +2,8 @@
 
 Low-level animation library providing composable animation functions. Useful for advanced physics simulations and custom animation logic.
 
+**Maintenance status:** Popmotion's last npm release was `11.0.5` in August 2022; the package has had no releases since and is effectively unmaintained. Its author (Matt Perry) now maintains Motion (`motion` on npm, formerly Framer Motion), which absorbed Popmotion's low-level animation primitives (`animate()`, spring/inertia/keyframes generators) into `motion-dom`/`motion-utils`. The `spring`/`inertia`/`decay`/`physics` functions documented below still work as installed, but for new projects prefer `motion`'s `animate()` and standalone `spring()`/`inertia()` (see the `motion-framer` skill) over adding `popmotion` as a dependency.
+
 ## Table of Contents
 
 - [Core Animations](#core-animations)

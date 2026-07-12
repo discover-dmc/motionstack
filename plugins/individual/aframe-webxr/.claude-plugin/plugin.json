@@ -2,13 +2,13 @@
   "name": "aframe-webxr",
   "version": "1.0.0",
   "description": "Declarative web framework for building browser-based 3D, VR, and AR experiences using HTML and entity-component architecture. Use this skill when creating WebXR applications, VR experiences, AR experiences, 360-degree media viewers, or immersive web content with minimal JavaScript. Triggers on tasks involving A-Frame, WebXR, VR development, AR development, entity-component-system, declarative 3D, or HTML-based 3D scenes. Built on Three.js with accessible HTML-first approach.",
-  "author": {
-    "name": "Claude Design Skillstack",
-    "email": "oladotun.olatunji@gmail.com"
+  "author": "Motionstack",
+  "license": "MIT",
+  "homepage": "https://github.com/discover-dmc/motionstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/discover-dmc/motionstack.git"
   },
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/freshtechbro/claudedesignskills",
-  "repository": "https://github.com/freshtechbro/claudedesignskills.git",
   "keywords": [
     "aframe",
     "webxr",
@@ -16,12 +16,8 @@
     "ar",
     "3d"
   ],
-  "skills": "./skills/",
-  "commands": [
-    "./commands/component_builder.md",
-    "./commands/scene_generator.md"
-  ],
-  "agents": [
-    "./agents/aframe-webxr-architect.md"
-  ]
+  "category": "3d-graphics",
+  "skills": "skills/",
+  "commands": "commands/",
+  "agents": "agents/"
 }

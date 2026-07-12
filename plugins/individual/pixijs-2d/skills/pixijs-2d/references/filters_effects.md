@@ -174,7 +174,7 @@ import { DisplacementFilter, Sprite } from 'pixi.js';
 
 // Create displacement sprite (usually perlin noise or cloud texture)
 const displacementSprite = Sprite.from('displacement.jpg');
-displacementSprite.texture.baseTexture.wrapMode = WRAP_MODES.REPEAT;
+displacementSprite.texture.source.wrapMode = 'repeat';
 
 const displacementFilter = new DisplacementFilter({
   sprite: displacementSprite,
@@ -687,7 +687,7 @@ class MultiPassFilter extends Filter {
 Blur + Additive Blend
 
 ```javascript
-import { BlurFilter, BLEND_MODES } from 'pixi.js';
+import { BlurFilter } from 'pixi.js';
 
 // Original sprite
 const sprite = Sprite.from('star.png');
@@ -695,7 +695,7 @@ const sprite = Sprite.from('star.png');
 // Glow sprite (blurred copy)
 const glowSprite = new Sprite(sprite.texture);
 glowSprite.filters = [new BlurFilter({ strength: 15 })];
-glowSprite.blendMode = BLEND_MODES.ADD;
+glowSprite.blendMode = 'add';
 glowSprite.alpha = 0.8;
 
 const container = new Container();

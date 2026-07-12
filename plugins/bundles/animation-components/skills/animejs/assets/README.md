@@ -1,6 +1,6 @@
 # Anime.js - Assets
 
-This directory contains starter templates and example documentation for Anime.js animations.
+This directory contains starter templates and example documentation for Anime.js v4 animations.
 
 ## Contents
 
@@ -30,30 +30,24 @@ The Anime.js team maintains excellent examples at:
 ### Recommended Examples by Category
 
 **Basic Animations:**
-- Simple animation: https://codepen.io/juliangarnier/pen/KRwwOL
-- Property parameters: https://codepen.io/juliangarnier/pen/LpWPgj
-- Function-based values: https://codepen.io/juliangarnier/pen/gmOwJX
+- Property values: https://animejs.com/documentation/animation
+- Keyframes: https://animejs.com/documentation/animation/keyframes
 
 **Stagger Animations:**
-- Basic stagger: https://codepen.io/juliangarnier/pen/PboRJN
-- Stagger from center: https://codepen.io/juliangarnier/pen/WNNwQa
-- Grid stagger: https://codepen.io/juliangarnier/pen/JXaKpP
-- Stagger easing: https://codepen.io/juliangarnier/pen/QMMmQK
+- Stagger utility: https://animejs.com/documentation/utilities/stagger
 
 **Timeline Animations:**
-- Basic timeline: https://codepen.io/juliangarnier/pen/grVWYq
-- Timeline offsets: https://codepen.io/juliangarnier/pen/xLOXJX
-- Timeline controls: https://codepen.io/juliangarnier/pen/oWjmWd
+- Timeline: https://animejs.com/documentation/timeline
 
 **SVG Animations:**
-- Line drawing: https://codepen.io/juliangarnier/pen/XdqyNw
-- Path morphing: https://codepen.io/juliangarnier/pen/mWEOmL
-- Motion path: https://codepen.io/juliangarnier/pen/NqYKQL
+- Line drawing: https://animejs.com/documentation/svg/createdrawable
+- Path morphing: https://animejs.com/documentation/svg/morphto
+- Motion path: https://animejs.com/documentation/svg/createmotionpath
 
-**Advanced Patterns:**
-- Keyframes: https://codepen.io/juliangarnier/pen/QMMmQK
-- Scroll-driven: https://codepen.io/juliangarnier/pen/ZqyEJw
-- Custom easing: https://codepen.io/juliangarnier/pen/YBBRvG
+**Interaction and Scroll:**
+- Draggable: https://animejs.com/documentation/draggable
+- Scroll-linked: https://animejs.com/documentation/events/onscroll
+- Scope (React/Vue): https://animejs.com/documentation/scope
 
 ## Quick Start Template
 
@@ -72,7 +66,7 @@ Minimal Anime.js setup:
     "preview": "vite preview"
   },
   "dependencies": {
-    "animejs": "^3.2.2"
+    "animejs": "^4.5.0"
   },
   "devDependencies": {
     "vite": "^5.0.8"
@@ -131,50 +125,38 @@ Minimal Anime.js setup:
 
 ### main.js
 ```javascript
-import anime from 'animejs/lib/anime.es.js'
+import { animate, stagger, createTimeline } from 'animejs'
 
 // Basic Animation
 document.getElementById('basic-btn').addEventListener('click', () => {
-  anime({
-    targets: '.box1',
-    translateX: 250,
+  animate('.box1', {
+    x: 250,
     rotate: '1turn',
     scale: [0.75, 1],
     duration: 800,
-    easing: 'easeInOutQuad'
+    ease: 'inOutQuad'
   })
 })
 
 // Stagger Animation
 document.getElementById('stagger-btn').addEventListener('click', () => {
-  anime({
-    targets: '.stagger-item',
+  animate('.stagger-item', {
     scale: [0, 1],
-    delay: anime.stagger(100),
-    easing: 'easeOutElastic(1, .8)',
+    delay: stagger(100),
+    ease: 'outElastic(1, .8)',
     duration: 600
   })
 })
 
 // Timeline Animation
 document.getElementById('timeline-btn').addEventListener('click', () => {
-  const tl = anime.timeline({
-    easing: 'easeOutExpo',
-    duration: 750
+  const tl = createTimeline({
+    defaults: { ease: 'outExpo', duration: 750 }
   })
 
-  tl.add({
-    targets: '.timeline-box.box1',
-    translateX: 250
-  })
-  .add({
-    targets: '.timeline-box.box2',
-    translateX: 250
-  }, '-=500')
-  .add({
-    targets: '.timeline-box.box3',
-    translateX: 250
-  }, '-=500')
+  tl.add('.timeline-box.box1', { x: 250 })
+  .add('.timeline-box.box2', { x: 250 }, '-=500')
+  .add('.timeline-box.box3', { x: 250 }, '-=500')
 })
 ```
 
@@ -281,12 +263,13 @@ button:active {
 ### Pattern 1: Sequential List Reveal
 
 ```javascript
-anime({
-  targets: '.list-item',
-  translateY: [30, 0],
+import { animate, stagger } from 'animejs'
+
+animate('.list-item', {
+  y: [30, 0],
   opacity: [0, 1],
-  delay: anime.stagger(80),
-  easing: 'easeOutQuad',
+  delay: stagger(80),
+  ease: 'outQuad',
   duration: 600
 })
 ```
@@ -294,14 +277,10 @@ anime({
 ### Pattern 2: Grid Expand from Center
 
 ```javascript
-anime({
-  targets: '.grid-square',
+animate('.grid-square', {
   scale: [0, 1],
-  delay: anime.stagger(30, {
-    grid: [10, 10],
-    from: 'center'
-  }),
-  easing: 'easeOutElastic(1, .8)',
+  delay: stagger(30, { grid: [10, 10], from: 'center' }),
+  ease: 'outElastic(1, .8)',
   duration: 600
 })
 ```
@@ -309,10 +288,11 @@ anime({
 ### Pattern 3: SVG Line Drawing
 
 ```javascript
-anime({
-  targets: 'path',
-  strokeDashoffset: [anime.setDashoffset, 0],
-  easing: 'easeInOutQuad',
+import { animate, svg } from 'animejs'
+
+animate(svg.createDrawable('path'), {
+  draw: ['0 0', '0 1'],
+  ease: 'inOutQuad',
   duration: 2000,
   delay: (el, i) => i * 250
 })
@@ -321,25 +301,15 @@ anime({
 ### Pattern 4: Timeline Sequence
 
 ```javascript
-const tl = anime.timeline({
-  easing: 'easeOutExpo',
-  duration: 750
+import { createTimeline } from 'animejs'
+
+const tl = createTimeline({
+  defaults: { ease: 'outExpo', duration: 750 }
 })
 
-tl.add({
-  targets: '.title',
-  translateY: [-50, 0],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.subtitle',
-  translateY: [-30, 0],
-  opacity: [0, 1]
-}, '-=500')
-.add({
-  targets: '.button',
-  scale: [0, 1]
-}, '-=300')
+tl.add('.title', { y: [-50, 0], opacity: [0, 1] })
+.add('.subtitle', { y: [-30, 0], opacity: [0, 1] }, '-=500')
+.add('.button', { scale: [0, 1] }, '-=300')
 ```
 
 ## Framework Integration
@@ -347,69 +317,59 @@ tl.add({
 ### With React
 
 ```jsx
+import { animate, createScope } from 'animejs'
 import { useEffect, useRef } from 'react'
-import anime from 'animejs/lib/anime.es.js'
 
 function AnimatedComponent() {
-  const ref = useRef(null)
+  const root = useRef(null)
+  const scope = useRef(null)
 
   useEffect(() => {
-    const animation = anime({
-      targets: ref.current,
-      translateX: 250,
-      duration: 800,
-      easing: 'easeInOutQuad'
+    scope.current = createScope({ root }).add(() => {
+      animate('.element', { x: 250, duration: 800, ease: 'inOutQuad' })
     })
 
-    return () => animation.pause()
+    return () => scope.current.revert()
   }, [])
 
-  return <div ref={ref}>Animated</div>
+  return <div ref={root}><div className="element">Animated</div></div>
 }
 ```
 
 ### With Vue
 
 ```javascript
+import { animate } from 'animejs'
+
 export default {
   mounted() {
-    anime({
-      targets: this.$el,
-      translateX: 250,
-      duration: 800
-    })
+    animate(this.$el, { x: 250, duration: 800 })
   }
 }
 ```
 
 ## TypeScript Support
 
-For TypeScript projects, install types:
-
-```bash
-npm install --save-dev @types/animejs
-```
+Anime.js v4 ships its own TypeScript definitions — no separate `@types/animejs` package needed.
 
 ## Performance Tips
 
 1. **Use transforms and opacity** - GPU-accelerated properties
 2. **Batch similar animations** - One animation for multiple targets
 3. **Add will-change** to CSS for complex animations
-4. **Use autoplay: false** for scroll-driven animations
-5. **Pause animations** on cleanup in frameworks
-6. **Limit element count** - Stagger works best with <100 elements
+4. **Use `onScroll()`** for scroll-linked animations instead of manual scroll listeners
+5. **Revert `createScope()` instances** on cleanup in frameworks
+6. **Limit element count** - Stagger works best with fewer than 100 elements
 
 ## Additional Resources
 
 - **Official Documentation**: https://animejs.com/documentation/
-- **API Reference**: https://animejs.com/documentation/#cssProperties
 - **GitHub Repository**: https://github.com/juliangarnier/anime
 - **CodePen Collection**: https://codepen.io/collection/DxpqGJ/
-- **Community Examples**: https://animejs.com/documentation/#communityShowcase
 
 ---
 
 For more patterns and reference documentation, see:
-- `api_reference.md` - Complete Anime.js API
+- `api_reference.md` - Complete Anime.js v4 API
 - `stagger_guide.md` - Stagger utilities deep dive
 - `timeline_guide.md` - Timeline sequencing guide

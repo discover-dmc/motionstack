@@ -1,6 +1,6 @@
 ---
 name: react-spring-physics
-description: Physics-based animation library combining React Spring (spring dynamics, gesture integration, 60fps animations) and Popmotion (low-level composable animation utilities, reactive streams). Use when building fluid, natural-feeling UI animations, gesture-driven interfaces, physics simulations, or spring-loaded interactions. Triggers on tasks involving React Spring hooks, spring physics, inertia scrolling, physics-based motion, animation composition, or natural UI movements. Alternative physics approach to motion-framer for more physically accurate animations.
+description: Physics-based animation library combining React Spring (spring dynamics, gesture integration, 60fps animations) and Popmotion (low-level composable animation utilities, reactive streams; note Popmotion has been unmaintained since 2022, use Motion for new low-level physics utilities). Use when building fluid, natural-feeling UI animations, gesture-driven interfaces, physics simulations, or spring-loaded interactions. Triggers on tasks involving React Spring hooks, spring physics, inertia scrolling, physics-based motion, animation composition, or natural UI movements. Alternative physics approach to motion-framer for more physically accurate animations.
 ---
 
 # React Spring Physics
@@ -19,9 +19,9 @@ React Spring provides spring-physics animations that feel natural and interrupti
 - Momentum scrolling and inertia effects
 
 **Core libraries:**
-- `@react-spring/web` - React hooks for spring animations
+- `@react-spring/web` (v10, React 19 compatible) - React hooks for spring animations
 - `@react-spring/three` - Three.js integration
-- `popmotion` - Low-level animation utilities (optional, for advanced use cases)
+- `popmotion` - Low-level animation utilities (unmaintained since 2022; prefer `motion` for new low-level physics/inertia utilities, see Popmotion reference for status)
 
 ## Core Concepts
 
@@ -288,6 +288,8 @@ function ThreeScene() {
 ```
 
 ### With Popmotion (Low-Level Physics)
+
+Popmotion's last npm release was 11.0.5 in 2022; it is effectively unmaintained. The API below still works, but for new projects prefer `motion`'s `animate()` and `inertia` utilities, which absorbed Popmotion's approach. See `references/popmotion_api.md` for details.
 
 ```jsx
 import { spring, inertia } from 'popmotion'

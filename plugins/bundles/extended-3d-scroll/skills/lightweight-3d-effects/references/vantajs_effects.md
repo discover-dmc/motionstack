@@ -2,9 +2,10 @@
 
 Complete reference for Vanta.js - animated WebGL backgrounds powered by Three.js.
 
-**Version**: 0.5.24
+**Version**: 0.5.24 (latest, published ~2021)
 **License**: MIT
 **Website**: https://www.vantajs.com
+**Maintenance**: Discontinued per Snyk's advisory (no publishes in years), not archived. Pin `vanta@0.5.24` explicitly rather than `@latest`. Requires three.js r134 (`0.134.0`) exactly — do not upgrade three.js independently.
 
 ---
 
@@ -29,7 +30,7 @@ Complete reference for Vanta.js - animated WebGL backgrounds powered by Three.js
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
 <!-- Vanta.js effect (choose one) -->
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.waves.min.js"></script>
 
 <div id="vanta-bg"></div>
 
@@ -526,7 +527,7 @@ Water ripple effect.
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.ripple.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.ripple.min.js"></script>
 ```
 
 ```javascript

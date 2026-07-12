@@ -20,10 +20,10 @@ npm install motion clsx tailwind-merge
 # Install shadcn/ui
 npx shadcn@latest init
 
-# Add Magic UI components
-npx shadcn@latest add https://magicui.design/r/grid-pattern
-npx shadcn@latest add https://magicui.design/r/shimmer-button
-npx shadcn@latest add https://magicui.design/r/marquee
+# Add Magic UI components (registry-namespace syntax)
+npx shadcn@latest add @magicui/grid-pattern
+npx shadcn@latest add @magicui/shimmer-button
+npx shadcn@latest add @magicui/marquee
 ```
 
 **Required: lib/utils.ts**
@@ -69,15 +69,15 @@ cd my-react-bits-app
 
 # Install dependencies
 npm install
-npm install framer-motion
+npm install motion  # package renamed from framer-motion
 npm install ogl  # For WebGL components (Particles, Plasma, Aurora)
 ```
 
-**Copy components from reactbits.dev**:
+**Get components from reactbits.dev**:
 - Visit https://reactbits.dev
-- Browse component gallery
-- Click "View Code" on desired component
-- Copy to `src/components/`
+- Browse component gallery, pick a variant (JS-CSS, JS-TW, TS-CSS, TS-TW)
+- Install via CLI: `npx shadcn@latest add @react-bits/ComponentName-TS-TW`
+- Or click "Copy Code" and paste into `src/components/`
 
 ## Example Implementations
 

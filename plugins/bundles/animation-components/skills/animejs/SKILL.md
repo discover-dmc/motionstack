@@ -1,252 +1,263 @@
 ---
 name: animejs
-description: Versatile JavaScript animation engine for DOM, CSS, SVG, and JavaScript objects. Use when creating timeline-based animations, stagger effects, SVG morphing, keyframe sequences, or complex choreographed animations. Triggers on tasks involving Anime.js, timeline animations, staggered sequences, SVG path animations, morphing, or multi-step animation choreography. Alternative to GSAP for SVG-heavy animations and React-independent projects.
+description: Versatile JavaScript animation engine for DOM, CSS, SVG, and JavaScript objects. Use when creating timeline-based animations, stagger effects, SVG morphing/drawing, keyframe sequences, draggable elements, scroll-linked animations, or complex choreographed animations. Triggers on tasks involving Anime.js, Anime.js v4, animate(), createTimeline, stagger, SVG path animations, morphing, createDraggable, createScope, onScroll, or multi-step animation choreography. Alternative to GSAP for SVG-heavy animations and React-independent projects.
 ---
 
 # Anime.js
 
-Lightweight JavaScript animation library with powerful timeline and stagger capabilities for web animations.
+Lightweight JavaScript animation engine (v4) with modular named exports, powerful timeline/stagger tools, and dedicated SVG, scroll, and drag utilities.
 
 ## Overview
 
-Anime.js (pronounced "Anime JS") is a versatile animation engine that works with DOM elements, CSS properties, SVG attributes, and JavaScript objects. Unlike React-specific libraries, Anime.js works with vanilla JavaScript and any framework.
+Anime.js v4 is a complete rewrite of the library as a set of modular, tree-shakeable named exports. There is no more single `anime()` factory: `animate()`, `createTimeline()`, `createTimer()`, `createDraggable()`, `createScope()`, `onScroll()`, `svg`, and `utils` are imported individually from `'animejs'`. It works with vanilla JavaScript and any framework.
 
 **When to use this skill:**
 - Timeline-based animation sequences with precise choreography
 - Staggered animations across multiple elements
-- SVG path morphing and drawing animations
-- Keyframe animations with percentage-based timing
-- Framework-agnostic animation (works with React, Vue, vanilla JS)
-- Complex easing functions (spring, steps, cubic-bezier)
+- SVG path morphing and line-drawing animations
+- Keyframe animations (per-property or percentage-based)
+- Framework-agnostic animation (works with React, Vue, vanilla JS) via `createScope()`
+- Scroll-linked animations via `onScroll()`
+- Draggable elements via `createDraggable()`
+- Spring, cubic-bezier, and other custom easing
 
 **Core features:**
-- Timeline sequencing with relative positioning
-- Powerful stagger utilities (grid, from center, easing)
-- SVG morphing and path animations
-- Built-in spring physics easing
-- Keyframe support with flexible timing
-- Small bundle size (~9KB gzipped)
+- `animate(targets, params)` — two-argument animation function (targets no longer live inside the params object)
+- `createTimeline()` — sequencing with label and relative-offset positioning
+- `stagger()` — grid, from-center, jitter, and eased delay/value distribution
+- `svg` module — `createDrawable()` for line drawing, `morphTo()` for shape morphing, `createMotionPath()` for path following
+- `createDraggable()` and `onScroll()` for interaction and scroll-linked playback
+- `createScope()` for framework-safe setup/teardown and media-query-driven animation
 
 ## Core Concepts
 
 ### Basic Animation
 
-The `anime()` function creates animations:
+`animate()` takes targets as the first argument and parameters as the second — not a single options object with a `targets` key:
 
 ```javascript
-import anime from 'animejs'
+import { animate } from 'animejs'
 
-anime({
-  targets: '.element',
-  translateX: 250,
+animate('.element', {
+  x: 250,
   rotate: '1turn',
   duration: 800,
-  easing: 'easeInOutQuad'
+  ease: 'inOutQuad'
 })
 ```
 
 ### Targets
 
-Multiple ways to specify animation targets:
-
 ```javascript
 // CSS selector
-anime({ targets: '.box' })
+animate('.box', { x: 250 })
 
 // DOM elements
-anime({ targets: document.querySelectorAll('.box') })
+animate(document.querySelectorAll('.box'), { x: 250 })
 
 // Array of elements
-anime({ targets: [el1, el2, el3] })
+animate([el1, el2, el3], { x: 250 })
 
 // JavaScript object
 const obj = { x: 0 }
-anime({ targets: obj, x: 100 })
+animate(obj, { x: 100 })
 ```
 
 ### Animatable Properties
 
-**CSS Properties:**
+**CSS transforms** — `x`/`y`/`z` are shorthand for `translateX`/`translateY`/`translateZ`; the fully-named transform properties still work:
+
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
+animate('.element', {
+  x: 250,           // shorthand for translateX
+  rotate: '1turn',
   scale: 2,
   opacity: 0.5,
   backgroundColor: '#FFF'
 })
 ```
 
-**CSS Transforms (Individual):**
+**SVG attributes and drawing/morphing:**
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,   // Individual transform
-  rotate: '1turn',   // Not 'transform: rotate()'
-  scale: 2
+import { animate, svg } from 'animejs'
+
+animate(svg.createDrawable('path'), {
+  draw: ['0 0', '0 1'],   // line drawing, replaces strokeDashoffset + setDashoffset
+  duration: 2000,
+  ease: 'inOutQuad'
 })
 ```
 
-**SVG Attributes:**
-```javascript
-anime({
-  targets: 'path',
-  d: 'M10 80 Q 77.5 10, 145 80', // Path morphing
-  fill: '#FF0000',
-  strokeDashoffset: [anime.setDashoffset, 0] // Line drawing
-})
-```
-
-**JavaScript Objects:**
+**JavaScript objects:**
 ```javascript
 const obj = { value: 0 }
-anime({
-  targets: obj,
+animate(obj, {
   value: 100,
   round: 1,
-  update: () => console.log(obj.value)
+  onUpdate: () => console.log(obj.value)
 })
 ```
+
+### Property Value Syntax
+
+```javascript
+animate('.element', {
+  x: 250,                       // single value, animates from current to 250
+  y: { from: 0, to: 100 },      // explicit from/to
+  rotate: '+=1turn',            // relative value
+  scale: () => Math.random() + 1 // function-based value
+})
+```
+
+### Callbacks
+
+All callbacks are prefixed with `on`:
+
+```javascript
+animate('.element', {
+  x: 250,
+  onBegin: () => {},
+  onBeforeUpdate: () => {},
+  onUpdate: () => {},
+  onRender: () => {},
+  onLoop: () => {},
+  onPause: () => {},
+  onComplete: () => {}
+})
+```
+
+`animate()` also returns a promise-like instance: `animation.then(() => {})`.
 
 ### Timeline
 
-Create complex sequences with precise control:
-
 ```javascript
-const timeline = anime.timeline({
-  duration: 750,
-  easing: 'easeOutExpo'
-})
+import { createTimeline } from 'animejs'
 
-timeline
-  .add({
-    targets: '.box1',
-    translateX: 250
-  })
-  .add({
-    targets: '.box2',
-    translateX: 250
-  }, '-=500') // Start 500ms before previous animation ends
-  .add({
-    targets: '.box3',
-    translateX: 250
-  }, '+=200') // Start 200ms after previous animation ends
+const tl = createTimeline({ defaults: { duration: 750, ease: 'outExpo' } })
+
+tl.label('start')
+  .add('.box1', { x: 250 })
+  .add('.box2', { x: 250 }, '-=500')   // 500ms before previous ends
+  .add('.box3', { x: 250 }, '+=200')   // 200ms after previous ends
+  .add('.box4', { x: 250 }, 'start')   // at the "start" label
 ```
+
+`timeline.add(target, params, position)` — target is a separate first argument, matching `animate()`. Timelines also support `.set()`, `.call()`, `.sync()`, and `.label()`.
 
 ## Common Patterns
 
 ### 1. Stagger Animation (Sequential Reveal)
 
 ```javascript
-anime({
-  targets: '.stagger-element',
-  translateY: [100, 0],
+import { animate, stagger } from 'animejs'
+
+animate('.stagger-element', {
+  y: [100, 0],
   opacity: [0, 1],
-  delay: anime.stagger(100), // Increase delay by 100ms
-  easing: 'easeOutQuad',
+  delay: stagger(100), // increase delay by 100ms per element
+  ease: 'outQuad',
   duration: 600
 })
 ```
 
-### 2. Stagger from Center
+### 2. Stagger from Center (Grid)
 
 ```javascript
-anime({
-  targets: '.grid-item',
+animate('.grid-item', {
   scale: [0, 1],
-  delay: anime.stagger(50, {
+  delay: stagger(50, {
     grid: [14, 5],
-    from: 'center', // Also: 'first', 'last', index, [x, y]
-    axis: 'x'       // Also: 'y', null
+    from: 'center', // also: 'first', 'last', index, [x, y]
+    axis: 'x'       // also: 'y', null
   }),
-  easing: 'easeOutQuad'
+  ease: 'outQuad'
 })
 ```
 
 ### 3. SVG Line Drawing
 
 ```javascript
-anime({
-  targets: 'path',
-  strokeDashoffset: [anime.setDashoffset, 0],
-  easing: 'easeInOutQuad',
+import { animate, svg, stagger } from 'animejs'
+
+animate(svg.createDrawable('.line'), {
+  draw: ['0 0', '0 1'],
+  ease: 'inOutQuad',
   duration: 2000,
-  delay: (el, i) => i * 250
+  delay: stagger(100)
 })
 ```
 
 ### 4. SVG Morphing
 
 ```javascript
-anime({
-  targets: '#morphing-path',
-  d: [
-    { value: 'M10 80 Q 77.5 10, 145 80' }, // Start shape
-    { value: 'M10 80 Q 77.5 150, 145 80' }  // End shape
-  ],
+import { animate, svg, utils } from 'animejs'
+
+const [$path1, $path2] = utils.$('polygon')
+
+animate($path1, {
+  points: svg.morphTo($path2),
   duration: 2000,
-  easing: 'easeInOutQuad',
+  ease: 'inOutQuad',
   loop: true,
-  direction: 'alternate'
+  alternate: true
 })
 ```
 
 ### 5. Timeline Sequence
 
 ```javascript
-const tl = anime.timeline({
-  easing: 'easeOutExpo',
-  duration: 750
-})
+import { createTimeline } from 'animejs'
 
-tl.add({
-  targets: '.title',
-  translateY: [-50, 0],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.subtitle',
-  translateY: [-30, 0],
-  opacity: [0, 1]
-}, '-=500')
-.add({
-  targets: '.button',
-  scale: [0, 1],
-  opacity: [0, 1]
-}, '-=300')
+const tl = createTimeline({ defaults: { ease: 'outExpo', duration: 750 } })
+
+tl.add('.title', { y: [-50, 0], opacity: [0, 1] })
+  .add('.subtitle', { y: [-30, 0], opacity: [0, 1] }, '-=500')
+  .add('.button', { scale: [0, 1], opacity: [0, 1] }, '-=300')
 ```
 
 ### 6. Keyframe Animation
 
+Per-property waypoints:
+
 ```javascript
-anime({
-  targets: '.element',
-  keyframes: [
-    { translateX: 100 },
-    { translateY: 100 },
-    { translateX: 0 },
-    { translateY: 0 }
-  ],
+animate('.element', {
+  x: [{ to: 100 }, { to: 0 }],
+  y: [{ to: 100 }, { to: 0 }],
   duration: 4000,
-  easing: 'easeInOutQuad',
+  ease: 'inOutQuad',
   loop: true
 })
 ```
 
-### 7. Scroll-Triggered Animation
+Percentage-based, multiple properties per checkpoint:
 
 ```javascript
-const animation = anime({
-  targets: '.scroll-element',
-  translateY: [100, 0],
-  opacity: [0, 1],
-  easing: 'easeOutQuad',
-  autoplay: false
+animate('.element', {
+  keyframes: {
+    '0%': { x: 0, y: 0 },
+    '50%': { x: 100, y: 100 },
+    '100%': { x: 0, y: 0 }
+  },
+  duration: 4000,
+  loop: true
 })
+```
 
-window.addEventListener('scroll', () => {
-  const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight)
-  animation.seek(animation.duration * scrollPercent)
+### 7. Scroll-Linked Animation
+
+```javascript
+import { animate, onScroll } from 'animejs'
+
+animate('.scroll-element', {
+  y: [100, 0],
+  opacity: [0, 1],
+  ease: 'outQuad',
+  autoplay: onScroll({
+    container: '.scroll-container',
+    enter: 'bottom top',
+    leave: 'top bottom',
+    sync: true
+  })
 })
 ```
 
@@ -254,53 +265,85 @@ window.addEventListener('scroll', () => {
 
 ### With React
 
-```javascript
+`createScope()` handles setup and teardown safely inside `useEffect`:
+
+```jsx
+import { animate, createScope, createDraggable } from 'animejs'
 import { useEffect, useRef } from 'react'
-import anime from 'animejs'
 
 function AnimatedComponent() {
-  const ref = useRef(null)
+  const root = useRef(null)
+  const scope = useRef(null)
 
   useEffect(() => {
-    const animation = anime({
-      targets: ref.current,
-      translateX: 250,
-      duration: 800,
-      easing: 'easeInOutQuad'
+    scope.current = createScope({ root }).add(() => {
+      animate('.element', {
+        x: 250,
+        duration: 800,
+        ease: 'inOutQuad'
+      })
+
+      createDraggable('.draggable')
     })
 
-    return () => animation.pause()
+    return () => scope.current.revert()
   }, [])
 
-  return <div ref={ref}>Animated</div>
+  return <div ref={root}><div className="element">Animated</div></div>
 }
 ```
 
 ### With Vue
 
 ```javascript
+import { animate } from 'animejs'
+
 export default {
   mounted() {
-    anime({
-      targets: this.$el,
-      translateX: 250,
-      duration: 800
-    })
+    animate(this.$el, { x: 250, duration: 800 })
   }
 }
 ```
 
-### Path Following Animation
+### Responsive Animation with createScope
+
+`createScope({ mediaQueries })` re-runs the scope callback when a query's match state changes — no manual `matchMedia` listeners:
 
 ```javascript
-const path = anime.path('#motion-path')
+import { animate, utils, createScope } from 'animejs'
 
-anime({
-  targets: '.element',
-  translateX: path('x'),
-  translateY: path('y'),
-  rotate: path('angle'),
-  easing: 'linear',
+createScope({
+  mediaQueries: {
+    isSmall: '(max-width: 200px)',
+    reduceMotion: '(prefers-reduced-motion)'
+  }
+}).add(self => {
+  const { isSmall, reduceMotion } = self.matches
+
+  if (isSmall) utils.set('.square', { scale: 0.5 })
+
+  animate('.square', {
+    x: isSmall ? 0 : ['-35vw', '35vw'],
+    y: isSmall ? ['-40vh', '40vh'] : 0,
+    loop: true,
+    alternate: true,
+    duration: reduceMotion ? 0 : isSmall ? 750 : 1250
+  })
+})
+```
+
+### Motion Path Following
+
+```javascript
+import { animate, svg } from 'animejs'
+
+const { translateX, translateY, rotate } = svg.createMotionPath('#motion-path')
+
+animate('.element', {
+  translateX,
+  translateY,
+  rotate,
+  ease: 'linear',
   duration: 2000,
   loop: true
 })
@@ -311,62 +354,58 @@ anime({
 ### Spring Easing
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
-  easing: 'spring(1, 80, 10, 0)', // mass, stiffness, damping, velocity
-  duration: 2000
+import { animate, spring } from 'animejs'
+
+animate('.element', {
+  x: 250,
+  ease: spring({ bounce: 0.5, duration: 800 }) // perceived params
+  // or physics params: spring({ mass: 1, stiffness: 100, damping: 10, velocity: 0 })
 })
 ```
 
-### Steps Easing
+### Steps and Bezier Easing
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
-  easing: 'steps(5)',
-  duration: 1000
-})
-```
-
-### Custom Bezier
-
-```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
-  easing: 'cubicBezier(.5, .05, .1, .3)',
-  duration: 1000
-})
+animate('.element', { x: 250, ease: 'steps(5)', duration: 1000 })
+animate('.element', { x: 250, ease: 'cubicBezier(.5, .05, .1, .3)', duration: 1000 })
 ```
 
 ### Direction and Loop
 
+`direction` no longer exists — use `alternate` and `reversed` booleans:
+
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
-  direction: 'alternate', // 'normal', 'reverse', 'alternate'
-  loop: true,             // or number of iterations
-  easing: 'easeInOutQuad'
+animate('.element', {
+  x: 250,
+  alternate: true,   // ping-pong each loop, was direction: 'alternate'
+  reversed: false,   // was direction: 'reverse'
+  loop: true,         // or a number of iterations
+  loopDelay: 200,      // was endDelay
+  ease: 'inOutQuad'
 })
 ```
 
 ### Playback Control
 
 ```javascript
-const animation = anime({
-  targets: '.element',
-  translateX: 250,
-  autoplay: false
-})
+const animation = animate('.element', { x: 250, autoplay: false })
 
 animation.play()
 animation.pause()
 animation.restart()
 animation.reverse()
-animation.seek(500) // Seek to 500ms
+animation.seek(500) // seek to 500ms
+```
+
+### Draggable Elements
+
+```javascript
+import { createDraggable, spring } from 'animejs'
+
+createDraggable('.square', {
+  container: [0, 0, 0, 0],
+  releaseEase: spring({ bounce: 0.7 })
+})
 ```
 
 ## Performance Optimization
@@ -374,34 +413,21 @@ animation.seek(500) // Seek to 500ms
 ### Use Transform and Opacity
 
 ```javascript
-// ✅ Good: GPU-accelerated
-anime({
-  targets: '.element',
-  translateX: 250,
-  opacity: 0.5
-})
+// Good: GPU-accelerated
+animate('.element', { x: 250, opacity: 0.5 })
 
-// ❌ Avoid: Triggers layout
-anime({
-  targets: '.element',
-  left: '250px',
-  width: '500px'
-})
+// Avoid: triggers layout
+animate('.element', { left: '250px', width: '500px' })
 ```
 
 ### Batch Similar Animations
 
 ```javascript
-// ✅ Single animation for multiple targets
-anime({
-  targets: '.multiple-elements',
-  translateX: 250
-})
+// Good: single call for multiple targets
+animate('.multiple-elements', { x: 250 })
 
-// ❌ Avoid: Multiple separate animations
-elements.forEach(el => {
-  anime({ targets: el, translateX: 250 })
-})
+// Avoid: separate calls per element
+elements.forEach(el => animate(el, { x: 250 }))
 ```
 
 ### Use `will-change` for Complex Animations
@@ -412,100 +438,89 @@ elements.forEach(el => {
 }
 ```
 
-### Disable autoplay for Scroll Animations
+### Disable autoplay for Manually-Driven Animations
 
 ```javascript
-const animation = anime({
-  targets: '.element',
-  translateX: 250,
-  autoplay: false // Control manually
-})
+const animation = animate('.element', { x: 250, autoplay: false })
 ```
 
 ## Common Pitfalls
 
-### 1. Forgetting Unit Types
+### 1. Passing an options object with `targets` instead of two arguments
 
 ```javascript
-// ❌ Wrong: No unit
-anime({ targets: '.element', width: 200 })
+// Wrong: v3 syntax, no longer valid
+animate({ targets: '.element', x: 250 })
 
-// ✅ Correct: Include unit
-anime({ targets: '.element', width: '200px' })
+// Correct: targets is the first argument
+animate('.element', { x: 250 })
 ```
 
-### 2. Using CSS transform Property Directly
+### 2. Using `easing` instead of `ease`
 
 ```javascript
-// ❌ Wrong: Can't animate transform string
-anime({ targets: '.element', transform: 'translateX(250px)' })
+// Wrong
+animate('.element', { x: 250, easing: 'easeInOutQuad' })
 
-// ✅ Correct: Individual transform properties
-anime({ targets: '.element', translateX: 250 })
+// Correct
+animate('.element', { x: 250, ease: 'inOutQuad' })
 ```
 
-### 3. Not Handling Animation Cleanup
+### 3. Forgetting Unit Types
 
 ```javascript
-// ❌ Wrong: Animation continues after unmount
+// Wrong: no unit
+animate('.element', { width: 200 })
+
+// Correct: include unit
+animate('.element', { width: '200px' })
+```
+
+### 4. Not Handling Animation Cleanup in Frameworks
+
+```javascript
+// Wrong: animation and its listeners outlive the component
 useEffect(() => {
-  anime({ targets: ref.current, translateX: 250 })
+  animate(ref.current, { x: 250 })
 }, [])
 
-// ✅ Correct: Pause on cleanup
+// Correct: wrap in createScope and revert on unmount
 useEffect(() => {
-  const anim = anime({ targets: ref.current, translateX: 250 })
-  return () => anim.pause()
+  const scope = createScope({ root: ref }).add(() => {
+    animate(ref.current, { x: 250 })
+  })
+  return () => scope.revert()
 }, [])
-```
-
-### 4. Animating Too Many Elements
-
-```javascript
-// ❌ Avoid: Animating 1000+ elements
-anime({ targets: '.many-items', translateX: 250 }) // 1000+ elements
-
-// ✅ Better: Use CSS animations for large sets
-// Or reduce element count with virtualization
 ```
 
 ### 5. Incorrect Timeline Timing
 
 ```javascript
-// ❌ Wrong: Missing offset operator
-.add({ targets: '.el2' }, '500') // Treated as absolute time
+// Wrong: missing offset operator, treated as absolute time
+tl.add('.el2', { x: 250 }, '500')
 
-// ✅ Correct: Use relative operators
-.add({ targets: '.el2' }, '-=500') // Relative to previous
-.add({ targets: '.el3' }, '+=200') // Relative to previous
+// Correct: use relative operators or a label
+tl.add('.el2', { x: 250 }, '-=500')
+tl.add('.el3', { x: 250 }, '+=200')
 ```
 
 ### 6. Overusing Loop
 
 ```javascript
-// ❌ Avoid: Infinite loops drain battery
-anime({
-  targets: '.element',
-  rotate: '1turn',
-  loop: true,
-  duration: 1000
-})
+// Avoid: infinite JS-driven loops drain battery
+animate('.element', { rotate: '1turn', loop: true, duration: 1000 })
 
-// ✅ Better: Use CSS animations for infinite loops
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+// Better: use CSS animations for simple infinite loops
 ```
 
 ## Resources
 
 ### Scripts
-- `animation_generator.py` - Generate Anime.js animation boilerplate (8 types)
-- `timeline_builder.py` - Build complex timeline sequences
+- `animation_generator.py` - Generate Anime.js v4 animation boilerplate (8 types)
+- `timeline_builder.py` - Build complex v4 timeline sequences
 
 ### References
-- `api_reference.md` - Complete Anime.js API documentation
+- `api_reference.md` - Complete Anime.js v4 API documentation
 - `stagger_guide.md` - Stagger utilities and patterns
 - `timeline_guide.md` - Timeline sequencing deep dive
 

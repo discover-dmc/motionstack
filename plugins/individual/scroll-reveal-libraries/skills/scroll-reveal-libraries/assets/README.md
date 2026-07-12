@@ -23,7 +23,7 @@ Production-ready code examples for AOS (Animate On Scroll) integration across di
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AOS Minimal Example</title>
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
   <h1 data-aos="fade-down">Hello World</h1>
@@ -31,7 +31,7 @@ Production-ready code examples for AOS (Animate On Scroll) integration across di
     This content fades in with a delay.
   </p>
 
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
   </script>
@@ -42,7 +42,7 @@ Production-ready code examples for AOS (Animate On Scroll) integration across di
 ### NPM Setup (ES6)
 
 ```bash
-npm install aos@next
+npm install aos@2.3.4
 ```
 
 ```javascript
@@ -488,7 +488,7 @@ export default {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AOS Landing Page</title>
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -591,7 +591,7 @@ export default {
     </div>
   </section>
 
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({
       duration: 800,

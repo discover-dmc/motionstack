@@ -116,13 +116,15 @@ torus.receiveShadow = true;
 objectsGroup.add(torus);
 
 // Animation Loop
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
+timer.connect(document);
 
-function animate() {
+function animate(timestamp) {
   requestAnimationFrame(animate);
 
-  const deltaTime = clock.getDelta();
-  const elapsedTime = clock.getElapsedTime();
+  timer.update(timestamp);
+  const deltaTime = timer.getDelta();
+  const elapsedTime = timer.getElapsed();
 
   // Animate objects
   cube.rotation.y += deltaTime * 0.5;

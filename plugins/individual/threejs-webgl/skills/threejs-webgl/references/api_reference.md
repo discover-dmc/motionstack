@@ -353,13 +353,15 @@ q.setFromAxisAngle(axis, angle);
 mesh.quaternion.copy(q);
 ```
 
-### Clock
+### Timer
+`THREE.Clock` is deprecated (r183); use `THREE.Timer`.
 ```javascript
-const clock = new THREE.Clock();
-const delta = clock.getDelta(); // Time since last call
-const elapsed = clock.getElapsedTime(); // Total time
-clock.start();
-clock.stop();
+const timer = new THREE.Timer();
+timer.update(timestamp); // call once per frame, from requestAnimationFrame
+const delta = timer.getDelta(); // Time since last update() — stable across repeated reads
+const elapsed = timer.getElapsed(); // Total time
+timer.reset();
+timer.connect(document); // avoids large deltas when tab is inactive
 ```
 
 ## Post-Processing
@@ -373,6 +375,7 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.render();
 ```
+For WebGPURenderer use `RenderPipeline` (renamed from `PostProcessing` in r183) instead — node/TSL-based, works on WebGPU and the WebGL2 fallback.
 
 ### Common Passes
 ```javascript
@@ -455,5 +458,5 @@ const instancedMesh = new THREE.InstancedMesh(geometry, material, count);
 2. **Set texture.colorSpace = THREE.SRGBColorSpace for diffuse textures**
 3. **Enable shadows on renderer, lights, and objects**
 4. **Dispose geometries, materials, and textures to prevent memory leaks**
-5. **Use Clock.getDelta() for frame-independent animations**
+5. **Use Timer.getDelta() for frame-independent animations** (`THREE.Clock` is deprecated since r183)
 6. **Call controls.update() in animation loop if damping is enabled**

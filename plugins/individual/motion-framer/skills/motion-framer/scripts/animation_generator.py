@@ -87,13 +87,13 @@ class MotionAnimationGenerator:
         if needs_presence:
             imports[0] += ", AnimatePresence"
 
-        imports[0] += " } from 'framer-motion'"
+        imports[0] += " } from 'motion/react'"
 
         if needs_hooks:
             imports.append("import { useState } from 'react'")
 
         if self.typescript:
-            imports.append("import type { Variants } from 'framer-motion'")
+            imports.append("import type { Variants } from 'motion/react'")
 
         return "\n".join(imports)
 
@@ -312,7 +312,7 @@ export function {self.name}({{ children }}{': ' + self.name + 'Props' if self.ty
         """Generate staggered children animation."""
         imports = self._get_imports()
         if self.typescript:
-            imports = self._get_imports() + "\nimport type { Variants } from 'framer-motion'"
+            imports = self._get_imports() + "\nimport type { Variants } from 'motion/react'"
 
         variants = "Variants" if self.typescript else ""
 
@@ -408,7 +408,7 @@ export function {self.name}({{ children }}{': ' + self.name + 'Props' if self.ty
         """Generate variant-based animation system."""
         imports = self._get_imports(needs_hooks=True)
         if self.typescript:
-            imports += "\nimport type { Variants } from 'framer-motion'"
+            imports += "\nimport type { Variants } from 'motion/react'"
 
         variants_type = ": Variants" if self.typescript else ""
 

@@ -1,28 +1,34 @@
 # Anime.js Timeline Guide
 
-Complete guide to creating complex animation sequences with Anime.js timelines.
+Complete guide to creating complex animation sequences with Anime.js v4 timelines.
 
 ## Overview
 
-Timelines allow you to chain multiple animations with precise control over timing and sequencing. They provide a declarative way to choreograph complex multi-step animations.
+Timelines chain multiple animations with precise control over timing and sequencing, using `createTimeline()`. They provide a declarative way to choreograph complex multi-step animations, and can hold animations, timers, labels, and callbacks.
+
+```javascript
+import { createTimeline } from 'animejs'
+```
 
 ## Creating a Timeline
 
 ### Basic Timeline
 
 ```javascript
-const timeline = anime.timeline()
+const timeline = createTimeline()
 ```
 
 ### Timeline with Default Parameters
 
 ```javascript
-const timeline = anime.timeline({
-  duration: 1000,      // Default duration for all animations
-  easing: 'easeOutExpo', // Default easing
-  loop: false,         // Loop entire timeline
-  direction: 'normal',  // 'normal', 'reverse', 'alternate'
-  autoplay: true       // Auto-start
+const timeline = createTimeline({
+  defaults: {
+    duration: 1000,     // default duration for all children
+    ease: 'outExpo'       // default ease for all children
+  },
+  loop: false,             // loop the entire timeline
+  alternate: false,         // ping-pong each loop (was direction: 'alternate')
+  autoplay: true             // auto-start
 })
 ```
 
@@ -32,75 +38,66 @@ const timeline = anime.timeline({
 
 ### .add() Method
 
+`timeline.add(target, parameters, position)` — target is passed as a separate argument, the same as `animate()`:
+
 ```javascript
-timeline.add({
-  targets: '.element',
-  translateX: 250,
-  duration: 800
-})
+timeline.add('.element', { x: 250, duration: 800 })
 ```
 
 ### Chaining Animations
 
 ```javascript
 timeline
-  .add({
-    targets: '.box1',
-    translateX: 250
-  })
-  .add({
-    targets: '.box2',
-    translateX: 250
-  })
-  .add({
-    targets: '.box3',
-    translateX: 250
-  })
+  .add('.box1', { x: 250 })
+  .add('.box2', { x: 250 })
+  .add('.box3', { x: 250 })
 ```
 
 ---
 
-## Timeline Offsets
+## Timeline Position (Offset)
 
-Control when each animation starts relative to the previous one.
+Control when each animation starts relative to the timeline or the previous item.
 
 ### Absolute Time
 
 ```javascript
-timeline.add({
-  targets: '.element',
-  translateX: 250
-}, 1000) // Start at 1000ms from timeline start
+timeline.add('.element', { x: 250 }, 1000) // start at 1000ms from timeline start
 ```
 
-### Relative to Previous (+=)
+### Relative to Previous End (+=)
 
 ```javascript
 timeline
-  .add({
-    targets: '.box1',
-    translateX: 250,
-    duration: 1000
-  })
-  .add({
-    targets: '.box2',
-    translateX: 250
-  }, '+=500') // Start 500ms AFTER box1 completes
+  .add('.box1', { x: 250, duration: 1000 })
+  .add('.box2', { x: 250 }, '+=500') // start 500ms AFTER box1 completes
 ```
 
-### Overlap with Previous (-=)
+### Overlap with Previous End (-=)
 
 ```javascript
 timeline
-  .add({
-    targets: '.box1',
-    translateX: 250,
-    duration: 1000
-  })
-  .add({
-    targets: '.box2',
-    translateX: 250
-  }, '-=500') // Start 500ms BEFORE box1 completes (overlap)
+  .add('.box1', { x: 250, duration: 1000 })
+  .add('.box2', { x: 250 }, '-=500') // start 500ms BEFORE box1 completes (overlap)
+```
+
+### Relative to Previous Start (<)
+
+```javascript
+timeline
+  .add('.box1', { x: 250, duration: 1000 })
+  .add('.box2', { y: 250 }, '<')       // start at the exact same time as box1
+  .add('.box3', { y: 250 }, '<-=200')  // start 200ms before box1's own start
+```
+
+### Labels
+
+```javascript
+timeline
+  .label('start')
+  .add('.box1', { x: 250 })
+  .add('.box2', { x: 250 }, 'start')       // start exactly at the label
+  .add('.box3', { x: 250 }, 'start+=300')  // 300ms after the label
 ```
 
 ---
@@ -109,172 +106,76 @@ timeline
 
 ### 1. Sequential Animations
 
-Each animation starts after the previous completes:
-
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.title',
-  translateY: [-50, 0],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.subtitle',
-  translateY: [-30, 0],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.button',
-  scale: [0, 1]
-})
+tl.add('.title', { y: [-50, 0], opacity: [0, 1] })
+  .add('.subtitle', { y: [-30, 0], opacity: [0, 1] })
+  .add('.button', { scale: [0, 1] })
 ```
 
 ### 2. Overlapping Animations
 
-Create smooth transitions between animations:
-
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.section1',
-  opacity: [1, 0],
-  duration: 600
-})
-.add({
-  targets: '.section2',
-  opacity: [0, 1],
-  duration: 600
-}, '-=300') // Overlap by 300ms for crossfade
+tl.add('.section1', { opacity: [1, 0], duration: 600 })
+  .add('.section2', { opacity: [0, 1], duration: 600 }, '-=300') // crossfade
 ```
 
 ### 3. Staggered Timeline
 
-Combine timeline with stagger:
-
 ```javascript
-const tl = anime.timeline()
+import { createTimeline, stagger } from 'animejs'
 
-tl.add({
-  targets: '.card',
-  translateY: [100, 0],
-  opacity: [0, 1],
-  delay: anime.stagger(100)
-})
-.add({
-  targets: '.button',
-  scale: [0, 1]
-}, '-=200')
+const tl = createTimeline()
+
+tl.add('.card', { y: [100, 0], opacity: [0, 1], delay: stagger(100) })
+  .add('.button', { scale: [0, 1] }, '-=200')
 ```
 
 ### 4. Multi-Stage Animation
 
-Complex multi-step sequence:
-
 ```javascript
-const tl = anime.timeline({
-  easing: 'easeOutExpo',
-  duration: 750
-})
+const tl = createTimeline({ defaults: { ease: 'outExpo', duration: 750 } })
 
-tl.add({
-  targets: '.modal',
-  scale: [0, 1],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.modal-header',
-  translateY: [-20, 0],
-  opacity: [0, 1]
-}, '-=500')
-.add({
-  targets: '.modal-body',
-  translateY: [20, 0],
-  opacity: [0, 1]
-}, '-=400')
-.add({
-  targets: '.modal-footer',
-  opacity: [0, 1]
-}, '-=300')
+tl.add('.modal', { scale: [0, 1], opacity: [0, 1] })
+  .add('.modal-header', { y: [-20, 0], opacity: [0, 1] }, '-=500')
+  .add('.modal-body', { y: [20, 0], opacity: [0, 1] }, '-=400')
+  .add('.modal-footer', { opacity: [0, 1] }, '-=300')
 ```
 
 ### 5. Looping Timeline
 
 ```javascript
-const tl = anime.timeline({
-  loop: true,
-  direction: 'alternate'
-})
+const tl = createTimeline({ loop: true, alternate: true })
 
-tl.add({
-  targets: '.ball',
-  translateY: -200,
-  duration: 1000
-})
-.add({
-  targets: '.ball',
-  translateX: 200,
-  duration: 1000
-})
+tl.add('.ball', { y: -200, duration: 1000 })
+  .add('.ball', { x: 200, duration: 1000 })
 ```
 
 ### 6. Loading Sequence
 
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.loader-bg',
-  scaleY: [0, 1],
-  duration: 400,
-  easing: 'easeInOutQuad'
-})
-.add({
-  targets: '.loader-text',
-  opacity: [0, 1],
-  translateY: [20, 0],
-  duration: 600
-}, '-=200')
-.add({
-  targets: '.loader-spinner',
-  rotate: '1turn',
-  duration: 800,
-  loop: 3
-}, '-=400')
-.add({
-  targets: '.loader',
-  opacity: 0,
-  duration: 400
-}, '+=500')
-.add({
-  targets: '.content',
-  translateY: [50, 0],
-  opacity: [0, 1],
-  duration: 600
-})
+tl.add('.loader-bg', { scaleY: [0, 1], duration: 400, ease: 'inOutQuad' })
+  .add('.loader-text', { opacity: [0, 1], y: [20, 0], duration: 600 }, '-=200')
+  .add('.loader-spinner', { rotate: '1turn', duration: 800, loop: 3 }, '-=400')
+  .add('.loader', { opacity: 0, duration: 400 }, '+=500')
+  .add('.content', { y: [50, 0], opacity: [0, 1], duration: 600 })
 ```
 
 ### 7. Page Transition
 
 ```javascript
-function pageTransition(oldPage, newPage) {
-  const tl = anime.timeline()
+import { createTimeline } from 'animejs'
 
-  tl.add({
-    targets: oldPage,
-    translateX: [0, -100],
-    opacity: [1, 0],
-    duration: 400,
-    easing: 'easeInQuad'
-  })
-  .add({
-    targets: newPage,
-    translateX: [100, 0],
-    opacity: [0, 1],
-    duration: 400,
-    easing: 'easeOutQuad'
-  }, '-=200')
+function pageTransition(oldPage, newPage) {
+  const tl = createTimeline()
+
+  tl.add(oldPage, { x: [0, -100], opacity: [1, 0], duration: 400, ease: 'inQuad' })
+    .add(newPage, { x: [100, 0], opacity: [0, 1], duration: 400, ease: 'outQuad' }, '-=200')
 
   return tl
 }
@@ -287,104 +188,86 @@ function pageTransition(oldPage, newPage) {
 ### Playback Methods
 
 ```javascript
-const tl = anime.timeline({ autoplay: false })
+const tl = createTimeline({ autoplay: false })
 
-tl.play()       // Play from current position
-tl.pause()      // Pause
-tl.restart()    // Restart from beginning
-tl.reverse()    // Reverse direction
-tl.seek(2000)   // Seek to 2000ms
+tl.play()       // play from current position
+tl.pause()      // pause
+tl.restart()    // restart from beginning
+tl.reverse()    // reverse direction
+tl.seek(2000)   // seek to 2000ms
 ```
 
 ### Properties
 
 ```javascript
-tl.duration      // Total duration
-tl.currentTime   // Current time
-tl.progress      // Progress (0-100)
-tl.reversed      // Is reversed?
-tl.paused        // Is paused?
-tl.began         // Has begun?
-tl.finished      // Is finished?
+tl.duration
+tl.currentTime
+tl.progress      // 0-100
+tl.paused
+tl.began
+tl.completed
 ```
 
 ---
 
 ## Advanced Techniques
 
-### Labels
-
-Mark specific points in the timeline:
+### .set() — Instant Value Changes
 
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.intro',
-  opacity: [0, 1]
-})
-.add({}, '+=500') // Add label "intro-done" at this point
-.add({
-  targets: '.content',
-  translateY: [50, 0],
-  opacity: [0, 1]
-})
-
-// Seek to label
-tl.seek('intro-done')
+tl.add('.intro', { opacity: [0, 1] })
+  .set('.intro', { pointerEvents: 'none' }) // apply instantly at this point
+  .add('.content', { y: [50, 0], opacity: [0, 1] })
 ```
 
-### Nested Timelines
+### .call() — Run Arbitrary Code at a Position
+
+```javascript
+const tl = createTimeline()
+
+tl.add('.intro', { opacity: [0, 1] })
+  .call(() => console.log('intro finished'), '+=0')
+  .add('.content', { y: [50, 0], opacity: [0, 1] })
+```
+
+### Nested Timelines via .sync()
 
 ```javascript
 function createIntroTimeline() {
-  const tl = anime.timeline({ autoplay: false })
-  tl.add({
-    targets: '.logo',
-    scale: [0, 1]
-  })
-  .add({
-    targets: '.tagline',
-    opacity: [0, 1]
-  })
+  const tl = createTimeline({ autoplay: false })
+  tl.add('.logo', { scale: [0, 1] })
+    .add('.tagline', { opacity: [0, 1] })
   return tl
 }
 
-const mainTimeline = anime.timeline()
-mainTimeline.add(createIntroTimeline())
+const mainTimeline = createTimeline()
+mainTimeline.sync(createIntroTimeline())
 ```
 
 ### Timeline Callbacks
 
 ```javascript
-const tl = anime.timeline({
-  begin: () => console.log('Timeline begins'),
-  update: (tl) => console.log('Progress:', tl.progress),
-  complete: () => console.log('Timeline completes')
+const tl = createTimeline({
+  onBegin: () => console.log('timeline begins'),
+  onUpdate: (tl) => console.log('progress:', tl.progress),
+  onComplete: () => console.log('timeline completes')
 })
 ```
 
 ### Conditional Timeline
 
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.element1',
-  translateX: 250
-})
+tl.add('.element1', { x: 250 })
 
 if (condition) {
-  tl.add({
-    targets: '.element2',
-    opacity: [0, 1]
-  })
+  tl.add('.element2', { opacity: [0, 1] })
 }
 
-tl.add({
-  targets: '.element3',
-  scale: [0, 1]
-})
+tl.add('.element3', { scale: [0, 1] })
 ```
 
 ---
@@ -394,49 +277,20 @@ tl.add({
 ### Without Timeline (Hard to Manage)
 
 ```javascript
-anime({
-  targets: '.box1',
-  translateX: 250,
-  duration: 1000
-})
+animate('.box1', { x: 250, duration: 1000 })
 
-setTimeout(() => {
-  anime({
-    targets: '.box2',
-    translateX: 250,
-    duration: 1000
-  })
-}, 1000)
-
-setTimeout(() => {
-  anime({
-    targets: '.box3',
-    translateX: 250,
-    duration: 1000
-  })
-}, 2000)
+setTimeout(() => animate('.box2', { x: 250, duration: 1000 }), 1000)
+setTimeout(() => animate('.box3', { x: 250, duration: 1000 }), 2000)
 ```
 
-### With Timeline (Clean & Maintainable)
+### With Timeline (Clean and Maintainable)
 
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.box1',
-  translateX: 250,
-  duration: 1000
-})
-.add({
-  targets: '.box2',
-  translateX: 250,
-  duration: 1000
-})
-.add({
-  targets: '.box3',
-  translateX: 250,
-  duration: 1000
-})
+tl.add('.box1', { x: 250, duration: 1000 })
+  .add('.box2', { x: 250, duration: 1000 })
+  .add('.box3', { x: 250, duration: 1000 })
 ```
 
 ---
@@ -446,91 +300,82 @@ tl.add({
 ### 1. Use Relative Offsets
 
 ```javascript
-// ✅ Good: Flexible timing
-.add({...}, '-=500')
+// Good: flexible timing
+.add('.el', {...}, '-=500')
 
-// ❌ Avoid: Brittle absolute timing
-.add({...}, 1500)
+// Avoid: brittle absolute timing
+.add('.el', {...}, 1500)
 ```
 
 ### 2. Batch Similar Animations
 
 ```javascript
-// ✅ Good: Single animation
-tl.add({
-  targets: ['.el1', '.el2', '.el3'],
-  translateX: 250
-})
+// Good: single call
+tl.add(['.el1', '.el2', '.el3'], { x: 250 })
 
-// ❌ Avoid: Multiple separate animations
-tl.add({ targets: '.el1', translateX: 250 })
-  .add({ targets: '.el2', translateX: 250 })
-  .add({ targets: '.el3', translateX: 250 })
+// Avoid: separate calls
+tl.add('.el1', { x: 250 })
+  .add('.el2', { x: 250 })
+  .add('.el3', { x: 250 })
 ```
 
-### 3. Set Default Parameters
+### 3. Set Defaults Once
 
 ```javascript
-// ✅ Good: DRY
-const tl = anime.timeline({
-  easing: 'easeOutExpo',
-  duration: 800
-})
+// Good: DRY
+const tl = createTimeline({ defaults: { ease: 'outExpo', duration: 800 } })
 
-// ❌ Avoid: Repetition
-tl.add({ targets: '.el1', easing: 'easeOutExpo', duration: 800 })
-  .add({ targets: '.el2', easing: 'easeOutExpo', duration: 800 })
+// Avoid: repetition
+tl.add('.el1', { ease: 'outExpo', duration: 800 })
+  .add('.el2', { ease: 'outExpo', duration: 800 })
 ```
 
 ---
 
 ## Common Mistakes
 
-### ❌ Wrong: Missing Offset Operator
+### Wrong: Missing Offset Operator
 
 ```javascript
-tl.add({
-  targets: '.box1',
-  translateX: 250
-})
-.add({
-  targets: '.box2',
-  translateX: 250
-}, '500') // Treated as absolute time!
+tl.add('.box1', { x: 250 })
+  .add('.box2', { x: 250 }, '500') // treated as absolute time!
 ```
 
-### ✅ Correct: Use Relative Operator
+### Correct: Use Relative Operator
 
 ```javascript
-tl.add({
-  targets: '.box1',
-  translateX: 250
-})
-.add({
-  targets: '.box2',
-  translateX: 250
-}, '+=500') // Relative to previous
+tl.add('.box1', { x: 250 })
+  .add('.box2', { x: 250 }, '+=500') // relative to previous
 ```
 
-### ❌ Wrong: Forgetting autoplay: false
+### Wrong: Passing an Options Object with `targets`
 
 ```javascript
-const tl = anime.timeline() // Starts immediately
-
-// Later...
-button.addEventListener('click', () => {
-  tl.play() // Already playing!
-})
+tl.add({ targets: '.box1', x: 250 }) // v3 syntax, no longer valid
 ```
 
-### ✅ Correct: Disable autoplay
+### Correct: Target as First Argument
 
 ```javascript
-const tl = anime.timeline({ autoplay: false })
+tl.add('.box1', { x: 250 })
+```
+
+### Wrong: Forgetting autoplay: false
+
+```javascript
+const tl = createTimeline() // starts immediately
 
 button.addEventListener('click', () => {
-  tl.play() // Now it works
+  tl.play() // already playing!
 })
+```
+
+### Correct: Disable autoplay
+
+```javascript
+const tl = createTimeline({ autoplay: false })
+
+button.addEventListener('click', () => tl.play())
 ```
 
 ---
@@ -540,54 +385,23 @@ button.addEventListener('click', () => {
 ### Hero Section Animation
 
 ```javascript
-const heroTimeline = anime.timeline({
-  easing: 'easeOutExpo'
-})
+const heroTimeline = createTimeline({ defaults: { ease: 'outExpo' } })
 
 heroTimeline
-  .add({
-    targets: '.hero-bg',
-    scale: [1.2, 1],
-    opacity: [0, 1],
-    duration: 1200
-  })
-  .add({
-    targets: '.hero-title',
-    translateY: [100, 0],
-    opacity: [0, 1],
-    duration: 800
-  }, '-=800')
-  .add({
-    targets: '.hero-subtitle',
-    translateY: [50, 0],
-    opacity: [0, 1],
-    duration: 600
-  }, '-=400')
-  .add({
-    targets: '.hero-cta',
-    scale: [0, 1],
-    duration: 400
-  }, '-=200')
+  .add('.hero-bg', { scale: [1.2, 1], opacity: [0, 1], duration: 1200 })
+  .add('.hero-title', { y: [100, 0], opacity: [0, 1], duration: 800 }, '-=800')
+  .add('.hero-subtitle', { y: [50, 0], opacity: [0, 1], duration: 600 }, '-=400')
+  .add('.hero-cta', { scale: [0, 1], duration: 400 }, '-=200')
 ```
 
 ### Card Flip Animation
 
 ```javascript
 function flipCard(card) {
-  const tl = anime.timeline({ autoplay: false })
+  const tl = createTimeline({ autoplay: false })
 
-  tl.add({
-    targets: card.querySelector('.front'),
-    rotateY: [0, 90],
-    duration: 300,
-    easing: 'easeInQuad'
-  })
-  .add({
-    targets: card.querySelector('.back'),
-    rotateY: [-90, 0],
-    duration: 300,
-    easing: 'easeOutQuad'
-  }, '-=0')
+  tl.add(card.querySelector('.front'), { rotateY: [0, 90], duration: 300, ease: 'inQuad' })
+    .add(card.querySelector('.back'), { rotateY: [-90, 0], duration: 300, ease: 'outQuad' }, '<')
 
   return tl
 }
@@ -597,21 +411,10 @@ function flipCard(card) {
 
 ```javascript
 function showToast(toast) {
-  const tl = anime.timeline()
+  const tl = createTimeline()
 
-  tl.add({
-    targets: toast,
-    translateX: [400, 0],
-    opacity: [0, 1],
-    duration: 400,
-    easing: 'easeOutBack'
-  })
-  .add({
-    targets: toast,
-    opacity: [1, 0],
-    duration: 300,
-    easing: 'easeInQuad'
-  }, '+=3000')
+  tl.add(toast, { x: [400, 0], opacity: [0, 1], duration: 400, ease: 'outBack' })
+    .add(toast, { opacity: [1, 0], duration: 300, ease: 'inQuad' }, '+=3000')
 
   return tl
 }
@@ -624,8 +427,8 @@ function showToast(toast) {
 ### Log Timeline Progress
 
 ```javascript
-const tl = anime.timeline({
-  update: (tl) => {
+const tl = createTimeline({
+  onUpdate: (tl) => {
     console.log(`Progress: ${tl.progress.toFixed(2)}%`)
     console.log(`Current time: ${tl.currentTime}ms`)
   }
@@ -635,21 +438,19 @@ const tl = anime.timeline({
 ### Visualize Timeline
 
 ```javascript
-const tl = anime.timeline()
+const tl = createTimeline()
 
-tl.add({
-  targets: '.box1',
-  translateX: 250,
+tl.add('.box1', {
+  x: 250,
   duration: 1000,
-  begin: () => console.log('[0ms] Box1 begins'),
-  complete: () => console.log('[1000ms] Box1 completes')
+  onBegin: () => console.log('[0ms] Box1 begins'),
+  onComplete: () => console.log('[1000ms] Box1 completes')
 })
-.add({
-  targets: '.box2',
-  translateX: 250,
+.add('.box2', {
+  x: 250,
   duration: 1000,
-  begin: () => console.log('[1000ms] Box2 begins'),
-  complete: () => console.log('[2000ms] Box2 completes')
+  onBegin: () => console.log('[1000ms] Box2 begins'),
+  onComplete: () => console.log('[2000ms] Box2 completes')
 }, '-=500')
 ```
 
@@ -657,6 +458,5 @@ tl.add({
 
 ## Resources
 
-- Official Timeline Documentation: https://animejs.com/documentation/#timeline
-- Timeline Examples: https://codepen.io/collection/DxpqGJ/
-- Advanced Sequencing: https://animejs.com/documentation/#timelineBasics
+- Official Timeline Documentation: https://animejs.com/documentation/timeline
+- Official Documentation Home: https://animejs.com/documentation/

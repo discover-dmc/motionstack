@@ -70,7 +70,7 @@ def generate_basic_scene(name):
     <title>{name} - A-Frame Basic Scene</title>
     <meta name="description" content="{name} - A-Frame VR">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <style>
       body {{ margin: 0; }}
       #info {{
@@ -151,7 +151,7 @@ def generate_vr_scene(name):
     <title>{name} - A-Frame VR Experience</title>
     <meta name="description" content="{name} - VR Experience">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
     <style>
       body {{ margin: 0; }}
@@ -263,7 +263,7 @@ def generate_ar_scene(name):
     <title>{name} - A-Frame AR Experience</title>
     <meta name="description" content="{name} - AR Experience">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <style>
       body {{ margin: 0; }}
       #overlay {{
@@ -397,7 +397,7 @@ def generate_360_scene(name):
     <title>{name} - 360° Gallery</title>
     <meta name="description" content="{name} - 360° Gallery">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
     <style>
       body {{ margin: 0; }}
@@ -495,7 +495,7 @@ def generate_physics_scene(name):
     <title>{name} - A-Frame Physics Scene</title>
     <meta name="description" content="{name} - Physics Simulation">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-physics-system@4.2.2/dist/aframe-physics-system.min.js"></script>
     <style>
       body {{ margin: 0; }}
@@ -602,7 +602,7 @@ def generate_environment_scene(name):
     <title>{name} - A-Frame Environment</title>
     <meta name="description" content="{name} - Procedural Environment">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-particle-system-component@1.2.x/dist/aframe-particle-system-component.min.js"></script>
     <style>
@@ -664,7 +664,7 @@ def generate_networked_scene(name):
     <title>{name} - Networked A-Frame</title>
     <meta name="description" content="{name} - Multi-user VR">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/networked-aframe@^0.11.0/dist/networked-aframe.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
     <script>

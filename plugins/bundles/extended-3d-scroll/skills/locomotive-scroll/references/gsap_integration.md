@@ -2,7 +2,47 @@
 
 Complete guide for integrating Locomotive Scroll with GSAP ScrollTrigger for advanced scroll-driven animations.
 
-## Table of Contents
+**Current version: v5.0.1**, built on [Lenis](https://github.com/darkroomengineering/lenis). v5 moves the real scroll position instead of transforming a wrapper element, so the `scrollerProxy`/`pinType` setup below is v4-only and no longer needed.
+
+## v5 Integration (Current)
+
+```javascript
+import LocomotiveScroll from 'locomotive-scroll';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const scroll = new LocomotiveScroll({
+  autoStart: false, // GSAP's ticker drives the raf loop instead
+  scrollCallback: () => ScrollTrigger.update(),
+  initCustomTicker: (render) => {
+    gsap.ticker.add(render);
+    gsap.ticker.lagSmoothing(0);
+  },
+  destroyCustomTicker: (render) => gsap.ticker.remove(render),
+});
+
+// Standard ScrollTrigger usage — no custom scroller or scrollerProxy needed
+gsap.to('.fade-in', {
+  scrollTrigger: {
+    trigger: '.fade-in',
+    start: 'top bottom',
+    end: 'top center',
+    scrub: true
+  },
+  opacity: 1,
+  y: 0
+});
+
+ScrollTrigger.refresh();
+```
+
+`initCustomTicker`/`destroyCustomTicker` hand the raf loop to GSAP's ticker (matching the same pattern GSAP recommends for plain Lenis), and `scrollCallback` keeps ScrollTrigger's cached positions in sync every tick.
+
+---
+
+## Table of Contents (v4 Legacy)
 
 - [Why Combine Them](#why-combine-them)
 - [Basic Integration](#basic-integration)
@@ -29,7 +69,7 @@ Complete guide for integrating Locomotive Scroll with GSAP ScrollTrigger for adv
 - Parallax + complex timelines
 - Premium scroll experiences
 
-## Basic Integration
+## Basic Integration (v4 Legacy)
 
 ### 1. Installation
 

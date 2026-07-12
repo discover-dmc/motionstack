@@ -931,5 +931,5 @@ function initAccordion() {
 
 ---
 
-*Last updated: 2024*
+*Last updated: 2026*
 *Based on WCAG 2.1 and WCAG 2.2 standards*

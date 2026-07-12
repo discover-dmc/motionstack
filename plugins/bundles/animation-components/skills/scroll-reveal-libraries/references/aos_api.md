@@ -2,6 +2,8 @@
 
 Complete reference for AOS (Animate On Scroll) configuration, methods, and data attributes.
 
+**Note**: AOS has had no release since `2.3.4` (2018); the `aos@next` 3.0 beta is also stalled since 2018. This API surface is stable and accurate for existing AOS projects, but for new projects consider native CSS `animation-timeline: view()` first (see `modern-web-design` skill).
+
 ## Table of Contents
 
 - [Initialization](#initialization)

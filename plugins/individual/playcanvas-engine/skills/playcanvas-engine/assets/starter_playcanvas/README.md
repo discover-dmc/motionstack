@@ -177,23 +177,32 @@ entity.addComponent('collision', {
 
 ### Custom Scripts
 
-Create script component:
+Create an ESM Script component (engine v2.0+; classic `pc.createScript` was removed):
 
 ```javascript
-var MyScript = pc.createScript('myScript');
+// myScript.mjs
+import { Script } from 'playcanvas';
 
-MyScript.prototype.initialize = function() {
-    console.log('Script initialized');
-};
+export class MyScript extends Script {
+    static scriptName = 'myScript';
 
-MyScript.prototype.update = function(dt) {
-    // Update logic
-    this.entity.rotate(0, 10 * dt, 0);
-};
+    initialize() {
+        console.log('Script initialized');
+    }
 
+    update(dt) {
+        // Update logic
+        this.entity.rotate(0, 10 * dt, 0);
+    }
+}
+```
+
+```javascript
 // Attach to entity
+import { MyScript } from './myScript.mjs';
+
 entity.addComponent('script');
-entity.script.create('myScript');
+entity.script.create(MyScript);
 ```
 
 ---

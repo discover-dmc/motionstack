@@ -759,7 +759,7 @@ import { CullerPlugin } from 'pixi.js';
 const complexShape = new Graphics();
 // ... draw many shapes
 
-complexShape.cacheAsBitmap = true;  // Renders to texture once
+complexShape.cacheAsTexture(true);  // Renders to texture once
 ```
 
 ---
@@ -804,7 +804,7 @@ app.ticker.add(() => {
 **Solution**:
 ```javascript
 // Always destroy sprites and textures
-sprite.destroy({ children: true, texture: true, baseTexture: true });
+sprite.destroy({ children: true, texture: true, textureSource: true });
 
 // Destroy filters
 sprite.filters = null;

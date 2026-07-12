@@ -5,8 +5,9 @@ Complete reference for Magic UI components built on Tailwind CSS, Framer Motion,
 ## Installation
 
 ```bash
-# Via shadcn CLI (recommended)
-npx shadcn@latest add https://magicui.design/r/[component-name]
+# Via shadcn CLI (recommended, registry-namespace syntax)
+pnpm dlx shadcn@latest add @magicui/[component-name]
+# npx works too: npx shadcn@latest add @magicui/[component-name]
 
 # Manual installation
 # 1. Copy component code to components/ui/

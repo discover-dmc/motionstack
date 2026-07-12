@@ -39,8 +39,8 @@ def create_project_structure(project_name, include_nextjs=False):
         "dependencies": {
             "react": "^18.2.0",
             "react-dom": "^18.2.0",
-            "@splinetool/react-spline": "^2.2.6",
-            "@splinetool/runtime": "^0.9.508"
+            "@splinetool/react-spline": "^4.1.0",
+            "@splinetool/runtime": "^1.12.98"
         },
         "devDependencies": {
             "@vitejs/plugin-react": "^4.0.0",
@@ -54,7 +54,7 @@ def create_project_structure(project_name, include_nextjs=False):
     }
 
     if include_nextjs:
-        package_json["dependencies"]["next"] = "^14.0.0"
+        package_json["dependencies"]["next"] = "^15.0.0"
         package_json["scripts"] = {
             "dev": "next dev",
             "build": "next build",

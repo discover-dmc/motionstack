@@ -73,14 +73,14 @@ Minimal React Spring setup:
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@react-spring/web": "^9.7.3",
-    "@use-gesture/react": "^10.3.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@react-spring/web": "^10.1.2",
+    "@use-gesture/react": "^10.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.2.1",
     "vite": "^5.0.8"
   }

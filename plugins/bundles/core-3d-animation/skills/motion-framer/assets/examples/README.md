@@ -25,7 +25,7 @@ Comprehensive collection of real-world animation patterns, production-ready comp
 ### Full Page Fade
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useLocation } from 'react-router-dom'
 
 function PageTransition({ children }) {
@@ -228,7 +228,7 @@ function MultiStageTransition({ children }) {
 ### Multi-Direction Swipe Handler
 
 ```jsx
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
+import { motion, useMotionValue, useTransform, PanInfo } from 'motion/react'
 
 function SwipeCard() {
   const x = useMotionValue(0)
@@ -275,7 +275,7 @@ function SwipeCard() {
 ### Long Press Gesture
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useState, useRef } from 'react'
 
 function LongPressButton({ onLongPress, children }) {
@@ -346,7 +346,7 @@ function LongPressButton({ onLongPress, children }) {
 ### Pinch to Zoom
 
 ```jsx
-import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useRef } from 'react'
 
 function PinchZoomImage({ src }) {
@@ -424,7 +424,7 @@ function PinchZoomImage({ src }) {
 ### Parallax Scrolling
 
 ```jsx
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 
 function ParallaxSection() {
@@ -461,7 +461,7 @@ function ParallaxSection() {
 ### Scroll Progress Indicator
 
 ```jsx
-import { motion, useScroll } from 'framer-motion'
+import { motion, useScroll } from 'motion/react'
 
 function ScrollProgressBar() {
   const { scrollYProgress } = useScroll()
@@ -487,7 +487,7 @@ function ScrollProgressBar() {
 ### Scroll-Triggered Animation Sequence
 
 ```jsx
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 
 function ScrollSequence() {
@@ -529,7 +529,7 @@ function ScrollSequence() {
 ### Scroll-Based Counter
 
 ```jsx
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring } from 'motion/react'
 import { useRef } from 'react'
 
 function AnimatedCounter({ from = 0, to = 100 }) {
@@ -556,7 +556,7 @@ function AnimatedCounter({ from = 0, to = 100 }) {
 ### Sticky Scroll Sections
 
 ```jsx
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 
 function StickyScrollSection() {
@@ -616,7 +616,7 @@ function StickyScrollSection() {
 ### Masonry Grid with Layout Animation
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function MasonryGrid() {
@@ -671,7 +671,7 @@ function MasonryGrid() {
 ### Expandable Card
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 
 function ExpandableCard({ title, content }) {
@@ -710,7 +710,7 @@ function ExpandableCard({ title, content }) {
 ### Accordion with Layout Animation
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function Accordion({ items }) {
@@ -779,7 +779,7 @@ function Accordion({ items }) {
 ### Grid to List View Toggle
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function ViewToggle() {
@@ -834,7 +834,7 @@ function ViewToggle() {
 ### Image Gallery with Shared Layout
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function SharedLayoutGallery() {
@@ -914,7 +914,7 @@ function SharedLayoutGallery() {
 ### Tab Indicator
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 
 function TabsWithIndicator() {
@@ -968,7 +968,7 @@ function TabsWithIndicator() {
 ### Card Expansion with Shared Layout
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function ExpandingCardList() {
@@ -1064,7 +1064,7 @@ function ExpandingCardList() {
 ### Smooth Modal with Backdrop
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 
 function Modal({ isOpen, onClose, children }) {
   return (
@@ -1118,7 +1118,7 @@ function Modal({ isOpen, onClose, children }) {
 ### Drawer / Side Panel
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 
 function Drawer({ isOpen, onClose, position = 'right', children }) {
   const variants = {
@@ -1196,7 +1196,7 @@ function Drawer({ isOpen, onClose, position = 'right', children }) {
 ### Bottom Sheet (Mobile)
 
 ```jsx
-import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion'
+import { motion, AnimatePresence, useDragControls, PanInfo } from 'motion/react'
 import { useRef } from 'react'
 
 function BottomSheet({ isOpen, onClose, children }) {
@@ -1281,7 +1281,7 @@ function BottomSheet({ isOpen, onClose, children }) {
 ### Confirmation Dialog with Shake
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function ConfirmDialog({ isOpen, onConfirm, onCancel, title, message }) {
@@ -1386,7 +1386,7 @@ function ConfirmDialog({ isOpen, onConfirm, onCancel, title, message }) {
 ### Floating Label Input
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 
 function FloatingLabelInput({ label, type = 'text', ...props }) {
@@ -1446,7 +1446,7 @@ function FloatingLabelInput({ label, type = 'text', ...props }) {
 ### Multi-Step Form with Progress
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function MultiStepForm() {
@@ -1583,7 +1583,7 @@ function MultiStepForm() {
 ### Form Validation with Animation
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function ValidatedInput({ label, validation, ...props }) {
@@ -1685,7 +1685,7 @@ function ContactForm() {
 ### Skeleton Loading
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 function Skeleton({ width, height, borderRadius = 8 }) {
   return (
@@ -1730,7 +1730,7 @@ function SkeletonCard() {
 ### Spinner with Variants
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 function Spinner({ size = 40, color = '#667eea' }) {
   return (
@@ -1783,7 +1783,7 @@ function DotsSpinner() {
 ### Progress Bar with Pulse
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 function ProgressBar({ progress }) {
   return (
@@ -1828,7 +1828,7 @@ function ProgressBar({ progress }) {
 ### Content Fade In
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useState, useEffect } from 'react'
 
 function AsyncContent({ fetchData }) {
@@ -1875,7 +1875,7 @@ function AsyncContent({ fetchData }) {
 ### Animated List with Add/Remove
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function AnimatedList() {
@@ -1965,7 +1965,7 @@ function AnimatedList() {
 ### Reorderable List (Drag to Reorder)
 
 ```jsx
-import { motion, Reorder } from 'framer-motion'
+import { motion, Reorder } from 'motion/react'
 import { useState } from 'react'
 
 function ReorderableList() {
@@ -2008,7 +2008,7 @@ function ReorderableList() {
 ### Staggered Grid
 
 ```jsx
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 const container = {
   hidden: { opacity: 0 },
@@ -2082,7 +2082,7 @@ function StaggeredGrid() {
 ### Lightbox Gallery
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function LightboxGallery({ images }) {
@@ -2225,7 +2225,7 @@ function LightboxGallery({ images }) {
 ### Carousel with Swipe
 
 ```jsx
-import { motion, AnimatePresence, PanInfo } from 'framer-motion'
+import { motion, AnimatePresence, PanInfo } from 'motion/react'
 import { useState } from 'react'
 
 function Carousel({ images }) {
@@ -2372,7 +2372,7 @@ function Carousel({ images }) {
 ### Animated Dropdown Menu
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function DropdownMenu({ trigger, items }) {
@@ -2457,7 +2457,7 @@ function DropdownMenu({ trigger, items }) {
 ### Mega Menu
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function MegaMenu() {
@@ -2569,7 +2569,7 @@ function MegaMenu() {
 ### Mobile Hamburger Menu
 
 ```jsx
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 
 function HamburgerMenu() {
@@ -2693,7 +2693,7 @@ function HamburgerMenu() {
 ### useReducedMotion Hook
 
 ```jsx
-import { useReducedMotion } from 'framer-motion'
+import { useReducedMotion } from 'motion/react'
 
 function AccessibleAnimation() {
   const shouldReduceMotion = useReducedMotion()
@@ -2716,7 +2716,7 @@ function AccessibleAnimation() {
 
 ```jsx
 import { lazy } from 'react'
-import { LazyMotion, domAnimation, m } from 'framer-motion'
+import { LazyMotion, domAnimation, m } from 'motion/react'
 
 // Use 'm' instead of 'motion' with LazyMotion for smaller bundle
 function OptimizedComponent() {
@@ -2786,7 +2786,7 @@ function ComponentC() {
 ### Throttle Scroll Events
 
 ```jsx
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { useThrottle } from './useThrottle'
 
@@ -2809,7 +2809,7 @@ function ThrottledScroll() {
 ### Exit Before Enter (Reduce Simultaneous Animations)
 
 ```jsx
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'motion/react'
 
 // ✅ Good - "wait" mode reduces simultaneous animations
 function OptimizedPageTransition() {
@@ -2843,7 +2843,7 @@ function OptimizedPageTransition() {
 ### 2. Respect Accessibility
 
 ```jsx
-import { useReducedMotion } from 'framer-motion'
+import { useReducedMotion } from 'motion/react'
 
 function AccessibleComponent() {
   const prefersReducedMotion = useReducedMotion()
@@ -2862,7 +2862,7 @@ function AccessibleComponent() {
 ### 3. Optimize Bundle Size
 
 ```jsx
-import { LazyMotion, domAnimation, m } from 'framer-motion'
+import { LazyMotion, domAnimation, m } from 'motion/react'
 
 function SmallBundle() {
   return (
@@ -2876,7 +2876,7 @@ function SmallBundle() {
 ### 4. Clean Up Animations
 
 ```jsx
-import { useAnimation } from 'framer-motion'
+import { useAnimation } from 'motion/react'
 import { useEffect } from 'react'
 
 function CleanupExample() {
@@ -2898,7 +2898,7 @@ function CleanupExample() {
 ### 5. Debounce/Throttle Expensive Operations
 
 ```jsx
-import { motion, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue } from 'motion/react'
 import { useDebounce } from './useDebounce'
 
 function DebouncedInput() {

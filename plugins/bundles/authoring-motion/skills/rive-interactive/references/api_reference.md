@@ -8,6 +8,8 @@ Complete API reference for `rive-react` library.
 npm install rive-react
 ```
 
+`rive-react` bundles `@rive-app/canvas` (default renderer), `@rive-app/canvas-lite`, and `@rive-app/webgl2` as dependencies. Canvas is the default and is fine for most UI use cases and pages with many concurrent Rive instances; `@rive-app/webgl2` gives higher rendering quality and is required for vector feathering. The older `@rive-app/webgl` package is deprecated — use `webgl2` instead.
+
 ## Hooks
 
 ### useRive
@@ -26,7 +28,7 @@ const { rive, RiveComponent } = useRive(options);
 - `stateMachines` (string | string[]): State machines to activate
 - `layout` (Layout): Fit and alignment options
 - `autoplay` (boolean): Auto-play animations (default: true)
-- `autoBind` (boolean): Auto-bind ViewModels (default: true)
+- `autoBind` (boolean): Auto-bind the default ViewModel + instance to the artboard, exposed via `rive.viewModelInstance` (default: false — manual binding via `useViewModel`/`useViewModelInstance` is the default path)
 - `automaticallyHandleEvents` (boolean): Handle Rive events
 - `useOffscreenRenderer` (boolean): Use off-screen renderer
 - `shouldResizeCanvasToContainer` (boolean): Auto-resize canvas
@@ -102,6 +104,38 @@ Bind enum property.
 
 ```typescript
 const { value, setValue } = useViewModelInstanceEnum('propertyName', instance);
+```
+
+### useViewModelInstanceBoolean
+
+Bind boolean property.
+
+```typescript
+const { value, setValue } = useViewModelInstanceBoolean('propertyName', instance);
+```
+
+### useViewModelInstanceImage
+
+Bind image property (accepts a decoded image source).
+
+```typescript
+const { setValue } = useViewModelInstanceImage('propertyName', instance);
+```
+
+### useViewModelInstanceList
+
+Bind a list/array property (add, remove, reorder nested instances).
+
+```typescript
+const { value, addInstance, removeInstance } = useViewModelInstanceList('propertyName', instance);
+```
+
+### useViewModelInstanceArtboard
+
+Bind a nested artboard property, for swapping artboards referenced by a ViewModel.
+
+```typescript
+const { setValue } = useViewModelInstanceArtboard('propertyName', instance);
 ```
 
 ### useViewModelInstanceTrigger

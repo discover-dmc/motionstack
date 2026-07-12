@@ -1020,7 +1020,7 @@ import { DisplacementFilter } from 'pixi.js';
 (async () => {
     // Create displacement sprite
     const displacementSprite = PIXI.Sprite.from('displacement_map.png');
-    displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+    displacementSprite.texture.source.wrapMode = 'repeat';
 
     // Create displacement filter
     const displacementFilter = new DisplacementFilter({

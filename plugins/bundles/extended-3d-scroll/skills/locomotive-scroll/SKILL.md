@@ -7,6 +7,12 @@ description: Comprehensive skill for Locomotive Scroll smooth scrolling library 
 
 Comprehensive guide for implementing smooth scrolling, parallax effects, and scroll-driven animations using Locomotive Scroll.
 
+## Version & Status
+
+**Current: v5.0.1** (Jan 2026). v5 is a complete rewrite built on top of [Lenis](https://github.com/darkroomengineering/lenis) — 9.4kB gzipped, TypeScript-first, no more `data-scroll-container`/`data-scroll-section` wrapper markup or CSS-transform scrolling. Actively maintained (8.8k stars, recent releases).
+
+Patterns below are v5 (current) unless marked **Legacy (v4)**. Older production codebases still on v4 will use the container/section markup and `scrollerProxy` GSAP pattern — those are preserved under Legacy headings.
+
 ## Overview
 
 Locomotive Scroll is a JavaScript library that provides:
@@ -37,85 +43,99 @@ npm install locomotive-scroll
 ```
 
 ```javascript
-// ES6
+// ES6 (v5)
 import LocomotiveScroll from 'locomotive-scroll';
-import 'locomotive-scroll/dist/locomotive-scroll.css';
 
-// Or via CDN
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll/dist/locomotive-scroll.min.css">
-<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll/dist/locomotive-scroll.min.js"></script>
+const scroll = new LocomotiveScroll();
 ```
+
+```css
+@import 'locomotive-scroll/dist/locomotive-scroll.css';
+```
+
+```html
+<!-- Or via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll/bundled/locomotive-scroll.min.js"></script>
+<script>
+  const locomotiveScroll = new LocomotiveScroll();
+</script>
+```
+
+v5 scrolls the whole document by default — no wrapper markup required. To scroll a custom container, pass `lenisOptions: { wrapper, content }` (same shape as [Lenis](https://github.com/darkroomengineering/lenis)'s own options).
 
 ## Core Concepts
 
-### 1. HTML Structure
+### 1. HTML Structure (v5)
 
-Every Locomotive Scroll implementation requires specific data attributes:
+No container/section wrapper attributes are needed. Mark individual elements for detection and parallax directly:
 
 ```html
-<!-- Scroll container (required) -->
-<div data-scroll-container>
+<h1 data-scroll>Basic detection</h1>
 
-  <!-- Scroll sections (optional, improves performance) -->
-  <div data-scroll-section>
+<!-- Parallax element -->
+<div data-scroll data-scroll-speed="2">
+  Moves faster than scroll
+</div>
 
-    <!-- Tracked elements -->
-    <h1 data-scroll>Basic detection</h1>
+<!-- Element with ID for tracking -->
+<div data-scroll data-scroll-id="hero">
+  Accessible via JavaScript
+</div>
 
-    <!-- Parallax element -->
-    <div data-scroll data-scroll-speed="2">
-      Moves faster than scroll
-    </div>
-
-    <!-- Sticky element -->
-    <div data-scroll data-scroll-sticky>
-      Sticks within section
-    </div>
-
-    <!-- Element with ID for tracking -->
-    <div data-scroll data-scroll-id="hero">
-      Accessible via JavaScript
-    </div>
-
-    <!-- Call event trigger -->
-    <div data-scroll data-scroll-call="fadeIn">
-      Triggers custom event
-    </div>
-
-  </div>
+<!-- Call event trigger -->
+<div data-scroll data-scroll-call="fadeIn">
+  Triggers custom event
 </div>
 ```
 
-### 2. Initialization
+**Legacy (v4)**: v4 required `data-scroll-container` wrapping the page and `data-scroll-section` around each section for performance. Both attributes and the `data-scroll-sticky`/`data-scroll-target` sticky system are gone in v5 — use native CSS `position: sticky` instead.
 
+### 2. Initialization (v5)
+
+```javascript
+const scroll = new LocomotiveScroll({
+  lenisOptions: {
+    lerp: 0.1,          // Smoothness (0-1, lower = smoother)
+    duration: 1.2,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+  },
+  triggerRootMargin: '-1px -1px -1px -1px', // IntersectionObserver margin for triggers
+  rafRootMargin: '100% 100% 100% 100%',     // margin for continuously-animated elements
+  autoStart: true,     // false if driving the raf loop externally (e.g. GSAP ticker)
+});
+```
+
+**Legacy (v4)**:
 ```javascript
 const scroll = new LocomotiveScroll({
   el: document.querySelector('[data-scroll-container]'),
   smooth: true,
-  lerp: 0.1,        // Smoothness (0-1, lower = smoother)
-  multiplier: 1,    // Speed multiplier
-  class: 'is-inview', // Class added to visible elements
-  repeat: false,    // Repeat in-view detection
-  offset: [0, 0]    // Global trigger offset [bottom, top]
+  lerp: 0.1,
+  multiplier: 1,
+  class: 'is-inview',
+  repeat: false,
+  offset: [0, 0]
 });
 ```
 
-### 3. Data Attributes
+### 3. Data Attributes (v5)
 
 | Attribute | Purpose | Example |
 |-----------|---------|---------|
 | `data-scroll` | Enable detection | `data-scroll` |
 | `data-scroll-speed` | Parallax speed | `data-scroll-speed="2"` |
-| `data-scroll-direction` | Parallax axis | `data-scroll-direction="horizontal"` |
-| `data-scroll-sticky` | Sticky positioning | `data-scroll-sticky` |
-| `data-scroll-target` | Sticky boundary | `data-scroll-target="#section"` |
-| `data-scroll-offset` | Trigger offset | `data-scroll-offset="20%"` |
+| `data-scroll-position` | Parallax start reference | `data-scroll-position="top"` |
 | `data-scroll-repeat` | Repeat detection | `data-scroll-repeat` |
 | `data-scroll-call` | Event trigger | `data-scroll-call="myFunction"` |
-| `data-scroll-id` | Unique identifier | `data-scroll-id="hero"` |
 | `data-scroll-class` | Custom class | `data-scroll-class="is-visible"` |
+| `data-scroll-event-progress` | Fires progress on scroll callback | `data-scroll-event-progress` |
+
+`data-scroll-container`, `data-scroll-section`, `data-scroll-sticky`, `data-scroll-target`, and `data-scroll-id` are v4-only. Consult [scroll.locomotive.ca/docs](https://scroll.locomotive.ca/docs/documentation/options) for the full current attribute list before shipping.
 
 ## Common Patterns
+
+**Legacy (v4)**: the examples below use v4's `data-scroll-container`/`data-scroll-section` markup, `el`/`smooth`/`tablet`/`smartphone` options, and `data-scroll-sticky`. On v5, drop the container/section wrappers (scroll the document directly or pass `lenisOptions.wrapper`/`content`), replace sticky elements with native CSS `position: sticky`, and pass responsive tuning through `lenisOptions`.
 
 ### 1. Basic Smooth Scrolling
 
@@ -276,7 +296,41 @@ const scroll = new LocomotiveScroll({
 
 ## Integration with GSAP ScrollTrigger
 
-Locomotive Scroll and GSAP ScrollTrigger work together for advanced animations:
+v5 is built on Lenis, which moves the real scroll position instead of transforming a wrapper — so the v4 `scrollerProxy`/`pinType` dance is no longer needed. Drive Lenis's raf loop from GSAP's ticker and forward scroll events to `ScrollTrigger.update()`:
+
+```javascript
+import LocomotiveScroll from 'locomotive-scroll';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const scroll = new LocomotiveScroll({
+  autoStart: false, // GSAP's ticker drives the raf loop instead
+  scrollCallback: () => ScrollTrigger.update(),
+  initCustomTicker: (render) => {
+    gsap.ticker.add(render);
+    gsap.ticker.lagSmoothing(0);
+  },
+  destroyCustomTicker: (render) => gsap.ticker.remove(render),
+});
+
+// Regular ScrollTrigger usage, no custom scroller needed
+gsap.to('.fade-in', {
+  scrollTrigger: {
+    trigger: '.fade-in',
+    start: 'top bottom',
+    end: 'top center',
+    scrub: true
+  },
+  opacity: 1,
+  y: 0
+});
+
+ScrollTrigger.refresh();
+```
+
+**Legacy (v4)**: v4's transform-based scroll required telling ScrollTrigger how to read/write it via `scrollerProxy`:
 
 ```javascript
 import LocomotiveScroll from 'locomotive-scroll';
@@ -332,6 +386,8 @@ ScrollTrigger.refresh();
 
 ## Instance Methods
 
+Core lifecycle/navigation methods below are stable across v4 and v5 (v5 proxies most of them to Lenis). Confirm exact v5 signatures against [scroll.locomotive.ca/docs](https://scroll.locomotive.ca/docs) before relying on option details like `scrollTo`'s easing/offset shape.
+
 ```javascript
 const scroll = new LocomotiveScroll();
 
@@ -354,7 +410,7 @@ scroll.off('scroll', callback);
 
 ## Performance Optimization
 
-1. **Use `data-scroll-section`** to segment long pages:
+1. **Legacy (v4) only** — segment long pages with `data-scroll-section`:
 ```html
 <div data-scroll-container>
   <div data-scroll-section>Section 1</div>
@@ -362,13 +418,11 @@ scroll.off('scroll', callback);
   <div data-scroll-section>Section 3</div>
 </div>
 ```
+v5's dual IntersectionObserver strategy replaces this; no manual sectioning needed.
 
 2. **Limit parallax elements** - Too many can impact performance
 
-3. **Disable on mobile** if performance is poor:
-```javascript
-smartphone: { smooth: false }
-```
+3. **Disable smooth scroll on mobile** if performance is poor — v5 auto-disables parallax on touch devices; to fully disable smoothing, tune `lenisOptions.smoothTouch: false`. (v4: `smartphone: { smooth: false }`)
 
 4. **Update on resize**:
 ```javascript
@@ -388,7 +442,9 @@ scroll.destroy();
 
 **Problem**: `position: fixed` elements break with smooth scroll
 
-**Solution**: Use `data-scroll-sticky` instead or add fixed elements outside container:
+**Solution (v5)**: v5 doesn't transform a wrapper, so native `position: fixed` and `position: sticky` work without special attributes — no `data-scroll-sticky` needed.
+
+**Legacy (v4)**: Use `data-scroll-sticky` instead or add fixed elements outside container:
 ```html
 <!-- Fixed nav outside container -->
 <nav style="position: fixed;">Navigation</nav>
@@ -430,14 +486,19 @@ scroll.update();
 
 **Problem**: Screen readers and keyboard navigation broken
 
-**Solution**: Provide disable option:
+**Solution (v5)**: Provide disable option via `lenisOptions`:
 ```javascript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const scroll = new LocomotiveScroll({
-  smooth: !prefersReducedMotion
+  lenisOptions: {
+    smoothWheel: !prefersReducedMotion,
+    smoothTouch: !prefersReducedMotion
+  }
 });
 ```
+
+**Legacy (v4)**: `new LocomotiveScroll({ smooth: !prefersReducedMotion })`
 
 ### 5. Memory Leaks
 

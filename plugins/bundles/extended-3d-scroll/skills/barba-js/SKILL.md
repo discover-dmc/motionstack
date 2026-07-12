@@ -11,6 +11,8 @@ Modern page transition library for creating fluid, smooth transitions between we
 
 Barba.js is a lightweight (7kb minified and compressed) JavaScript library that intercepts navigation between pages, fetches new content via AJAX, and smoothly transitions between old and new containers. It reduces page load delays and HTTP requests while maintaining the benefits of traditional multi-page architecture.
 
+**Maintenance status (as of mid-2026)**: `@barba/core` is at v2.10.3 (published August 2024); the last commit to the GitHub repo was December 2024. The project is not archived, but it is functionally stagnant, no new features or fixes are landing. Treat it as a mature, frozen dependency with a stable API rather than an actively evolving one. For simple multi-page transitions, evaluate the native View Transitions API first, it now covers same-document transitions in all major browsers and cross-document transitions in Chrome/Edge and Safari (no Firefox yet) — see the modern-web-design skill's View Transitions section. Reach for Barba when broader browser support, richer transition-selection rules (namespace/route targeting, lifecycle hooks), or GSAP-driven choreography are required.
+
 **Core Features**:
 - Smooth page transitions without full reloads
 - Lifecycle hooks for precise control over transition phases
@@ -45,7 +47,7 @@ Barba.js uses a specific DOM structure to manage transitions:
   </main>
 
   <!-- Static footer outside container -->
-  <footer>© 2025</footer>
+  <footer>© 2026</footer>
 </body>
 ```
 
@@ -869,3 +871,4 @@ Templates and starter projects:
 - **gsap-scrolltrigger** - For advanced GSAP animations in transitions
 - **locomotive-scroll** - Can be combined with Barba for smooth scrolling between pages
 - **motion-framer** - Alternative approach for React-based page transitions
+- **modern-web-design** - Documents the native View Transitions API, the modern alternative to Barba for simpler cases

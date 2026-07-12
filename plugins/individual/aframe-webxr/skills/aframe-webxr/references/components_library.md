@@ -23,7 +23,7 @@ Curated collection of popular A-Frame community components for extending functio
 ### CDN (Recommended)
 
 ```html
-<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+<script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
 ```
 

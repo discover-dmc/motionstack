@@ -2,7 +2,7 @@
 """
 Anime.js Animation Generator
 
-Generates Anime.js animation boilerplate code for common animation patterns.
+Generates Anime.js v4 animation boilerplate code for common animation patterns.
 
 Usage:
     ./animation_generator.py                    # Interactive mode
@@ -25,26 +25,28 @@ import sys
 ANIMATION_TYPES = {
     'basic': {
         'name': 'Basic Animation',
-        'description': 'Simple translateX/Y, opacity animation',
-        'code': '''anime({
-  targets: '.element',
-  translateX: 250,
+        'description': 'Simple x/y, opacity animation',
+        'code': '''import { animate } from 'animejs'
+
+animate('.element', {
+  x: 250,
   rotate: '1turn',
   opacity: [0, 1],
   duration: 800,
-  easing: 'easeInOutQuad'
+  ease: 'inOutQuad'
 })'''
     },
 
     'stagger': {
         'name': 'Stagger Animation',
         'description': 'Sequential reveal with stagger effect',
-        'code': '''anime({
-  targets: '.stagger-element',
-  translateY: [100, 0],
+        'code': '''import { animate, stagger } from 'animejs'
+
+animate('.stagger-element', {
+  y: [100, 0],
   opacity: [0, 1],
-  delay: anime.stagger(100), // Increment delay by 100ms
-  easing: 'easeOutQuad',
+  delay: stagger(100), // Increment delay by 100ms
+  ease: 'outQuad',
   duration: 600
 })'''
     },
@@ -52,15 +54,16 @@ ANIMATION_TYPES = {
     'grid-stagger': {
         'name': 'Grid Stagger Animation',
         'description': 'Grid-based stagger from center',
-        'code': '''anime({
-  targets: '.grid-item',
+        'code': '''import { animate, stagger } from 'animejs'
+
+animate('.grid-item', {
   scale: [0, 1],
-  delay: anime.stagger(50, {
+  delay: stagger(50, {
     grid: [14, 5],        // 14 columns, 5 rows
     from: 'center',       // Start from center
     axis: 'x'             // Primary axis
   }),
-  easing: 'easeOutElastic(1, .8)',
+  ease: 'outElastic(1, .8)',
   duration: 600
 })'''
     },
@@ -68,10 +71,11 @@ ANIMATION_TYPES = {
     'svg-line': {
         'name': 'SVG Line Drawing',
         'description': 'SVG path line drawing animation',
-        'code': '''anime({
-  targets: 'path',
-  strokeDashoffset: [anime.setDashoffset, 0],
-  easing: 'easeInOutQuad',
+        'code': '''import { animate, svg } from 'animejs'
+
+animate(svg.createDrawable('path'), {
+  draw: ['0 0', '0 1'],
+  ease: 'inOutQuad',
   duration: 2000,
   delay: (el, i) => i * 250
 })'''
@@ -80,75 +84,65 @@ ANIMATION_TYPES = {
     'svg-morph': {
         'name': 'SVG Path Morphing',
         'description': 'Morph between SVG path shapes',
-        'code': '''anime({
-  targets: '#morphing-path',
-  d: [
-    { value: 'M10 80 Q 77.5 10, 145 80' },  // Start shape
-    { value: 'M10 80 Q 77.5 150, 145 80' }  // End shape
-  ],
+        'code': '''import { animate, svg, utils } from 'animejs'
+
+const [$path1, $path2] = utils.$('polygon')
+
+animate($path1, {
+  points: svg.morphTo($path2),
   duration: 2000,
-  easing: 'easeInOutQuad',
+  ease: 'inOutQuad',
   loop: true,
-  direction: 'alternate'
+  alternate: true
 })'''
     },
 
     'timeline': {
         'name': 'Timeline Sequence',
         'description': 'Multi-step timeline with overlapping animations',
-        'code': '''const tl = anime.timeline({
-  easing: 'easeOutExpo',
-  duration: 750
+        'code': '''import { createTimeline } from 'animejs'
+
+const tl = createTimeline({
+  defaults: { ease: 'outExpo', duration: 750 }
 })
 
-tl.add({
-  targets: '.title',
-  translateY: [-50, 0],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.subtitle',
-  translateY: [-30, 0],
-  opacity: [0, 1]
-}, '-=500')  // Start 500ms before previous ends
-.add({
-  targets: '.button',
-  scale: [0, 1],
-  opacity: [0, 1]
-}, '-=300')'''
+tl.add('.title', { y: [-50, 0], opacity: [0, 1] })
+.add('.subtitle', { y: [-30, 0], opacity: [0, 1] }, '-=500')  // Start 500ms before previous ends
+.add('.button', { scale: [0, 1], opacity: [0, 1] }, '-=300')'''
     },
 
     'keyframe': {
         'name': 'Keyframe Animation',
         'description': 'Multiple keyframes for complex motion',
-        'code': '''anime({
-  targets: '.element',
-  keyframes: [
-    { translateX: 100 },
-    { translateY: 100 },
-    { translateX: 0 },
-    { translateY: 0 }
-  ],
+        'code': '''import { animate } from 'animejs'
+
+animate('.element', {
+  keyframes: {
+    '0%': { x: 100, y: 0 },
+    '25%': { x: 100, y: 100 },
+    '50%': { x: 0, y: 100 },
+    '100%': { x: 0, y: 0 }
+  },
   duration: 4000,
-  easing: 'easeInOutQuad',
+  ease: 'inOutQuad',
   loop: true
 })'''
     },
 
     'scroll': {
-        'name': 'Scroll-Triggered Animation',
+        'name': 'Scroll-Linked Animation',
         'description': 'Animation controlled by scroll position',
-        'code': '''const animation = anime({
-  targets: '.scroll-element',
-  translateY: [100, 0],
-  opacity: [0, 1],
-  easing: 'easeOutQuad',
-  autoplay: false
-})
+        'code': '''import { animate, onScroll } from 'animejs'
 
-window.addEventListener('scroll', () => {
-  const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight)
-  animation.seek(animation.duration * scrollPercent)
+animate('.scroll-element', {
+  y: [100, 0],
+  opacity: [0, 1],
+  ease: 'outQuad',
+  autoplay: onScroll({
+    enter: 'bottom top',
+    leave: 'top bottom',
+    sync: true
+  })
 })'''
     }
 }

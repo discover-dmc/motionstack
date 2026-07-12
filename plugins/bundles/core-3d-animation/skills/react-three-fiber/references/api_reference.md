@@ -325,6 +325,7 @@ import { TextureLoader, GLTFLoader } from 'three'
 // Load texture
 function TexturedBox() {
   const texture = useLoader(TextureLoader, '/texture.jpg')
+  texture.colorSpace = THREE.SRGBColorSpace // R3F v9: no longer automatic for color maps
 
   return (
     <mesh>

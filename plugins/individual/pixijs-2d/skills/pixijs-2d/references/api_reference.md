@@ -75,7 +75,7 @@ app.destroy(true, { children: true, texture: true });
 - `stageOptions: object` - Options for stage destruction
   - `children: boolean` - Destroy all children
   - `texture: boolean` - Destroy textures
-  - `baseTexture: boolean` - Destroy base textures
+  - `textureSource: boolean` - Destroy underlying texture sources
 
 #### `resizeCanvas()`
 
@@ -142,7 +142,7 @@ Sprite.from(source: string | Texture)  // Convenience method
 sprite.texture: Texture       // The texture to display
 sprite.anchor: ObservablePoint // Pivot point (0-1, default: 0,0)
 sprite.tint: number           // Color tint (0xRRGGBB)
-sprite.blendMode: BLEND_MODES // How sprite blends with background
+sprite.blendMode: string      // How sprite blends with background, e.g. 'normal', 'add'
 
 // Transform properties (inherited from DisplayObject)
 sprite.position: ObservablePoint  // x, y position
@@ -163,7 +163,7 @@ sprite.hitArea: Rectangle | Circle | Polygon  // Custom hit area
 
 // Performance
 sprite.cullable: boolean          // Enable viewport culling
-sprite.cacheAsBitmap: boolean     // Convert to texture for performance
+sprite.cacheAsTexture(true)       // Convert to texture for performance
 ```
 
 ### Methods
@@ -182,7 +182,7 @@ sprite.getBounds()
 sprite.getLocalBounds()
 
 // Destroy
-sprite.destroy({ children: true, texture: false, baseTexture: false })
+sprite.destroy({ children: true, texture: false, textureSource: false })
 ```
 
 ### Example
@@ -222,15 +222,14 @@ Texture.fromBuffer(buffer: Uint8Array, width: number, height: number)
 ```typescript
 texture.width: number           // Texture width
 texture.height: number          // Texture height
-texture.baseTexture: BaseTexture  // Underlying GPU texture
-texture.frame: Rectangle        // Region of baseTexture to use
-texture.source: TextureSource   // Source data
+texture.source: TextureSource   // Underlying GPU texture source
+texture.frame: Rectangle        // Region of source to use
 ```
 
 ### Methods
 
 ```typescript
-texture.destroy(destroyBase?: boolean)
+texture.destroy(destroySource?: boolean)
 texture.update()                // Update from source
 texture.clone()                 // Create copy
 ```
@@ -253,7 +252,7 @@ const ctx = canvas.getContext('2d');
 const canvasTex = Texture.from(canvas);
 
 // Destroy
-texture.destroy(true);  // Also destroy baseTexture
+texture.destroy(true);  // Also destroy the underlying texture source
 ```
 
 **API Reference**: https://pixijs.download/release/docs/rendering.Texture.html
@@ -1140,14 +1139,14 @@ observable.x = 100;  // Triggers callback
 
 ## Performance APIs
 
-### CacheAsBitmap
+### CacheAsTexture
 
 ```typescript
 // Convert to texture for faster rendering
-displayObject.cacheAsBitmap = true;
+displayObject.cacheAsTexture(true);
 
 // Disable when updating frequently
-displayObject.cacheAsBitmap = false;
+displayObject.cacheAsTexture(false);
 ```
 
 ### Ticker
@@ -1176,35 +1175,35 @@ ticker.start();
 
 ### Blend Modes
 
-```typescript
-import { BLEND_MODES } from 'pixi.js';
+v8 uses string literals instead of the `BLEND_MODES` enum:
 
-sprite.blendMode = BLEND_MODES.NORMAL;
-sprite.blendMode = BLEND_MODES.ADD;
-sprite.blendMode = BLEND_MODES.MULTIPLY;
-sprite.blendMode = BLEND_MODES.SCREEN;
-sprite.blendMode = BLEND_MODES.OVERLAY;
-sprite.blendMode = BLEND_MODES.DARKEN;
-sprite.blendMode = BLEND_MODES.LIGHTEN;
-sprite.blendMode = BLEND_MODES.COLOR_DODGE;
-sprite.blendMode = BLEND_MODES.COLOR_BURN;
-sprite.blendMode = BLEND_MODES.HARD_LIGHT;
-sprite.blendMode = BLEND_MODES.SOFT_LIGHT;
-sprite.blendMode = BLEND_MODES.DIFFERENCE;
-sprite.blendMode = BLEND_MODES.EXCLUSION;
-sprite.blendMode = BLEND_MODES.HUE;
-sprite.blendMode = BLEND_MODES.SATURATION;
-sprite.blendMode = BLEND_MODES.COLOR;
-sprite.blendMode = BLEND_MODES.LUMINOSITY;
+```typescript
+sprite.blendMode = 'normal';
+sprite.blendMode = 'add';
+sprite.blendMode = 'multiply';
+sprite.blendMode = 'screen';
+sprite.blendMode = 'overlay';
+sprite.blendMode = 'darken';
+sprite.blendMode = 'lighten';
+sprite.blendMode = 'color-dodge';
+sprite.blendMode = 'color-burn';
+sprite.blendMode = 'hard-light';
+sprite.blendMode = 'soft-light';
+sprite.blendMode = 'difference';
+sprite.blendMode = 'exclusion';
+sprite.blendMode = 'hue';
+sprite.blendMode = 'saturation';
+sprite.blendMode = 'color';
+sprite.blendMode = 'luminosity';
 ```
 
 ### Scale Modes
 
-```typescript
-import { SCALE_MODES } from 'pixi.js';
+v8 uses string literals instead of the `SCALE_MODES` enum, and textures expose the source directly via `.source` (no more `.baseTexture`):
 
-texture.baseTexture.scaleMode = SCALE_MODES.LINEAR;   // Smooth (default)
-texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;  // Pixelated
+```typescript
+texture.source.scaleMode = 'linear';   // Smooth (default)
+texture.source.scaleMode = 'nearest';  // Pixelated
 ```
 
 ---

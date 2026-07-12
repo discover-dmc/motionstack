@@ -2,7 +2,7 @@
 
 Complete API documentation for the PlayCanvas WebGL/WebGPU engine.
 
-**Version**: 1.70+
+**Version**: 2.20+ (engine v2.0 dropped WebGL1 support and removed classic `pc.createScript` scripts; WebGL2/WebGPU only)
 **License**: MIT
 **Official Docs**: https://api.playcanvas.com/
 
@@ -498,58 +498,65 @@ entity.collision.on('contact', (result) => {
 
 ### Script Component
 
-Runs custom JavaScript code.
+Runs custom JavaScript code. Engine v2.0+ requires ESM Scripts — the legacy
+`pc.createScript` classic-script system was removed entirely.
 
 ```javascript
+import { MyScript } from './my-script.mjs';
+
 entity.addComponent('script');
-entity.script.create('scriptName', {
-  attributes: {
+entity.script.create(MyScript, {
+  properties: {
     speed: 10,
     target: targetEntity
   }
 });
 ```
 
-**Script Definition**:
+**Script Definition** (`my-script.mjs`):
 ```javascript
-const MyScript = pc.createScript('myScript');
+import { Script, Entity } from 'playcanvas';
 
-MyScript.attributes.add('speed', {
-  type: 'number',
-  default: 10,
-  title: 'Movement Speed',
-  description: 'Units per second'
-});
+export class MyScript extends Script {
+  static scriptName = 'myScript';
 
-MyScript.attributes.add('target', {
-  type: 'entity',
-  title: 'Target Entity'
-});
+  /**
+   * Units per second.
+   * @attribute
+   */
+  speed = 10;
 
-MyScript.prototype.initialize = function() {
-  // Called once
-};
+  /**
+   * @attribute
+   * @type {Entity}
+   */
+  target;
 
-MyScript.prototype.update = function(dt) {
-  // Called every frame
-  this.entity.translate(0, 0, this.speed * dt);
-};
+  initialize() {
+    // Called once
+  }
 
-MyScript.prototype.postUpdate = function(dt) {
-  // After all updates
-};
+  update(dt) {
+    // Called every frame
+    this.entity.translate(0, 0, this.speed * dt);
+  }
 
-MyScript.prototype.destroy = function() {
-  // Cleanup
-};
+  postUpdate(dt) {
+    // After all updates
+  }
+
+  destroy() {
+    // Cleanup
+  }
+}
 ```
 
-**Attribute Types**:
-- `'boolean'`, `'number'`, `'string'`
-- `'entity'`, `'asset'`, `'rgb'`, `'rgba'`
-- `'vec2'`, `'vec3'`, `'vec4'`
-- `'curve'`, `'colorcurve'`
-- `'json'`
+**Attribute annotation** (JSDoc `@attribute` on a class field, engine v2.x):
+- Primitives (`number`, `string`, `boolean`) and `Vec2`/`Vec3`/`Vec4`/`Color` fields are inferred from the default value
+- `@type {Entity}` for entity references, `@type {Asset}` + `@resource <type>` for asset references
+- `@range [min, max]` and `@placeholder` for editor UI hints
+
+Classic-script attribute types (`'entity'`, `'asset'`, `'rgb'`, `'curve'`, `'json'`, etc.) only apply to legacy `pc.createScript` projects, which continue to run in existing pre-2.0 projects but cannot be created in current engine versions.
 
 ---
 

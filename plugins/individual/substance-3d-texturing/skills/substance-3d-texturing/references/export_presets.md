@@ -623,3 +623,7 @@ material.metalnessMap = ormTexture;
 - Reduce resolution (sizeLog2)
 - Pack channels (ORM)
 - Compress with external tools (pngquant, tinypng)
+
+**Exported map names don't match the `srcMapName` values above (Painter 12.1+):**
+- The Export Textures window has a naming-convention dropdown that defaults to OpenPBR naming when a project shader uses OpenPBR (the default material workflow since 12.1)
+- Switch it back to the metallic/roughness naming scheme before exporting for glTF/Three.js/Babylon.js

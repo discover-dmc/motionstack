@@ -176,7 +176,7 @@ def create_html_template(title, effect_name, effect_code, css_styles=""):
 def generate_waves():
     """Generate WAVES effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.waves.min.js',
         'init': """VANTA.WAVES({
       el: "#vanta-bg",
       mouseControls: true,
@@ -216,7 +216,7 @@ def generate_waves():
 def generate_clouds():
     """Generate CLOUDS effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.clouds.min.js',
         'init': """VANTA.CLOUDS({
       el: "#vanta-bg",
       mouseControls: true,
@@ -256,7 +256,7 @@ def generate_clouds():
 def generate_birds():
     """Generate BIRDS effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js',
         'init': """VANTA.BIRDS({
       el: "#vanta-bg",
       mouseControls: true,
@@ -302,7 +302,7 @@ def generate_birds():
 def generate_net():
     """Generate NET effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js',
         'init': """VANTA.NET({
       el: "#vanta-bg",
       mouseControls: true,
@@ -343,7 +343,7 @@ def generate_net():
 def generate_cells():
     """Generate CELLS effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.cells.min.js',
         'init': """VANTA.CELLS({
       el: "#vanta-bg",
       mouseControls: true,
@@ -381,7 +381,7 @@ def generate_cells():
 def generate_fog():
     """Generate FOG effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.fog.min.js',
         'init': """VANTA.FOG({
       el: "#vanta-bg",
       mouseControls: true,
@@ -421,7 +421,7 @@ def generate_fog():
 def generate_globe():
     """Generate GLOBE effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.globe.min.js',
         'init': """VANTA.GLOBE({
       el: "#vanta-bg",
       mouseControls: true,
@@ -451,7 +451,7 @@ def generate_globe():
 def generate_rings():
     """Generate RINGS effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.rings.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.rings.min.js',
         'init': """VANTA.RINGS({
       el: "#vanta-bg",
       mouseControls: true,
@@ -471,7 +471,7 @@ def generate_rings():
 def generate_dots():
     """Generate DOTS effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js',
         'init': """VANTA.DOTS({
       el: "#vanta-bg",
       mouseControls: true,
@@ -511,7 +511,7 @@ def generate_dots():
 def generate_topology():
     """Generate TOPOLOGY effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js',
         'init': """VANTA.TOPOLOGY({
       el: "#vanta-bg",
       mouseControls: true,
@@ -531,7 +531,7 @@ def generate_topology():
 def generate_trunk():
     """Generate TRUNK effect"""
     return {
-        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.trunk.min.js',
+        'cdn': 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.trunk.min.js',
         'init': """VANTA.TRUNK({
       el: "#vanta-bg",
       mouseControls: true,

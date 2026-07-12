@@ -4,11 +4,17 @@ Complete reference for `@splinetool/react-spline` and Spline Application API.
 
 ## Installation
 
+Current stable versions: `@splinetool/react-spline@4.x`, `@splinetool/runtime@1.12.x`.
+
 ```bash
 npm install @splinetool/react-spline @splinetool/runtime
 # or
 yarn add @splinetool/react-spline @splinetool/runtime
 ```
+
+Since v4.0.0, event listener props are named `onSplineXXX` (e.g. `onSplineMouseDown`) instead of native-sounding names like `onMouseDown`, to avoid colliding with native DOM mouse/keyboard event props. All examples in this reference already use the current naming.
+
+The `@splinetool/react-spline/next` entry requires Next.js 14.2+ and supports the App Router with React Server Components (React 18 or 19).
 
 ## Spline Component
 

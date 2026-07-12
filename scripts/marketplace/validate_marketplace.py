@@ -17,7 +17,7 @@ from typing import List, Tuple, Optional
 class MarketplaceValidator:
     def __init__(self, repo_root: Path):
         self.repo_root = repo_root
-        self.plugins_dir = repo_root / ".claude" / "plugins"
+        self.plugins_dir = repo_root / "plugins"
         self.marketplace_file = repo_root / ".claude-plugin" / "marketplace.json"
         self.errors = []
         self.warnings = []
@@ -104,7 +104,7 @@ class MarketplaceValidator:
             source = plugin["source"]
             if source.startswith("./"):
                 # Relative path - verify it exists
-                plugin_path = self.repo_root / ".claude" / "plugins" / source.lstrip("./")
+                plugin_path = self.repo_root / source.lstrip("./")
                 if not plugin_path.exists():
                     self.errors.append(f"Plugin '{plugin.get('name', 'unknown')}': Source path not found - {source}")
 

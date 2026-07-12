@@ -7,7 +7,7 @@ description: Modern animation library for React and JavaScript. Create smooth, p
 
 ## Overview
 
-Motion (formerly Framer Motion) is a production-ready animation library for React and JavaScript that enables declarative, performant animations with minimal code. It provides `motion` components that wrap HTML elements with animation superpowers, supports gesture recognition (hover, tap, drag, focus), and includes advanced features like layout animations, exit animations, and spring physics.
+Motion (formerly Framer Motion, renamed 2025 as an independent, framework-agnostic project) is a production-ready animation library for React and JavaScript that enables declarative, performant animations with minimal code. It provides `motion` components that wrap HTML elements with animation superpowers, supports gesture recognition (hover, tap, drag, focus), and includes advanced features like layout animations, exit animations, and spring physics.
 
 **When to use this skill:**
 - Building interactive UI components (buttons, cards, menus)
@@ -20,9 +20,9 @@ Motion (formerly Framer Motion) is a production-ready animation library for Reac
 - Replacing CSS transitions with more powerful, controllable animations
 
 **Technology:**
-- **Motion** (v11+) - The modern, smaller library from Framer Motion creators
-- **Framer Motion** - The full-featured predecessor (still widely used)
-- React 18+ compatible, also supports Vue
+- **Motion** (v12+) - Package name is `motion` (import from `motion/react`); framework-agnostic, with vanilla JS support via the base `motion` import and React Server Component support via `motion/react-client`
+- **Framer Motion** - Legacy package name, still published as a compatibility alias; the component/hook APIs are identical, only the import path changed
+- React 18+ and React 19 compatible, also supports Vue
 - Supports TypeScript
 - Works with Next.js, Vite, Remix, and all modern React frameworks
 
@@ -33,7 +33,7 @@ Motion (formerly Framer Motion) is a production-ready animation library for Reac
 Convert any HTML/SVG element into an animatable component by prefixing with `motion.`:
 
 ```jsx
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 
 // Regular HTML becomes motion component
 <motion.div />
@@ -41,6 +41,8 @@ import { motion } from "framer-motion"
 <motion.svg />
 <motion.path />
 ```
+
+Install with `npm install motion` (the legacy `framer-motion` package still works via the same component/hook API, but `motion/react` is the current import path).
 
 Every motion component accepts animation props like `animate`, `initial`, `transition`, and gesture props like `whileHover`, `whileTap`, etc.
 
@@ -285,7 +287,7 @@ Make elements draggable with the `drag` prop:
 Animate components when they're removed from the DOM using `AnimatePresence`:
 
 ```jsx
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "motion/react"
 
 // Basic exit animation
 <AnimatePresence>
@@ -548,7 +550,7 @@ Motion provides declarative gesture handlers:
 Manually control animations with the `useAnimate` hook:
 
 ```jsx
-import { useAnimate } from "framer-motion"
+import { useAnimate } from "motion/react"
 
 function Component() {
   const [scope, animate] = useAnimate()
@@ -590,7 +592,7 @@ controls.time = 0  // Seek to start
 Create spring-animated motion values:
 
 ```jsx
-import { useSpring } from "framer-motion"
+import { useSpring } from "motion/react"
 
 function Component() {
   const x = useSpring(0, { stiffness: 300, damping: 20 })
@@ -608,7 +610,7 @@ function Component() {
 Detect when an element is in viewport:
 
 ```jsx
-import { useInView } from "framer-motion"
+import { useInView } from "motion/react"
 
 function Component() {
   const ref = useRef(null)
@@ -629,7 +631,7 @@ function Component() {
 Combine Motion for React state-based animations and GSAP for complex timelines:
 
 ```jsx
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import gsap from "gsap"
 
 function Component() {
@@ -658,7 +660,7 @@ function Component() {
 Animate 3D objects using Motion values:
 
 ```jsx
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { useFrame } from "@react-three/fiber"
 
 function Box() {
@@ -690,7 +692,7 @@ function Box() {
 Animate form validation states:
 
 ```jsx
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react"
 
 function FormField({ error }) {
   return (
@@ -750,7 +752,7 @@ Motion supports individual transform properties for cleaner code:
 Respect user preferences for reduced motion:
 
 ```jsx
-import { useReducedMotion } from "framer-motion"
+import { useReducedMotion } from "motion/react"
 
 function Component() {
   const shouldReduceMotion = useReducedMotion()
@@ -906,7 +908,7 @@ const variants = {
 ### Official Documentation
 - [Motion Docs](https://motion.dev/) - Official Motion documentation
 - [Framer Motion Docs](https://www.framer.com/motion/) - Framer Motion (legacy)
-- [Motion GitHub](https://github.com/framer/motion) - Source code & examples
+- [Motion GitHub](https://github.com/motiondivision/motion) - Source code & examples
 
 ### Bundled Resources
 

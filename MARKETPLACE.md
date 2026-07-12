@@ -1,8 +1,8 @@
-# Claude Design Skillstack - Plugin Marketplace
+# Motionstack - Plugin Marketplace
 
 **Professional design agency skillstack for 3D/WebGL, animation, and modern web development**
 
-This repository serves as both a development workspace for skills and a plugin marketplace for Claude Code, providing comprehensive coverage of modern web technologies including Three.js, GSAP, React Three Fiber, Framer Motion, Babylon.js, and more.
+This repository serves as both a development workspace for skills and a plugin marketplace for Claude Code, providing comprehensive coverage of modern web technologies including Three.js, GSAP, React Three Fiber, Motion, Babylon.js, and more.
 
 ---
 
@@ -13,7 +13,7 @@ This repository serves as both a development workspace for skills and a plugin m
 Add this marketplace to your Claude Code:
 
 ```bash
-/plugin marketplace add freshtechbro/claudedesignskills
+/plugin marketplace add discover-dmc/motionstack
 ```
 
 ### Installing Individual Plugins
@@ -73,9 +73,9 @@ All individual plugins include:
    - Agent: React Three Fiber Architect
    - Use for: React + Three.js integration, declarative 3D, component-based 3D
 
-4. **motion-framer** - Framer Motion
+4. **motion-framer** - Motion (formerly Framer Motion)
    - Commands: `/motion-framer-animation_generator`, `/motion-framer-variant_builder`
-   - Agent: Framer Motion Animation Choreographer
+   - Agent: Motion Animation Choreographer
    - Use for: React animations, gesture-driven UI, layout animations
 
 5. **babylonjs-engine** - Babylon.js Game Engine
@@ -314,7 +314,7 @@ To regenerate plugins after skill updates:
 
 ## 📄 License
 
-All plugins are licensed under Apache License 2.0.
+All plugins are licensed under MIT License.
 
 ---
 
@@ -330,8 +330,8 @@ Contributions are welcome! Please:
 
 ## 🔗 Links
 
-- **Repository**: https://github.com/freshtechbro/claudedesignskills
-- **Issues**: https://github.com/freshtechbro/claudedesignskills/issues
+- **Repository**: https://github.com/discover-dmc/motionstack
+- **Issues**: https://github.com/discover-dmc/motionstack/issues
 - **Claude Code Docs**: https://docs.claude.com/en/docs/claude-code/overview
 
 ---

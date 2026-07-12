@@ -1,20 +1,23 @@
 # Anime.js Stagger Guide
 
-Complete guide to Anime.js stagger utilities for creating sequential and coordinated animations.
+Complete guide to Anime.js v4 stagger utilities for creating sequential and coordinated animations.
 
 ## Overview
 
-Stagger distributes animation delays across multiple elements, creating cascading or wave-like effects. Anime.js provides powerful stagger options including grid-based staggering, directional control, and custom easing.
+`stagger()` distributes animation delays (or values) across multiple targets, creating cascading or wave-like effects. Anime.js provides grid-based staggering, directional control, jitter, and custom easing for the stagger progression itself.
+
+```javascript
+import { animate, stagger } from 'animejs'
+```
 
 ## Basic Stagger
 
 ### Time-Based Stagger
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
-  delay: anime.stagger(100) // Increment delay by 100ms
+animate('.element', {
+  x: 250,
+  delay: stagger(100) // increment delay by 100ms
 })
 ```
 
@@ -23,26 +26,28 @@ anime({
 ### Value-Based Stagger
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: anime.stagger([0, 100, 200, 300])
+animate('.element', {
+  x: stagger([0, 100, 200, 300])
 })
 ```
 
-**Result:** Each element animates to a different translateX value.
+**Result:** Each element animates to a different x value.
 
 ## Stagger Options
 
 ### Complete Syntax
 
 ```javascript
-anime.stagger(value, {
-  start: 0,              // Starting delay (ms)
-  from: 'first',         // Starting point
-  direction: 'normal',   // Direction of stagger
-  easing: 'linear',      // Easing for stagger progression
-  grid: [rows, cols],    // Grid dimensions
-  axis: null             // Grid axis ('x', 'y', or null)
+stagger(value, {
+  start: 0,              // starting delay (ms)
+  from: 'first',          // starting point
+  reversed: false,         // reverse the stagger order (was `direction: 'reverse'` in v3)
+  ease: 'linear',           // easing for the stagger progression
+  grid: [rows, cols],        // grid dimensions
+  axis: null,                 // grid axis ('x', 'y', or null)
+  modifier: v => v,             // transform each computed value
+  total: 20,                     // override the element count used in the calculation
+  jitter: 0                       // random variance, 0-1 (new in v4)
 })
 ```
 
@@ -54,64 +59,34 @@ Control where the stagger starts.
 
 ### from: 'first' (default)
 
-Start from the first element:
-
 ```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, { from: 'first' })
-})
+animate('.element', { scale: [0, 1], delay: stagger(100, { from: 'first' }) })
 ```
 
 ### from: 'last'
 
-Start from the last element:
-
 ```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, { from: 'last' })
-})
+animate('.element', { scale: [0, 1], delay: stagger(100, { from: 'last' }) })
 ```
 
 ### from: 'center'
 
-Start from the center and expand outward:
-
 ```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, { from: 'center' })
-})
+animate('.element', { scale: [0, 1], delay: stagger(100, { from: 'center' }) })
 ```
 
 ### from: index
 
-Start from a specific index:
-
 ```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, { from: 5 }) // Start from 6th element (0-indexed)
-})
+animate('.element', { scale: [0, 1], delay: stagger(100, { from: 5 }) }) // start from 6th element
 ```
 
 ### from: [x, y]
 
-Start from specific grid coordinates:
-
 ```javascript
-anime({
-  targets: '.grid-item',
+animate('.grid-item', {
   scale: [0, 1],
-  delay: anime.stagger(50, {
-    grid: [10, 10],
-    from: [5, 5] // Start from center of grid
-  })
+  delay: stagger(50, { grid: [10, 10], from: [5, 5] }) // start from center of grid
 })
 ```
 
@@ -119,30 +94,21 @@ anime({
 
 ## Grid Stagger
 
-Stagger elements arranged in a grid pattern.
-
 ### Basic Grid
 
 ```javascript
-anime({
-  targets: '.grid-item',
+animate('.grid-item', {
   scale: [0, 1],
-  delay: anime.stagger(50, {
-    grid: [14, 5] // 14 columns, 5 rows
-  })
+  delay: stagger(50, { grid: [14, 5] }) // 14 columns, 5 rows
 })
 ```
 
 ### Grid with from: 'center'
 
 ```javascript
-anime({
-  targets: '.grid-item',
+animate('.grid-item', {
   scale: [0, 1],
-  delay: anime.stagger(50, {
-    grid: [14, 5],
-    from: 'center'
-  })
+  delay: stagger(50, { grid: [14, 5], from: 'center' })
 })
 ```
 
@@ -150,93 +116,67 @@ anime({
 
 ### Grid with Axis
 
-Control which axis dominates the stagger:
-
 ```javascript
-// Horizontal waves
-anime({
-  targets: '.grid-item',
-  translateY: [-20, 0],
-  delay: anime.stagger(30, {
-    grid: [10, 10],
-    from: 'center',
-    axis: 'x' // Stagger primarily along x-axis
-  })
+// horizontal waves
+animate('.grid-item', {
+  y: [-20, 0],
+  delay: stagger(30, { grid: [10, 10], from: 'center', axis: 'x' })
 })
 
-// Vertical waves
-anime({
-  targets: '.grid-item',
-  translateY: [-20, 0],
-  delay: anime.stagger(30, {
-    grid: [10, 10],
-    from: 'center',
-    axis: 'y' // Stagger primarily along y-axis
-  })
+// vertical waves
+animate('.grid-item', {
+  y: [-20, 0],
+  delay: stagger(30, { grid: [10, 10], from: 'center', axis: 'y' })
 })
 ```
 
 ---
 
-## Stagger Direction
+## Stagger Direction (reversed)
 
-### direction: 'normal' (default)
-
-```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, { direction: 'normal' })
-})
-```
-
-### direction: 'reverse'
-
-Reverse the stagger order:
+`direction: 'reverse'` from v3 is now the boolean `reversed`:
 
 ```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, {
-    from: 'first',
-    direction: 'reverse' // Last to first
-  })
-})
+animate('.element', { scale: [0, 1], delay: stagger(100, { reversed: false }) })
+animate('.element', { scale: [0, 1], delay: stagger(100, { from: 'first', reversed: true }) }) // last to first
 ```
 
 ---
 
 ## Stagger Easing
 
-Apply easing to the stagger progression itself.
+Apply easing to the stagger progression itself:
 
 ```javascript
-anime({
-  targets: '.element',
-  translateY: [-50, 0],
-  delay: anime.stagger(100, {
-    easing: 'easeOutQuad' // Ease the delay distribution
-  })
+animate('.element', {
+  y: [-50, 0],
+  delay: stagger(100, { ease: 'outQuad' })
 })
 ```
 
-**Effect:** Early elements have shorter delays, later elements have longer delays (exponential distribution).
+**Effect:** Early elements have shorter delays, later elements have longer delays.
+
+---
+
+## Stagger Jitter (new in v4)
+
+Add random variance to a stagger:
+
+```javascript
+animate('.element', {
+  scale: [0, 1],
+  delay: stagger(100, { jitter: 0.5 })
+})
+```
 
 ---
 
 ## Stagger Start
 
-Add an initial delay before stagger begins.
+Add an initial delay before stagger begins:
 
 ```javascript
-anime({
-  targets: '.element',
-  scale: [0, 1],
-  delay: anime.stagger(100, {
-    start: 500 // Wait 500ms before starting stagger
-  })
-})
+animate('.element', { scale: [0, 1], delay: stagger(100, { start: 500 }) })
 ```
 
 **Result:**
@@ -251,39 +191,33 @@ anime({
 ### 1. Sequential List Reveal
 
 ```javascript
-anime({
-  targets: '.list-item',
-  translateY: [30, 0],
+animate('.list-item', {
+  y: [30, 0],
   opacity: [0, 1],
-  delay: anime.stagger(80),
-  easing: 'easeOutQuad'
+  delay: stagger(80),
+  ease: 'outQuad'
 })
 ```
 
 ### 2. Grid Expand from Center
 
 ```javascript
-anime({
-  targets: '.grid-square',
+animate('.grid-square', {
   scale: [0, 1],
-  delay: anime.stagger(30, {
-    grid: [10, 10],
-    from: 'center'
-  }),
-  easing: 'easeOutElastic(1, .8)'
+  delay: stagger(30, { grid: [10, 10], from: 'center' }),
+  ease: 'outElastic(1, .8)'
 })
 ```
 
 ### 3. Wave Effect
 
 ```javascript
-anime({
-  targets: '.wave-element',
-  translateY: [
-    { value: -20, duration: 300 },
-    { value: 0, duration: 300 }
+animate('.wave-element', {
+  y: [
+    { to: -20, duration: 300 },
+    { to: 0, duration: 300 }
   ],
-  delay: anime.stagger(50),
+  delay: stagger(50),
   loop: true
 })
 ```
@@ -291,56 +225,45 @@ anime({
 ### 4. Diagonal Wipe
 
 ```javascript
-anime({
-  targets: '.tile',
+animate('.tile', {
   opacity: [0, 1],
-  translateX: [-50, 0],
-  delay: anime.stagger(20, {
-    grid: [10, 10],
-    from: [0, 0], // Top-left corner
-    axis: null // Both axes
-  })
+  x: [-50, 0],
+  delay: stagger(20, { grid: [10, 10], from: [0, 0], axis: null })
 })
 ```
 
 ### 5. Text Character Reveal
 
 ```javascript
-// Split text into characters first
-const textWrapper = document.querySelector('.text')
-textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>")
+import { animate, stagger, splitText } from 'animejs'
 
-anime({
-  targets: '.letter',
-  translateY: [100, 0],
+const { chars } = splitText('.text', { chars: true })
+
+animate(chars, {
+  y: [100, 0],
   opacity: [0, 1],
-  delay: anime.stagger(30),
-  easing: 'easeOutExpo'
+  delay: stagger(30),
+  ease: 'outExpo'
 })
 ```
 
 ### 6. Circular Stagger
 
 ```javascript
-anime({
-  targets: '.circle-item',
+animate('.circle-item', {
   scale: [0, 1],
-  delay: anime.stagger(100, {
-    from: 'center',
-    easing: 'linear'
-  }),
-  rotate: anime.stagger([0, 360])
+  delay: stagger(100, { from: 'center', ease: 'linear' }),
+  rotate: stagger([0, 360])
 })
 ```
 
 ### 7. Alternating Direction
 
 ```javascript
-anime({
-  targets: '.row',
-  translateX: (el, i) => i % 2 === 0 ? [-250, 0] : [250, 0],
+animate('.row', {
+  x: (el, i) => i % 2 === 0 ? [-250, 0] : [250, 0],
   opacity: [0, 1],
-  delay: anime.stagger(100)
+  delay: stagger(100)
 })
 ```
 
@@ -351,30 +274,21 @@ anime({
 ### Stagger Delays, Same Values
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250, // Same for all
-  delay: anime.stagger(100) // Different delays
-})
+animate('.element', { x: 250, delay: stagger(100) })
 ```
 
 ### Stagger Values, Same Timing
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: anime.stagger([0, 50, 100, 150]), // Different values
-  duration: 1000 // Same duration
-})
+animate('.element', { x: stagger([0, 50, 100, 150]), duration: 1000 })
 ```
 
 ### Stagger Both
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: anime.stagger([0, 50, 100, 150]),
-  delay: anime.stagger(100)
+animate('.element', {
+  x: stagger([0, 50, 100, 150]),
+  delay: stagger(100)
 })
 ```
 
@@ -392,38 +306,28 @@ function getGridSize() {
   return [cols, rows]
 }
 
-anime({
-  targets: '.grid-item',
+animate('.grid-item', {
   scale: [0, 1],
-  delay: anime.stagger(50, {
-    grid: getGridSize(),
-    from: 'center'
-  })
+  delay: stagger(50, { grid: getGridSize(), from: 'center' })
 })
 ```
 
-### Stagger with Function Values
+### Stagger with a Modifier
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: anime.stagger((el, i, total) => {
-    // Custom calculation
-    return (i / total) * 100
-  }),
-  delay: anime.stagger(100)
+animate('.element', {
+  x: stagger(100, { modifier: v => Math.round(v / 2) })
 })
 ```
 
 ### Multi-Property Stagger
 
 ```javascript
-anime({
-  targets: '.element',
-  translateX: anime.stagger([0, 100]),
-  translateY: anime.stagger([0, 50]),
-  rotate: anime.stagger([0, 360]),
-  delay: anime.stagger(100, { from: 'center' })
+animate('.element', {
+  x: stagger([0, 100]),
+  y: stagger([0, 50]),
+  rotate: stagger([0, 360]),
+  delay: stagger(100, { from: 'center' })
 })
 ```
 
@@ -431,8 +335,8 @@ anime({
 
 ## Performance Tips
 
-1. **Use transforms** - Stagger `translateX`, `translateY`, `scale`, `rotate` for GPU acceleration
-2. **Limit element count** - Stagger works best with <100 elements
+1. **Use transforms** - Stagger `x`, `y`, `scale`, `rotate` for GPU acceleration
+2. **Limit element count** - Stagger works best with fewer than 100 elements
 3. **Avoid layout properties** - Don't stagger `width`, `height`, `left`, `top`
 4. **Use `will-change`** - Add `will-change: transform` for smoother animations
 5. **Batch similar animations** - One stagger for multiple properties is more efficient than separate animations
@@ -441,72 +345,61 @@ anime({
 
 ## Common Mistakes
 
-### ❌ Wrong: Stagger on Single Element
+### Wrong: Stagger on Single Element
 
 ```javascript
-anime({
-  targets: '.single-element', // Only one element
-  scale: [0, 1],
-  delay: anime.stagger(100) // No effect
-})
+animate('.single-element', { scale: [0, 1], delay: stagger(100) }) // no effect, only one element
 ```
 
-### ✅ Correct: Multiple Elements
+### Correct: Multiple Elements
 
 ```javascript
-anime({
-  targets: '.multiple-elements', // Multiple elements
-  scale: [0, 1],
-  delay: anime.stagger(100)
-})
+animate('.multiple-elements', { scale: [0, 1], delay: stagger(100) })
 ```
 
-### ❌ Wrong: Grid Without Dimensions
+### Wrong: Grid Without Dimensions
 
 ```javascript
-anime({
-  targets: '.grid-item',
-  scale: [0, 1],
-  delay: anime.stagger(50, {
-    from: 'center' // Missing grid dimensions!
-  })
-})
+animate('.grid-item', { scale: [0, 1], delay: stagger(50, { from: 'center' }) }) // missing grid dimensions
 ```
 
-### ✅ Correct: Grid With Dimensions
+### Correct: Grid With Dimensions
 
 ```javascript
-anime({
-  targets: '.grid-item',
-  scale: [0, 1],
-  delay: anime.stagger(50, {
-    grid: [10, 10],
-    from: 'center'
-  })
-})
+animate('.grid-item', { scale: [0, 1], delay: stagger(50, { grid: [10, 10], from: 'center' }) })
+```
+
+### Wrong: Using v3's `direction` option
+
+```javascript
+delay: stagger(100, { direction: 'reverse' }) // removed in v4
+```
+
+### Correct: Use `reversed`
+
+```javascript
+delay: stagger(100, { reversed: true })
 ```
 
 ---
 
 ## Debugging Tips
 
-**Log stagger values:**
+**Log stagger values as they're computed:**
 ```javascript
-anime({
-  targets: '.element',
-  translateX: 250,
-  delay: anime.stagger(100),
-  begin: (anim) => {
-    anim.animatables.forEach((animatable, i) => {
-      console.log(`Element ${i}: delay ${animatable.delay}ms`)
-    })
-  }
+animate('.element', {
+  x: 250,
+  delay: stagger(100, {
+    modifier: (v, i) => {
+      console.log(`Element ${i}: delay ${v}ms`)
+      return v
+    }
+  })
 })
 ```
 
 **Visualize stagger:**
 ```javascript
-// Add data-index to elements
 document.querySelectorAll('.element').forEach((el, i) => {
   el.setAttribute('data-index', i)
 })
@@ -516,6 +409,5 @@ document.querySelectorAll('.element').forEach((el, i) => {
 
 ## Resources
 
-- Official Stagger Documentation: https://animejs.com/documentation/#stagger
-- Grid Stagger Demo: https://codepen.io/juliangarnier/pen/JXaKpP
-- Stagger Examples: https://animejs.com/documentation/#staggeringBasics
+- Official Stagger Documentation: https://animejs.com/documentation/utilities/stagger
+- Official Documentation Home: https://animejs.com/documentation/

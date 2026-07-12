@@ -2,9 +2,10 @@
 
 Complete reference for Vanilla-Tilt.js - smooth 3D tilt effect for any DOM element.
 
-**Version**: 1.8.1
+**Version**: 1.8.1 (latest, released August 2023)
 **License**: MIT
 **GitHub**: https://github.com/micku7zu/vanilla-tilt.js
+**Maintenance**: Lower activity but the most recently updated of the three libraries in this skill; safe default choice.
 
 ---
 

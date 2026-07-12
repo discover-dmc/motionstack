@@ -258,7 +258,7 @@ app.cullable = true;
 
 **Problem**: Complex vector graphics re-render every frame.
 
-**Solution**: Convert to texture using `cacheAsBitmap`.
+**Solution**: Convert to texture using `cacheAsTexture()`.
 
 ```javascript
 import { Graphics } from 'pixi.js';
@@ -274,11 +274,11 @@ for (let i = 0; i < 100; i++) {
   ).fill(Math.random() * 0xffffff);
 }
 
-// ✅ Cache as bitmap for static graphics
-complexShape.cacheAsBitmap = true;
+// ✅ Cache as texture for static graphics
+complexShape.cacheAsTexture(true);
 
 // ❌ Don't use for frequently changing graphics
-// complexShape.cacheAsBitmap = false;  // If updating often
+// complexShape.cacheAsTexture(false);  // If updating often
 ```
 
 **When to Use**:
@@ -339,10 +339,10 @@ const texture = Texture.from('image.png');
 const sprite = new Sprite(texture);
 
 // When done
-sprite.destroy({ texture: true, baseTexture: true });
+sprite.destroy({ texture: true, textureSource: true });
 
 // Or destroy texture directly
-texture.destroy(true);  // true = also destroy baseTexture
+texture.destroy(true);  // true = also destroy the underlying texture source
 ```
 
 **Batch Destruction with Delay**:
@@ -406,11 +406,11 @@ const optimizedTexture = Texture.from('optimized-image-1k.png');
 // Good sizes: 256, 512, 1024, 2048
 // Avoid odd sizes: 300, 500, 1500
 
-// Use NEAREST for pixel art
-texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
+// Use 'nearest' for pixel art
+texture.source.scaleMode = 'nearest';
 
-// Use LINEAR for photos
-texture.baseTexture.scaleMode = SCALE_MODES.LINEAR;
+// Use 'linear' for photos
+texture.source.scaleMode = 'linear';
 ```
 
 ---
@@ -739,16 +739,16 @@ const container = new Container();
 
 // ✅ GOOD: Destroy with options
 sprite.destroy({
-  children: true,      // Destroy children
-  texture: false,      // Keep texture (if used elsewhere)
-  baseTexture: false   // Keep baseTexture
+  children: true,       // Destroy children
+  texture: false,       // Keep texture (if used elsewhere)
+  textureSource: false  // Keep the underlying texture source
 });
 
 // Destroy container and all children
 container.destroy({ children: true });
 
 // Destroy texture when completely done
-texture.destroy(true);  // true = also destroy baseTexture
+texture.destroy(true);  // true = also destroy the underlying texture source
 ```
 
 ---

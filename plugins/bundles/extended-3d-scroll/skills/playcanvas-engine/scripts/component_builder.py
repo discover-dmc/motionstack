@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 PlayCanvas Component Builder
-Generates PlayCanvas script components with lifecycle methods and attributes.
+Generates PlayCanvas ESM Script components (engine v2.0+) with lifecycle
+methods and @attribute-annotated fields. Classic scripts (pc.createScript)
+were removed in engine v2.0.0; ESM scripts are the only supported format.
 
 Usage:
     Interactive mode:
@@ -21,77 +23,64 @@ from typing import Dict, Tuple, List
 
 # Component templates
 def generate_basic_component(name: str, include_attributes: bool = True) -> str:
-    """Generate a basic PlayCanvas script component"""
+    """Generate a basic PlayCanvas ESM Script component"""
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
     attributes = ""
     if include_attributes:
-        attributes = f"""
-// Attributes (editable in Editor)
-{class_name}.attributes.add('enabled', {{
-    type: 'boolean',
-    default: true,
-    title: 'Enabled'
-}});
+        attributes = """
+    /**
+     * @attribute
+     */
+    enabled = true;
 
-{class_name}.attributes.add('speed', {{
-    type: 'number',
-    default: 1.0,
-    title: 'Speed',
-    description: 'Component speed multiplier'
-}});
+    /**
+     * Component speed multiplier.
+     * @attribute
+     */
+    speed = 1.0;
 """
 
-    return f"""/**
+    return f"""import {{ Script }} from 'playcanvas';
+
+/**
  * {class_name} Component
- * Basic PlayCanvas script component template
+ * Basic PlayCanvas ESM Script template (engine v2.0+)
  *
  * Usage:
- * 1. Attach to entity via Editor or code
+ * 1. Save as {script_name}.mjs and add to a script component via Editor or code
  * 2. Configure attributes in Inspector
  * 3. Access via: entity.script.{script_name}
  */
-
-var {class_name} = pc.createScript('{script_name}');
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 {attributes}
-/**
- * Initialize component
- * Called once when script is enabled
- */
-{class_name}.prototype.initialize = function() {{
-    console.log('{class_name} initialized');
+    /**
+     * Called once when script is enabled.
+     */
+    initialize() {{
+        console.log('{class_name} initialized');
+    }}
 
-    // Store references
-    this.entity.script.{script_name}.active = true;
-}};
+    /**
+     * Called every frame.
+     * @param {{number}} dt - Delta time in seconds
+     */
+    update(dt) {{
+        if (!this.enabled) return;
 
-/**
- * Update method called every frame
- * @param {{number}} dt - Delta time in seconds
- */
-{class_name}.prototype.update = function(dt) {{
-    if (!this.enabled) return;
+        // Update logic here
+    }}
 
-    // Update logic here
-}};
-
-/**
- * Post-update method called after all update methods
- * @param {{number}} dt - Delta time in seconds
- */
-{class_name}.prototype.postUpdate = function(dt) {{
-    // Post-update logic here
-}};
-
-/**
- * Swap method called when script is hot-reloaded
- * @param {{object}} old - Old script instance
- */
-{class_name}.prototype.swap = function(old) {{
-    // Preserve state during hot-reload
-    this.enabled = old.enabled;
-}};
+    /**
+     * Called every frame, after all update methods.
+     * @param {{number}} dt - Delta time in seconds
+     */
+    postUpdate(dt) {{
+        // Post-update logic here
+    }}
+}}
 """
 
 
@@ -100,130 +89,125 @@ def generate_interactive_component(name: str) -> str:
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
-    return f"""/**
+    return f"""import {{ Script, Color }} from 'playcanvas';
+
+/**
  * {class_name} Component
- * Interactive component with mouse and touch input handling
+ * Interactive ESM Script with mouse and touch input handling
  */
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 
-var {class_name} = pc.createScript('{script_name}');
+    /**
+     * @attribute
+     */
+    hoverColor = new Color(0.5, 0.8, 1.0);
 
-{class_name}.attributes.add('hoverColor', {{
-    type: 'rgb',
-    default: [0.5, 0.8, 1.0],
-    title: 'Hover Color'
-}});
+    /**
+     * @attribute
+     */
+    clickScale = 0.9;
 
-{class_name}.attributes.add('clickScale', {{
-    type: 'number',
-    default: 0.9,
-    title: 'Click Scale'
-}});
+    initialize() {{
+        this.originalColor = null;
+        this.originalScale = this.entity.getLocalScale().clone();
+        this.isHovered = false;
+        this.isPressed = false;
 
-{class_name}.prototype.initialize = function() {{
-    this.originalColor = null;
-    this.originalScale = this.entity.getLocalScale().clone();
-    this.isHovered = false;
-    this.isPressed = false;
+        // Store material reference
+        if (this.entity.model) {{
+            this.material = this.entity.model.material;
+            this.originalColor = this.material.diffuse.clone();
+        }}
 
-    // Store material reference
-    if (this.entity.model) {{
-        this.material = this.entity.model.material;
-        this.originalColor = this.material.diffuse.clone();
+        // Mouse events
+        if (this.app.mouse) {{
+            this.app.mouse.on('mousedown', this.onMouseDown, this);
+            this.app.mouse.on('mouseup', this.onMouseUp, this);
+        }}
+
+        // Touch events
+        if (this.app.touch) {{
+            this.app.touch.on('touchstart', this.onTouchStart, this);
+            this.app.touch.on('touchend', this.onTouchEnd, this);
+        }}
     }}
 
-    // Mouse events
-    if (this.app.mouse) {{
-        this.app.mouse.on(pc.EVENT_MOUSEDOWN, this.onMouseDown, this);
-        this.app.mouse.on(pc.EVENT_MOUSEUP, this.onMouseUp, this);
-    }}
+    update(dt) {{
+        if (!this.app.mouse) return;
 
-    // Touch events
-    if (this.app.touch) {{
-        this.app.touch.on(pc.EVENT_TOUCHSTART, this.onTouchStart, this);
-        this.app.touch.on(pc.EVENT_TOUCHEND, this.onTouchEnd, this);
-    }}
-}};
+        // Raycast from mouse
+        const camera = this.app.root.findByName('Camera');
+        if (!camera) return;
 
-{class_name}.prototype.update = function(dt) {{
-    if (!this.app.mouse) return;
-
-    // Raycast from mouse
-    const camera = this.app.root.findByName('Camera');
-    if (!camera) return;
-
-    const ray = camera.camera.screenToWorld(
-        this.app.mouse.x,
-        this.app.mouse.y,
-        camera.camera.farClip
-    );
-
-    const from = camera.getPosition();
-    const to = ray;
-
-    const result = this.app.systems.rigidbody.raycastFirst(from, to);
-
-    // Check if hovering
-    const wasHovered = this.isHovered;
-    this.isHovered = result && result.entity === this.entity;
-
-    if (this.isHovered && !wasHovered) {{
-        this.onHoverEnter();
-    }} else if (!this.isHovered && wasHovered) {{
-        this.onHoverExit();
-    }}
-}};
-
-{class_name}.prototype.onHoverEnter = function() {{
-    if (this.material && this.originalColor) {{
-        this.material.diffuse.set(
-            this.hoverColor[0],
-            this.hoverColor[1],
-            this.hoverColor[2]
+        const from = camera.getPosition();
+        const to = camera.camera.screenToWorld(
+            this.app.mouse.x,
+            this.app.mouse.y,
+            camera.camera.farClip
         );
-        this.material.update();
+
+        const result = this.app.systems.rigidbody.raycastFirst(from, to);
+
+        // Check if hovering
+        const wasHovered = this.isHovered;
+        this.isHovered = result && result.entity === this.entity;
+
+        if (this.isHovered && !wasHovered) {{
+            this.onHoverEnter();
+        }} else if (!this.isHovered && wasHovered) {{
+            this.onHoverExit();
+        }}
     }}
-    this.fire('hover:enter');
-}};
 
-{class_name}.prototype.onHoverExit = function() {{
-    if (this.material && this.originalColor) {{
-        this.material.diffuse.copy(this.originalColor);
-        this.material.update();
+    onHoverEnter() {{
+        if (this.material && this.originalColor) {{
+            this.material.diffuse.copy(this.hoverColor);
+            this.material.update();
+        }}
+        this.fire('hover:enter');
     }}
-    this.fire('hover:exit');
-}};
 
-{class_name}.prototype.onMouseDown = function(event) {{
-    if (!this.isHovered) return;
-
-    this.isPressed = true;
-    this.entity.setLocalScale(
-        this.originalScale.x * this.clickScale,
-        this.originalScale.y * this.clickScale,
-        this.originalScale.z * this.clickScale
-    );
-
-    this.fire('click', {{ button: event.button }});
-}};
-
-{class_name}.prototype.onMouseUp = function(event) {{
-    if (!this.isPressed) return;
-
-    this.isPressed = false;
-    this.entity.setLocalScale(this.originalScale);
-
-    if (this.isHovered) {{
-        this.fire('click:release');
+    onHoverExit() {{
+        if (this.material && this.originalColor) {{
+            this.material.diffuse.copy(this.originalColor);
+            this.material.update();
+        }}
+        this.fire('hover:exit');
     }}
-}};
 
-{class_name}.prototype.onTouchStart = function(event) {{
-    this.onMouseDown({{ button: 0 }});
-}};
+    onMouseDown(event) {{
+        if (!this.isHovered) return;
 
-{class_name}.prototype.onTouchEnd = function(event) {{
-    this.onMouseUp({{ button: 0 }});
-}};
+        this.isPressed = true;
+        this.entity.setLocalScale(
+            this.originalScale.x * this.clickScale,
+            this.originalScale.y * this.clickScale,
+            this.originalScale.z * this.clickScale
+        );
+
+        this.fire('click', {{ button: event.button }});
+    }}
+
+    onMouseUp(event) {{
+        if (!this.isPressed) return;
+
+        this.isPressed = false;
+        this.entity.setLocalScale(this.originalScale);
+
+        if (this.isHovered) {{
+            this.fire('click:release');
+        }}
+    }}
+
+    onTouchStart(event) {{
+        this.onMouseDown({{ button: 0 }});
+    }}
+
+    onTouchEnd(event) {{
+        this.onMouseUp({{ button: 0 }});
+    }}
+}}
 """
 
 
@@ -232,91 +216,91 @@ def generate_animation_component(name: str) -> str:
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
-    return f"""/**
+    return f"""import {{ Script }} from 'playcanvas';
+
+/**
  * {class_name} Component
  * Controls entity animations with state management
  */
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 
-var {class_name} = pc.createScript('{script_name}');
+    /**
+     * @attribute
+     */
+    idleAnim = 'Idle';
 
-{class_name}.attributes.add('idleAnim', {{
-    type: 'string',
-    default: 'Idle',
-    title: 'Idle Animation'
-}});
+    /**
+     * @attribute
+     */
+    walkAnim = 'Walk';
 
-{class_name}.attributes.add('walkAnim', {{
-    type: 'string',
-    default: 'Walk',
-    title: 'Walk Animation'
-}});
+    /**
+     * @attribute
+     */
+    runAnim = 'Run';
 
-{class_name}.attributes.add('runAnim', {{
-    type: 'string',
-    default: 'Run',
-    title: 'Run Animation'
-}});
+    /**
+     * Animation blend time in seconds.
+     * @attribute
+     */
+    blendTime = 0.2;
 
-{class_name}.attributes.add('blendTime', {{
-    type: 'number',
-    default: 0.2,
-    title: 'Blend Time',
-    description: 'Animation blend time in seconds'
-}});
+    initialize() {{
+        this.currentState = 'idle';
+        this.animComponent = this.entity.anim;
 
-{class_name}.prototype.initialize = function() {{
-    this.currentState = 'idle';
-    this.animComponent = this.entity.anim;
+        if (!this.animComponent) {{
+            console.warn('{class_name}: No anim component found');
+            return;
+        }}
 
-    if (!this.animComponent) {{
-        console.warn('{class_name}: No anim component found');
-        return;
+        // Play initial animation
+        this.setState('idle');
     }}
 
-    // Play initial animation
-    this.setState('idle');
-}};
+    setState(state) {{
+        if (this.currentState === state) return;
 
-{class_name}.prototype.setState = function(state) {{
-    if (this.currentState === state) return;
+        const animName = this.getAnimationName(state);
+        if (!animName) {{
+            console.warn(`{class_name}: Unknown state "${{state}}"`);
+            return;
+        }}
 
-    const animName = this.getAnimationName(state);
-    if (!animName) {{
-        console.warn(`{class_name}: Unknown state "${{state}}"`);
-        return;
+        // Blend to new animation
+        this.animComponent.setBoolean(state, true);
+
+        const from = this.currentState;
+        this.currentState = state;
+        this.fire('state:change', {{ from, to: state }});
     }}
 
-    // Blend to new animation
-    this.animComponent.setBoolean(state, true);
-
-    this.currentState = state;
-    this.fire('state:change', {{ from: this.currentState, to: state }});
-}};
-
-{class_name}.prototype.getAnimationName = function(state) {{
-    switch (state) {{
-        case 'idle': return this.idleAnim;
-        case 'walk': return this.walkAnim;
-        case 'run': return this.runAnim;
-        default: return null;
+    getAnimationName(state) {{
+        switch (state) {{
+            case 'idle': return this.idleAnim;
+            case 'walk': return this.walkAnim;
+            case 'run': return this.runAnim;
+            default: return null;
+        }}
     }}
-}};
 
-{class_name}.prototype.playAnimation = function(name, loop = true) {{
-    if (!this.animComponent) return;
+    playAnimation(name, loop = true) {{
+        if (!this.animComponent) return;
 
-    const layer = this.animComponent.baseLayer;
-    layer.transition(name, this.blendTime);
+        const layer = this.animComponent.baseLayer;
+        layer.transition(name, this.blendTime);
 
-    if (loop) {{
-        this.animComponent.setBoolean('loop', true);
+        if (loop) {{
+            this.animComponent.setBoolean('loop', true);
+        }}
     }}
-}};
 
-{class_name}.prototype.update = function(dt) {{
-    // Override to add state logic
-    // Example: this.setState('walk') based on velocity
-}};
+    update(dt) {{
+        // Override to add state logic
+        // Example: this.setState('walk') based on velocity
+    }}
+}}
 """
 
 
@@ -325,111 +309,109 @@ def generate_physics_component(name: str) -> str:
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
-    return f"""/**
+    return f"""import {{ Script }} from 'playcanvas';
+
+/**
  * {class_name} Component
  * Physics-based component with force and impulse control
  */
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 
-var {class_name} = pc.createScript('{script_name}');
+    /**
+     * @attribute
+     */
+    mass = 1.0;
 
-{class_name}.attributes.add('mass', {{
-    type: 'number',
-    default: 1.0,
-    title: 'Mass'
-}});
+    /**
+     * @attribute
+     */
+    friction = 0.5;
 
-{class_name}.attributes.add('friction', {{
-    type: 'number',
-    default: 0.5,
-    title: 'Friction'
-}});
+    /**
+     * Bounciness (0-1).
+     * @attribute
+     */
+    restitution = 0.3;
 
-{class_name}.attributes.add('restitution', {{
-    type: 'number',
-    default: 0.3,
-    title: 'Restitution',
-    description: 'Bounciness (0-1)'
-}});
+    /**
+     * @attribute
+     */
+    linearDamping = 0.1;
 
-{class_name}.attributes.add('linearDamping', {{
-    type: 'number',
-    default: 0.1,
-    title: 'Linear Damping'
-}});
+    /**
+     * @attribute
+     */
+    angularDamping = 0.1;
 
-{class_name}.attributes.add('angularDamping', {{
-    type: 'number',
-    default: 0.1,
-    title: 'Angular Damping'
-}});
+    initialize() {{
+        this.rigidbody = this.entity.rigidbody;
 
-{class_name}.prototype.initialize = function() {{
-    this.rigidbody = this.entity.rigidbody;
+        if (!this.rigidbody) {{
+            console.warn('{class_name}: No rigidbody component found');
+            return;
+        }}
 
-    if (!this.rigidbody) {{
-        console.warn('{class_name}: No rigidbody component found');
-        return;
+        // Configure physics properties
+        this.rigidbody.mass = this.mass;
+        this.rigidbody.friction = this.friction;
+        this.rigidbody.restitution = this.restitution;
+        this.rigidbody.linearDamping = this.linearDamping;
+        this.rigidbody.angularDamping = this.angularDamping;
+
+        // Listen to collision events
+        this.entity.collision.on('contact', this.onContact, this);
+        this.entity.collision.on('collisionstart', this.onCollisionStart, this);
+        this.entity.collision.on('collisionend', this.onCollisionEnd, this);
     }}
 
-    // Configure physics properties
-    this.rigidbody.mass = this.mass;
-    this.rigidbody.friction = this.friction;
-    this.rigidbody.restitution = this.restitution;
-    this.rigidbody.linearDamping = this.linearDamping;
-    this.rigidbody.angularDamping = this.angularDamping;
-
-    // Listen to collision events
-    this.entity.collision.on('contact', this.onContact, this);
-    this.entity.collision.on('collisionstart', this.onCollisionStart, this);
-    this.entity.collision.on('collisionend', this.onCollisionEnd, this);
-}};
-
-{class_name}.prototype.applyForce = function(force) {{
-    if (!this.rigidbody) return;
-    this.rigidbody.applyForce(force.x, force.y, force.z);
-}};
-
-{class_name}.prototype.applyImpulse = function(impulse) {{
-    if (!this.rigidbody) return;
-    this.rigidbody.applyImpulse(impulse.x, impulse.y, impulse.z);
-}};
-
-{class_name}.prototype.applyTorque = function(torque) {{
-    if (!this.rigidbody) return;
-    this.rigidbody.applyTorque(torque.x, torque.y, torque.z);
-}};
-
-{class_name}.prototype.applyTorqueImpulse = function(torque) {{
-    if (!this.rigidbody) return;
-    this.rigidbody.applyTorqueImpulse(torque.x, torque.y, torque.z);
-}};
-
-{class_name}.prototype.onContact = function(result) {{
-    // Called every frame during contact
-    this.fire('physics:contact', {{ result: result }});
-}};
-
-{class_name}.prototype.onCollisionStart = function(result) {{
-    console.log('Collision started with:', result.other.name);
-    this.fire('physics:collision:start', {{ result: result }});
-}};
-
-{class_name}.prototype.onCollisionEnd = function(other) {{
-    console.log('Collision ended with:', other.name);
-    this.fire('physics:collision:end', {{ other: other }});
-}};
-
-{class_name}.prototype.update = function(dt) {{
-    // Access velocity
-    const velocity = this.rigidbody.linearVelocity;
-    const speed = velocity.length();
-
-    // Example: Apply drag at high speeds
-    if (speed > 10) {{
-        const drag = velocity.clone().scale(-0.1);
-        this.applyForce(drag);
+    applyForce(force) {{
+        if (!this.rigidbody) return;
+        this.rigidbody.applyForce(force.x, force.y, force.z);
     }}
-}};
+
+    applyImpulse(impulse) {{
+        if (!this.rigidbody) return;
+        this.rigidbody.applyImpulse(impulse.x, impulse.y, impulse.z);
+    }}
+
+    applyTorque(torque) {{
+        if (!this.rigidbody) return;
+        this.rigidbody.applyTorque(torque.x, torque.y, torque.z);
+    }}
+
+    applyTorqueImpulse(torque) {{
+        if (!this.rigidbody) return;
+        this.rigidbody.applyTorqueImpulse(torque.x, torque.y, torque.z);
+    }}
+
+    onContact(result) {{
+        // Called every frame during contact
+        this.fire('physics:contact', {{ result }});
+    }}
+
+    onCollisionStart(result) {{
+        console.log('Collision started with:', result.other.name);
+        this.fire('physics:collision:start', {{ result }});
+    }}
+
+    onCollisionEnd(other) {{
+        console.log('Collision ended with:', other.name);
+        this.fire('physics:collision:end', {{ other }});
+    }}
+
+    update(dt) {{
+        // Access velocity
+        const velocity = this.rigidbody.linearVelocity;
+        const speed = velocity.length();
+
+        // Example: Apply drag at high speeds
+        if (speed > 10) {{
+            const drag = velocity.clone().scale(-0.1);
+            this.applyForce(drag);
+        }}
+    }}
+}}
 """
 
 
@@ -438,145 +420,146 @@ def generate_character_controller(name: str) -> str:
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
-    return f"""/**
+    return f"""import {{ Script, Vec3, Entity, math, KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE }} from 'playcanvas';
+
+/**
  * {class_name} Component
  * Third-person character controller with WASD movement
  */
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 
-var {class_name} = pc.createScript('{script_name}');
+    /**
+     * @attribute
+     */
+    speed = 5.0;
 
-{class_name}.attributes.add('speed', {{
-    type: 'number',
-    default: 5.0,
-    title: 'Movement Speed'
-}});
+    /**
+     * @attribute
+     */
+    jumpForce = 10.0;
 
-{class_name}.attributes.add('jumpForce', {{
-    type: 'number',
-    default: 10.0,
-    title: 'Jump Force'
-}});
+    /**
+     * Degrees per second.
+     * @attribute
+     */
+    rotationSpeed = 180;
 
-{class_name}.attributes.add('rotationSpeed', {{
-    type: 'number',
-    default: 180,
-    title: 'Rotation Speed',
-    description: 'Degrees per second'
-}});
+    /**
+     * @attribute
+     * @type {{Entity}}
+     */
+    camera;
 
-{class_name}.attributes.add('camera', {{
-    type: 'entity',
-    title: 'Camera Entity'
-}});
+    initialize() {{
+        this.velocity = new Vec3();
+        this.isGrounded = false;
+        this.moveDirection = new Vec3();
 
-{class_name}.prototype.initialize = function() {{
-    this.velocity = new pc.Vec3();
-    this.isGrounded = false;
-    this.moveDirection = new pc.Vec3();
-
-    // Collision detection for grounding
-    if (this.entity.collision) {{
-        this.entity.collision.on('collisionstart', this.onCollisionStart, this);
-        this.entity.collision.on('collisionend', this.onCollisionEnd, this);
-    }}
-}};
-
-{class_name}.prototype.update = function(dt) {{
-    this.handleMovement(dt);
-    this.handleJump();
-    this.handleRotation(dt);
-}};
-
-{class_name}.prototype.handleMovement = function(dt) {{
-    const keyboard = this.app.keyboard;
-
-    // Get camera forward and right vectors
-    const forward = this.camera ?
-        this.camera.forward.clone() :
-        new pc.Vec3(0, 0, -1);
-
-    const right = this.camera ?
-        this.camera.right.clone() :
-        new pc.Vec3(1, 0, 0);
-
-    // Flatten to horizontal plane
-    forward.y = 0;
-    forward.normalize();
-    right.y = 0;
-    right.normalize();
-
-    // Calculate movement direction
-    this.moveDirection.set(0, 0, 0);
-
-    if (keyboard.isPressed(pc.KEY_W)) {{
-        this.moveDirection.add(forward);
-    }}
-    if (keyboard.isPressed(pc.KEY_S)) {{
-        this.moveDirection.sub(forward);
-    }}
-    if (keyboard.isPressed(pc.KEY_A)) {{
-        this.moveDirection.sub(right);
-    }}
-    if (keyboard.isPressed(pc.KEY_D)) {{
-        this.moveDirection.add(right);
-    }}
-
-    // Normalize and apply speed
-    if (this.moveDirection.length() > 0) {{
-        this.moveDirection.normalize();
-        this.moveDirection.scale(this.speed * dt);
-
-        // Move entity
-        const pos = this.entity.getPosition();
-        pos.add(this.moveDirection);
-        this.entity.setPosition(pos);
-    }}
-}};
-
-{class_name}.prototype.handleJump = function() {{
-    const keyboard = this.app.keyboard;
-
-    if (keyboard.wasPressed(pc.KEY_SPACE) && this.isGrounded) {{
-        if (this.entity.rigidbody) {{
-            this.entity.rigidbody.applyImpulse(0, this.jumpForce, 0);
+        // Collision detection for grounding
+        if (this.entity.collision) {{
+            this.entity.collision.on('collisionstart', this.onCollisionStart, this);
+            this.entity.collision.on('collisionend', this.onCollisionEnd, this);
         }}
     }}
-}};
 
-{class_name}.prototype.handleRotation = function(dt) {{
-    if (this.moveDirection.length() > 0) {{
-        const targetAngle = Math.atan2(this.moveDirection.x, this.moveDirection.z) * pc.math.RAD_TO_DEG;
-        const currentAngles = this.entity.getEulerAngles();
-
-        // Smoothly rotate towards movement direction
-        const newY = this.lerpAngle(
-            currentAngles.y,
-            targetAngle,
-            this.rotationSpeed * dt
-        );
-
-        this.entity.setEulerAngles(currentAngles.x, newY, currentAngles.z);
+    update(dt) {{
+        this.handleMovement(dt);
+        this.handleJump();
+        this.handleRotation(dt);
     }}
-}};
 
-{class_name}.prototype.lerpAngle = function(from, to, t) {{
-    let diff = to - from;
-    while (diff > 180) diff -= 360;
-    while (diff < -180) diff += 360;
-    return from + diff * Math.min(t / 180, 1);
-}};
+    handleMovement(dt) {{
+        const keyboard = this.app.keyboard;
 
-{class_name}.prototype.onCollisionStart = function(result) {{
-    // Check if collision is below (ground)
-    const contact = result.contacts[0];
-    if (contact && contact.normal.y > 0.5) {{
-        this.isGrounded = true;
+        // Get camera forward and right vectors
+        const forward = this.camera ?
+            this.camera.forward.clone() :
+            new Vec3(0, 0, -1);
+
+        const right = this.camera ?
+            this.camera.right.clone() :
+            new Vec3(1, 0, 0);
+
+        // Flatten to horizontal plane
+        forward.y = 0;
+        forward.normalize();
+        right.y = 0;
+        right.normalize();
+
+        // Calculate movement direction
+        this.moveDirection.set(0, 0, 0);
+
+        if (keyboard.isPressed(KEY_W)) {{
+            this.moveDirection.add(forward);
+        }}
+        if (keyboard.isPressed(KEY_S)) {{
+            this.moveDirection.sub(forward);
+        }}
+        if (keyboard.isPressed(KEY_A)) {{
+            this.moveDirection.sub(right);
+        }}
+        if (keyboard.isPressed(KEY_D)) {{
+            this.moveDirection.add(right);
+        }}
+
+        // Normalize and apply speed
+        if (this.moveDirection.length() > 0) {{
+            this.moveDirection.normalize();
+            this.moveDirection.scale(this.speed * dt);
+
+            // Move entity
+            const pos = this.entity.getPosition();
+            pos.add(this.moveDirection);
+            this.entity.setPosition(pos);
+        }}
     }}
-}};
 
-{class_name}.prototype.onCollisionEnd = function(other) {{
-    this.isGrounded = false;
-}};
+    handleJump() {{
+        const keyboard = this.app.keyboard;
+
+        if (keyboard.wasPressed(KEY_SPACE) && this.isGrounded) {{
+            if (this.entity.rigidbody) {{
+                this.entity.rigidbody.applyImpulse(0, this.jumpForce, 0);
+            }}
+        }}
+    }}
+
+    handleRotation(dt) {{
+        if (this.moveDirection.length() > 0) {{
+            const targetAngle = Math.atan2(this.moveDirection.x, this.moveDirection.z) * math.RAD_TO_DEG;
+            const currentAngles = this.entity.getEulerAngles();
+
+            // Smoothly rotate towards movement direction
+            const newY = this.lerpAngle(
+                currentAngles.y,
+                targetAngle,
+                this.rotationSpeed * dt
+            );
+
+            this.entity.setEulerAngles(currentAngles.x, newY, currentAngles.z);
+        }}
+    }}
+
+    lerpAngle(from, to, t) {{
+        let diff = to - from;
+        while (diff > 180) diff -= 360;
+        while (diff < -180) diff += 360;
+        return from + diff * Math.min(t / 180, 1);
+    }}
+
+    onCollisionStart(result) {{
+        // Check if collision is below (ground)
+        const contact = result.contacts[0];
+        if (contact && contact.normal.y > 0.5) {{
+            this.isGrounded = true;
+        }}
+    }}
+
+    onCollisionEnd(other) {{
+        this.isGrounded = false;
+    }}
+}}
 """
 
 
@@ -585,115 +568,114 @@ def generate_camera_controller(name: str) -> str:
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
-    return f"""/**
+    return f"""import {{ Script, Entity, math, MOUSEBUTTON_LEFT }} from 'playcanvas';
+
+/**
  * {class_name} Component
  * Orbit camera controller with mouse/touch input
  */
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 
-var {class_name} = pc.createScript('{script_name}');
+    /**
+     * @attribute
+     * @type {{Entity}}
+     */
+    target;
 
-{class_name}.attributes.add('target', {{
-    type: 'entity',
-    title: 'Target Entity'
-}});
+    /**
+     * @attribute
+     */
+    distance = 10;
 
-{class_name}.attributes.add('distance', {{
-    type: 'number',
-    default: 10,
-    title: 'Distance'
-}});
+    /**
+     * @attribute
+     */
+    minDistance = 2;
 
-{class_name}.attributes.add('minDistance', {{
-    type: 'number',
-    default: 2,
-    title: 'Min Distance'
-}});
+    /**
+     * @attribute
+     */
+    maxDistance = 20;
 
-{class_name}.attributes.add('maxDistance', {{
-    type: 'number',
-    default: 20,
-    title: 'Max Distance'
-}});
+    /**
+     * @attribute
+     */
+    sensitivity = 0.3;
 
-{class_name}.attributes.add('sensitivity', {{
-    type: 'number',
-    default: 0.3,
-    title: 'Sensitivity'
-}});
+    /**
+     * @attribute
+     */
+    damping = 0.1;
 
-{class_name}.attributes.add('damping', {{
-    type: 'number',
-    default: 0.1,
-    title: 'Damping'
-}});
+    initialize() {{
+        this.yaw = 0;
+        this.pitch = 0;
+        this.currentDistance = this.distance;
 
-{class_name}.prototype.initialize = function() {{
-    this.yaw = 0;
-    this.pitch = 0;
-    this.currentDistance = this.distance;
+        this.targetYaw = 0;
+        this.targetPitch = 0;
 
-    this.targetYaw = 0;
-    this.targetPitch = 0;
+        // Mouse events
+        if (this.app.mouse) {{
+            this.app.mouse.on('mousemove', this.onMouseMove, this);
+            this.app.mouse.on('mousewheel', this.onMouseWheel, this);
+        }}
 
-    // Mouse events
-    if (this.app.mouse) {{
-        this.app.mouse.on(pc.EVENT_MOUSEMOVE, this.onMouseMove, this);
-        this.app.mouse.on(pc.EVENT_MOUSEWHEEL, this.onMouseWheel, this);
+        // Touch events
+        if (this.app.touch) {{
+            this.app.touch.on('touchmove', this.onTouchMove, this);
+        }}
     }}
 
-    // Touch events
-    if (this.app.touch) {{
-        this.app.touch.on(pc.EVENT_TOUCHMOVE, this.onTouchMove, this);
+    update(dt) {{
+        if (!this.target) return;
+
+        // Smooth damping
+        this.yaw = math.lerp(this.yaw, this.targetYaw, this.damping);
+        this.pitch = math.lerp(this.pitch, this.targetPitch, this.damping);
+
+        // Clamp pitch
+        this.pitch = math.clamp(this.pitch, -89, 89);
+
+        // Calculate camera position
+        const targetPos = this.target.getPosition();
+
+        const yawRad = this.yaw * math.DEG_TO_RAD;
+        const pitchRad = this.pitch * math.DEG_TO_RAD;
+
+        const x = targetPos.x + this.currentDistance * Math.cos(pitchRad) * Math.sin(yawRad);
+        const y = targetPos.y + this.currentDistance * Math.sin(pitchRad);
+        const z = targetPos.z + this.currentDistance * Math.cos(pitchRad) * Math.cos(yawRad);
+
+        this.entity.setPosition(x, y, z);
+        this.entity.lookAt(targetPos);
     }}
-}};
 
-{class_name}.prototype.update = function(dt) {{
-    if (!this.target) return;
+    onMouseMove(event) {{
+        if (!event.buttons[MOUSEBUTTON_LEFT]) return;
 
-    // Smooth damping
-    this.yaw = pc.math.lerp(this.yaw, this.targetYaw, this.damping);
-    this.pitch = pc.math.lerp(this.pitch, this.targetPitch, this.damping);
+        this.targetYaw -= event.dx * this.sensitivity;
+        this.targetPitch -= event.dy * this.sensitivity;
+    }}
 
-    // Clamp pitch
-    this.pitch = pc.math.clamp(this.pitch, -89, 89);
+    onMouseWheel(event) {{
+        this.currentDistance -= event.wheelDelta * 0.5;
+        this.currentDistance = math.clamp(
+            this.currentDistance,
+            this.minDistance,
+            this.maxDistance
+        );
+    }}
 
-    // Calculate camera position
-    const targetPos = this.target.getPosition();
+    onTouchMove(event) {{
+        if (event.touches.length !== 1) return;
 
-    const yawRad = this.yaw * pc.math.DEG_TO_RAD;
-    const pitchRad = this.pitch * pc.math.DEG_TO_RAD;
-
-    const x = targetPos.x + this.currentDistance * Math.cos(pitchRad) * Math.sin(yawRad);
-    const y = targetPos.y + this.currentDistance * Math.sin(pitchRad);
-    const z = targetPos.z + this.currentDistance * Math.cos(pitchRad) * Math.cos(yawRad);
-
-    this.entity.setPosition(x, y, z);
-    this.entity.lookAt(targetPos);
-}};
-
-{class_name}.prototype.onMouseMove = function(event) {{
-    if (!event.buttons[pc.MOUSEBUTTON_LEFT]) return;
-
-    this.targetYaw -= event.dx * this.sensitivity;
-    this.targetPitch -= event.dy * this.sensitivity;
-}};
-
-{class_name}.prototype.onMouseWheel = function(event) {{
-    this.currentDistance -= event.wheelDelta * 0.5;
-    this.currentDistance = pc.math.clamp(
-        this.currentDistance,
-        this.minDistance,
-        this.maxDistance
-    );
-}};
-
-{class_name}.prototype.onTouchMove = function(event) {{
-    if (event.touches.length !== 1) return;
-
-    const touch = event.touches[0];
-    this.targetYaw -= touch.dx * this.sensitivity;
-    this.targetPitch -= touch.dy * this.sensitivity;
-}};
+        const touch = event.touches[0];
+        this.targetYaw -= touch.dx * this.sensitivity;
+        this.targetPitch -= touch.dy * this.sensitivity;
+    }}
+}}
 """
 
 
@@ -702,150 +684,150 @@ def generate_ui_component(name: str) -> str:
     class_name = name[0].upper() + name[1:]
     script_name = name[0].lower() + name[1:]
 
-    return f"""/**
+    return f"""import {{ Script, Vec3 }} from 'playcanvas';
+
+/**
  * {class_name} Component
  * UI component with button-like behavior
  */
+export class {class_name} extends Script {{
+    static scriptName = '{script_name}';
 
-var {class_name} = pc.createScript('{script_name}');
+    /**
+     * @attribute
+     */
+    hoverScale = 1.1;
 
-{class_name}.attributes.add('hoverScale', {{
-    type: 'number',
-    default: 1.1,
-    title: 'Hover Scale'
-}});
+    /**
+     * @attribute
+     */
+    clickScale = 0.95;
 
-{class_name}.attributes.add('clickScale', {{
-    type: 'number',
-    default: 0.95,
-    title: 'Click Scale'
-}});
+    /**
+     * @attribute
+     */
+    transitionSpeed = 10;
 
-{class_name}.attributes.add('transitionSpeed', {{
-    type: 'number',
-    default: 10,
-    title: 'Transition Speed'
-}});
+    initialize() {{
+        this.originalScale = this.entity.getLocalScale().clone();
+        this.targetScale = this.originalScale.clone();
+        this.isHovered = false;
+        this.isPressed = false;
 
-{class_name}.prototype.initialize = function() {{
-    this.originalScale = this.entity.getLocalScale().clone();
-    this.targetScale = this.originalScale.clone();
-    this.isHovered = false;
-    this.isPressed = false;
+        // Add element component if not present
+        if (!this.entity.element) {{
+            console.warn('{class_name}: No element component found');
+            return;
+        }}
 
-    // Add element component if not present
-    if (!this.entity.element) {{
-        console.warn('{class_name}: No element component found');
-        return;
+        // Mouse events
+        this.entity.element.on('mouseenter', this.onMouseEnter, this);
+        this.entity.element.on('mouseleave', this.onMouseLeave, this);
+        this.entity.element.on('mousedown', this.onMouseDown, this);
+        this.entity.element.on('mouseup', this.onMouseUp, this);
+        this.entity.element.on('click', this.onClick, this);
+
+        // Touch events
+        this.entity.element.on('touchstart', this.onTouchStart, this);
+        this.entity.element.on('touchend', this.onTouchEnd, this);
     }}
 
-    // Mouse events
-    this.entity.element.on('mouseenter', this.onMouseEnter, this);
-    this.entity.element.on('mouseleave', this.onMouseLeave, this);
-    this.entity.element.on('mousedown', this.onMouseDown, this);
-    this.entity.element.on('mouseup', this.onMouseUp, this);
-    this.entity.element.on('click', this.onClick, this);
-
-    // Touch events
-    this.entity.element.on('touchstart', this.onTouchStart, this);
-    this.entity.element.on('touchend', this.onTouchEnd, this);
-}};
-
-{class_name}.prototype.update = function(dt) {{
-    // Smooth scale transition
-    const current = this.entity.getLocalScale();
-    const lerped = new pc.Vec3().lerp(
-        current,
-        this.targetScale,
-        this.transitionSpeed * dt
-    );
-    this.entity.setLocalScale(lerped);
-}};
-
-{class_name}.prototype.onMouseEnter = function() {{
-    this.isHovered = true;
-    this.targetScale.copy(this.originalScale).scale(this.hoverScale);
-    this.fire('hover:enter');
-}};
-
-{class_name}.prototype.onMouseLeave = function() {{
-    this.isHovered = false;
-    if (!this.isPressed) {{
-        this.targetScale.copy(this.originalScale);
+    update(dt) {{
+        // Smooth scale transition
+        const current = this.entity.getLocalScale();
+        const lerped = new Vec3().lerp(
+            current,
+            this.targetScale,
+            this.transitionSpeed * dt
+        );
+        this.entity.setLocalScale(lerped);
     }}
-    this.fire('hover:exit');
-}};
 
-{class_name}.prototype.onMouseDown = function() {{
-    this.isPressed = true;
-    this.targetScale.copy(this.originalScale).scale(this.clickScale);
-    this.fire('press');
-}};
-
-{class_name}.prototype.onMouseUp = function() {{
-    this.isPressed = false;
-    if (this.isHovered) {{
+    onMouseEnter() {{
+        this.isHovered = true;
         this.targetScale.copy(this.originalScale).scale(this.hoverScale);
-    }} else {{
-        this.targetScale.copy(this.originalScale);
+        this.fire('hover:enter');
     }}
-    this.fire('release');
-}};
 
-{class_name}.prototype.onClick = function() {{
-    console.log('{class_name} clicked');
-    this.fire('click');
-}};
+    onMouseLeave() {{
+        this.isHovered = false;
+        if (!this.isPressed) {{
+            this.targetScale.copy(this.originalScale);
+        }}
+        this.fire('hover:exit');
+    }}
 
-{class_name}.prototype.onTouchStart = function() {{
-    this.onMouseDown();
-}};
+    onMouseDown() {{
+        this.isPressed = true;
+        this.targetScale.copy(this.originalScale).scale(this.clickScale);
+        this.fire('press');
+    }}
 
-{class_name}.prototype.onTouchEnd = function() {{
-    this.onMouseUp();
-    this.fire('click');
-}};
+    onMouseUp() {{
+        this.isPressed = false;
+        if (this.isHovered) {{
+            this.targetScale.copy(this.originalScale).scale(this.hoverScale);
+        }} else {{
+            this.targetScale.copy(this.originalScale);
+        }}
+        this.fire('release');
+    }}
+
+    onClick() {{
+        console.log('{class_name} clicked');
+        this.fire('click');
+    }}
+
+    onTouchStart() {{
+        this.onMouseDown();
+    }}
+
+    onTouchEnd() {{
+        this.onMouseUp();
+        this.fire('click');
+    }}
+}}
 """
 
 
 # Component type registry
-COMPONENT_TYPES: Dict[str, Dict] = {{
-    'basic': {{
+COMPONENT_TYPES: Dict[str, Dict] = {
+    'basic': {
         'name': 'Basic Component',
         'description': 'Simple component with lifecycle methods',
         'generator': generate_basic_component
-    }},
-    'interactive': {{
+    },
+    'interactive': {
         'name': 'Interactive Component',
         'description': 'Mouse and touch interaction handling',
         'generator': lambda name: generate_interactive_component(name)
-    }},
-    'animation': {{
+    },
+    'animation': {
         'name': 'Animation Controller',
         'description': 'Animation state management',
         'generator': lambda name: generate_animation_component(name)
-    }},
-    'physics': {{
+    },
+    'physics': {
         'name': 'Physics Component',
         'description': 'Physics-based component with forces',
         'generator': lambda name: generate_physics_component(name)
-    }},
-    'character': {{
+    },
+    'character': {
         'name': 'Character Controller',
         'description': 'Third-person character movement',
         'generator': lambda name: generate_character_controller(name)
-    }},
-    'camera': {{
+    },
+    'camera': {
         'name': 'Camera Controller',
         'description': 'Orbit camera with mouse control',
         'generator': lambda name: generate_camera_controller(name)
-    }},
-    'ui': {{
+    },
+    'ui': {
         'name': 'UI Component',
         'description': 'Screen-space UI element',
         'generator': lambda name: generate_ui_component(name)
-    }}
-}}
+    }
+}
 
 
 def interactive_mode():
@@ -910,7 +892,7 @@ def interactive_mode():
 
         # Create output file
         script_name = name[0].lower() + name[1:]
-        filename = f"{script_name}.js"
+        filename = f"{script_name}.mjs"
         filepath = os.path.join(output_dir, filename)
 
         # Create directory if needed
@@ -924,11 +906,12 @@ def interactive_mode():
         print(f"\nComponent type: {COMPONENT_TYPES[component_type]['name']}")
         print(f"Lines of code: {len(code.splitlines())}")
 
-        print("\nUsage:")
-        print(f"1. Add script to PlayCanvas project")
+        print("\nUsage (ESM Script, engine v2.0+):")
+        print(f"1. Add {script_name}.mjs as a Script asset in the project (Editor or build tool)")
         print(f"2. Attach to entity via Editor or code:")
+        print(f"   import {{ {name[0].upper() + name[1:]} }} from './{script_name}.mjs';")
         print(f"   entity.addComponent('script');")
-        print(f"   entity.script.create('{script_name}');")
+        print(f"   entity.script.create({name[0].upper() + name[1:]});")
         print(f"3. Configure attributes in Inspector")
 
     except Exception as e:
@@ -961,7 +944,7 @@ def cli_mode(args):
 
         # Create output file
         script_name = name[0].lower() + name[1:]
-        filename = f"{script_name}.js"
+        filename = f"{script_name}.mjs"
         filepath = os.path.join(output_dir, filename)
 
         # Create directory if needed

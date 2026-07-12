@@ -65,6 +65,7 @@ Event-driven system with:
 - **Conditions**: Logic gates (if/else)
 - **Actions**: State changes, audio, scene switches
 - **Variables**: Dynamic data from APIs or user input
+- **Real-time API**: Bind an event (start, click, custom) to an HTTP request (GET/POST/PUT/PATCH/DELETE) and map the response into scene variables, configured entirely in the Spline editor (no code)
 
 ### 5. Export Options
 
@@ -83,7 +84,7 @@ Multiple deployment methods:
 **Implementation**:
 
 ```bash
-# Installation
+# Installation (react-spline v4.x, runtime v1.12.x)
 npm install @splinetool/react-spline @splinetool/runtime
 ```
 

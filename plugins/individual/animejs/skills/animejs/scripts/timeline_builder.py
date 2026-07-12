@@ -2,7 +2,7 @@
 """
 Anime.js Timeline Builder
 
-Build complex Anime.js timeline sequences with interactive configuration.
+Build complex Anime.js v4 timeline sequences with interactive configuration.
 
 Usage:
     ./timeline_builder.py                      # Interactive mode
@@ -25,142 +25,79 @@ TIMELINE_PRESETS = {
     'hero': {
         'name': 'Hero Section Animation',
         'description': 'Hero background, title, subtitle, and CTA reveal',
-        'code': '''const heroTimeline = anime.timeline({
-  easing: 'easeOutExpo'
+        'code': '''import { createTimeline } from 'animejs'
+
+const heroTimeline = createTimeline({
+  defaults: { ease: 'outExpo' }
 })
 
 heroTimeline
-  .add({
-    targets: '.hero-bg',
-    scale: [1.2, 1],
-    opacity: [0, 1],
-    duration: 1200
-  })
-  .add({
-    targets: '.hero-title',
-    translateY: [100, 0],
-    opacity: [0, 1],
-    duration: 800
-  }, '-=800')  // Overlap by 800ms
-  .add({
-    targets: '.hero-subtitle',
-    translateY: [50, 0],
-    opacity: [0, 1],
-    duration: 600
-  }, '-=400')
-  .add({
-    targets: '.hero-cta',
-    scale: [0, 1],
-    duration: 400
-  }, '-=200')'''
+  .add('.hero-bg', { scale: [1.2, 1], opacity: [0, 1], duration: 1200 })
+  .add('.hero-title', { y: [100, 0], opacity: [0, 1], duration: 800 }, '-=800')  // Overlap by 800ms
+  .add('.hero-subtitle', { y: [50, 0], opacity: [0, 1], duration: 600 }, '-=400')
+  .add('.hero-cta', { scale: [0, 1], duration: 400 }, '-=200')'''
     },
 
     'modal': {
         'name': 'Modal Popup Animation',
         'description': 'Modal entrance with header, body, and footer reveal',
-        'code': '''const tl = anime.timeline({
-  easing: 'easeOutExpo',
-  duration: 750
+        'code': '''import { createTimeline } from 'animejs'
+
+const tl = createTimeline({
+  defaults: { ease: 'outExpo', duration: 750 }
 })
 
-tl.add({
-  targets: '.modal',
-  scale: [0, 1],
-  opacity: [0, 1]
-})
-.add({
-  targets: '.modal-header',
-  translateY: [-20, 0],
-  opacity: [0, 1]
-}, '-=500')
-.add({
-  targets: '.modal-body',
-  translateY: [20, 0],
-  opacity: [0, 1]
-}, '-=400')
-.add({
-  targets: '.modal-footer',
-  opacity: [0, 1]
-}, '-=300')'''
+tl.add('.modal', { scale: [0, 1], opacity: [0, 1] })
+.add('.modal-header', { y: [-20, 0], opacity: [0, 1] }, '-=500')
+.add('.modal-body', { y: [20, 0], opacity: [0, 1] }, '-=400')
+.add('.modal-footer', { opacity: [0, 1] }, '-=300')'''
     },
 
     'cards': {
         'name': 'Card Grid Animation',
         'description': 'Cards stagger in, then button appears',
-        'code': '''const tl = anime.timeline()
+        'code': '''import { createTimeline, stagger } from 'animejs'
 
-tl.add({
-  targets: '.card',
-  translateY: [100, 0],
+const tl = createTimeline()
+
+tl.add('.card', {
+  y: [100, 0],
   opacity: [0, 1],
-  delay: anime.stagger(100),
+  delay: stagger(100),
   duration: 600,
-  easing: 'easeOutQuad'
+  ease: 'outQuad'
 })
-.add({
-  targets: '.button',
+.add('.button', {
   scale: [0, 1],
   duration: 400,
-  easing: 'easeOutBack'
+  ease: 'outBack'
 }, '-=200')'''
     },
 
     'loader': {
         'name': 'Loading Sequence',
         'description': 'Loader background, text, spinner, then fade to content',
-        'code': '''const tl = anime.timeline()
+        'code': '''import { createTimeline } from 'animejs'
 
-tl.add({
-  targets: '.loader-bg',
-  scaleY: [0, 1],
-  duration: 400,
-  easing: 'easeInOutQuad'
-})
-.add({
-  targets: '.loader-text',
-  opacity: [0, 1],
-  translateY: [20, 0],
-  duration: 600
-}, '-=200')
-.add({
-  targets: '.loader-spinner',
-  rotate: '1turn',
-  duration: 800,
-  loop: 3
-}, '-=400')
-.add({
-  targets: '.loader',
-  opacity: 0,
-  duration: 400
-}, '+=500')
-.add({
-  targets: '.content',
-  translateY: [50, 0],
-  opacity: [0, 1],
-  duration: 600
-})'''
+const tl = createTimeline()
+
+tl.add('.loader-bg', { scaleY: [0, 1], duration: 400, ease: 'inOutQuad' })
+.add('.loader-text', { opacity: [0, 1], y: [20, 0], duration: 600 }, '-=200')
+.add('.loader-spinner', { rotate: '1turn', duration: 800, loop: 3 }, '-=400')
+.add('.loader', { opacity: 0, duration: 400 }, '+=500')
+.add('.content', { y: [50, 0], opacity: [0, 1], duration: 600 })'''
     },
 
     'page': {
         'name': 'Page Transition',
         'description': 'Slide out old page, slide in new page',
-        'code': '''function pageTransition(oldPage, newPage) {
-  const tl = anime.timeline()
+        'code': '''import { createTimeline } from 'animejs'
 
-  tl.add({
-    targets: oldPage,
-    translateX: [0, -100],
-    opacity: [1, 0],
-    duration: 400,
-    easing: 'easeInQuad'
-  })
-  .add({
-    targets: newPage,
-    translateX: [100, 0],
-    opacity: [0, 1],
-    duration: 400,
-    easing: 'easeOutQuad'
-  }, '-=200')  // Overlap by 200ms for smooth transition
+function pageTransition(oldPage, newPage) {
+  const tl = createTimeline()
+
+  tl.add(oldPage, { x: [0, -100], opacity: [1, 0], duration: 400, ease: 'inQuad' })
+  .add(newPage, { x: [100, 0], opacity: [0, 1], duration: 400, ease: 'outQuad' }, '-=200')  // Overlap by 200ms for smooth transition
 
   return tl
 }'''
@@ -169,22 +106,13 @@ tl.add({
     'toast': {
         'name': 'Toast Notification',
         'description': 'Toast slides in, stays, then fades out',
-        'code': '''function showToast(toast) {
-  const tl = anime.timeline()
+        'code': '''import { createTimeline } from 'animejs'
 
-  tl.add({
-    targets: toast,
-    translateX: [400, 0],
-    opacity: [0, 1],
-    duration: 400,
-    easing: 'easeOutBack'
-  })
-  .add({
-    targets: toast,
-    opacity: [1, 0],
-    duration: 300,
-    easing: 'easeInQuad'
-  }, '+=3000')  // Wait 3 seconds before fading out
+function showToast(toast) {
+  const tl = createTimeline()
+
+  tl.add(toast, { x: [400, 0], opacity: [0, 1], duration: 400, ease: 'outBack' })
+  .add(toast, { opacity: [1, 0], duration: 300, ease: 'inQuad' }, '+=3000')  // Wait 3 seconds before fading out
 
   return tl
 }'''
@@ -193,21 +121,17 @@ tl.add({
     'menu': {
         'name': 'Menu Open Animation',
         'description': 'Menu slides in with staggered items',
-        'code': '''const tl = anime.timeline({ autoplay: false })
+        'code': '''import { createTimeline, stagger } from 'animejs'
 
-tl.add({
-  targets: '.menu-overlay',
-  translateX: ['-100%', 0],
-  duration: 400,
-  easing: 'easeOutQuad'
-})
-.add({
-  targets: '.menu-item',
-  translateX: [-50, 0],
+const tl = createTimeline({ autoplay: false })
+
+tl.add('.menu-overlay', { x: ['-100%', 0], duration: 400, ease: 'outQuad' })
+.add('.menu-item', {
+  x: [-50, 0],
   opacity: [0, 1],
-  delay: anime.stagger(80),
+  delay: stagger(80),
   duration: 500,
-  easing: 'easeOutExpo'
+  ease: 'outExpo'
 }, '-=200')
 
 // Play on button click
@@ -265,15 +189,14 @@ def generate_custom_timeline():
     print("\nGenerating timeline with", num_steps, "steps...\n")
 
     # Generate timeline code
-    code = "const tl = anime.timeline({\n"
-    code += "  duration: 750,\n"
-    code += "  easing: 'easeOutExpo'\n"
+    code = "import { createTimeline } from 'animejs'\n\n"
+    code += "const tl = createTimeline({\n"
+    code += "  defaults: { duration: 750, ease: 'outExpo' }\n"
     code += "})\n\n"
 
     for i in range(num_steps):
-        code += f"tl.add({{\n"
-        code += f"  targets: '.element-{i+1}',\n"
-        code += f"  translateY: [50, 0],\n"
+        code += f"tl.add('.element-{i+1}', {{\n"
+        code += f"  y: [50, 0],\n"
         code += f"  opacity: [0, 1]\n"
         if i > 0:
             code += f"}}, '-=300')  // Step {i+1}\n"

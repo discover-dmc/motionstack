@@ -413,87 +413,82 @@ ammoScript.onload = () => {
 
 ---
 
-### Pattern 5: Custom Scripts
+### Pattern 5: Custom Scripts (ESM Scripts)
 
-Create reusable script components.
+Create reusable script components. Engine v2.0+ removed the legacy `pc.createScript` scripting system entirely — ESM Scripts (`.mjs` files, ES class-based) are the only supported format. A `npx codemod playcanvas-esm-scripts` codemod exists for migrating old classic-script projects.
 
 ```javascript
-// Define script class
-const RotateScript = pc.createScript('rotate');
+// rotate.mjs
+import { Script, Vec3 } from 'playcanvas';
 
-// Script attributes (editor-exposed)
-RotateScript.attributes.add('speed', {
-  type: 'number',
-  default: 10,
-  title: 'Rotation Speed'
-});
+export class Rotate extends Script {
+  static scriptName = 'rotate';
 
-RotateScript.attributes.add('axis', {
-  type: 'vec3',
-  default: [0, 1, 0],
-  title: 'Rotation Axis'
-});
+  /** @attribute */
+  speed = 10;
 
-// Initialize method
-RotateScript.prototype.initialize = function() {
-  console.log('RotateScript initialized');
-};
+  /** @attribute */
+  axis = new Vec3(0, 1, 0);
 
-// Update method (called every frame)
-RotateScript.prototype.update = function(dt) {
-  this.entity.rotate(
-    this.axis.x * this.speed * dt,
-    this.axis.y * this.speed * dt,
-    this.axis.z * this.speed * dt
-  );
-};
+  initialize() {
+    console.log('Rotate initialized');
+  }
 
-// Cleanup
-RotateScript.prototype.destroy = function() {
-  console.log('RotateScript destroyed');
-};
+  update(dt) {
+    this.entity.rotate(
+      this.axis.x * this.speed * dt,
+      this.axis.y * this.speed * dt,
+      this.axis.z * this.speed * dt
+    );
+  }
 
+  destroy() {
+    console.log('Rotate destroyed');
+  }
+}
+```
+
+```javascript
 // Usage
+import { Rotate } from './rotate.mjs';
+
 const entity = new pc.Entity('rotatingCube');
 entity.addComponent('model', { type: 'box' });
 entity.addComponent('script');
-entity.script.create('rotate', {
-  attributes: {
-    speed: 20,
-    axis: new pc.Vec3(0, 1, 0)
-  }
+entity.script.create(Rotate, {
+  properties: { speed: 20, axis: new pc.Vec3(0, 1, 0) }
 });
 app.root.addChild(entity);
 ```
 
 **Script lifecycle methods**:
 ```javascript
-const MyScript = pc.createScript('myScript');
+export class MyScript extends Script {
+  static scriptName = 'myScript';
 
-MyScript.prototype.initialize = function() {
-  // Called once after all resources are loaded
-};
+  initialize() {
+    // Called once after all resources are loaded
+  }
 
-MyScript.prototype.postInitialize = function() {
-  // Called after all entities have initialized
-};
+  postInitialize() {
+    // Called after all entities have initialized
+  }
 
-MyScript.prototype.update = function(dt) {
-  // Called every frame before rendering
-};
+  update(dt) {
+    // Called every frame before rendering
+  }
 
-MyScript.prototype.postUpdate = function(dt) {
-  // Called every frame after update
-};
+  postUpdate(dt) {
+    // Called every frame after update
+  }
 
-MyScript.prototype.swap = function(old) {
-  // Hot reload support
-};
-
-MyScript.prototype.destroy = function() {
-  // Cleanup when entity is destroyed
-};
+  destroy() {
+    // Cleanup when entity is destroyed
+  }
+}
 ```
+
+ESM Scripts have module scope (explicit imports, no globals) versus Classic Scripts' global scope, and attributes are exposed via `@attribute` JSDoc on class fields rather than `Script.attributes.add()`.
 
 ---
 

@@ -100,7 +100,7 @@ def create_html_template(title, scene_code, additional_scripts=""):
   <canvas id="application-canvas"></canvas>
 
   <!-- PlayCanvas Engine -->
-  <script src="https://cdn.jsdelivr.net/npm/playcanvas@1.70.0/build/playcanvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/playcanvas@2.20.0/build/playcanvas.min.js"></script>
 
   {additional_scripts}
 

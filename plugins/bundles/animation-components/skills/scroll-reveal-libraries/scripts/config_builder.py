@@ -196,10 +196,10 @@ def generate_js_config(config, format_type="modern"):
         lines.append("")
     elif format_type == "cdn":
         lines.append("<!-- Add to <head> -->")
-        lines.append('<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />')
+        lines.append('<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />')
         lines.append("")
         lines.append("<!-- Add before </body> -->")
-        lines.append('<script src="https://unpkg.com/aos@next/dist/aos.js"></script>')
+        lines.append('<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>')
         lines.append("<script>")
 
     lines.append("AOS.init({")

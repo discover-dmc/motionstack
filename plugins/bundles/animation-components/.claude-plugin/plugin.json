@@ -2,13 +2,13 @@
   "name": "animation-components",
   "version": "1.0.0",
   "description": "Comprehensive animation and component libraries with React Spring, Magic UI, React Bits, AOS, Anime.js, and Lottie",
-  "author": {
-    "name": "Claude Design Skillstack",
-    "email": "oladotun.olatunji@gmail.com"
+  "author": "Motionstack",
+  "license": "MIT",
+  "homepage": "https://github.com/discover-dmc/motionstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/discover-dmc/motionstack.git"
   },
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/freshtechbro/claudedesignskills",
-  "repository": "https://github.com/freshtechbro/claudedesignskills.git",
   "keywords": [
     "bundle",
     "animation",
@@ -16,25 +16,16 @@
     "ui",
     "motion"
   ],
-  "skills": "./skills/",
-  "commands": [
-    "./commands/animated-component-libraries-component_importer.md",
-    "./commands/animated-component-libraries-props_generator.md",
-    "./commands/animejs-animation_generator.md",
-    "./commands/animejs-timeline_builder.md",
-    "./commands/lottie-animations-generate_lottie_component.md",
-    "./commands/lottie-animations-optimize_lottie.md",
-    "./commands/react-spring-physics-physics_calculator.md",
-    "./commands/react-spring-physics-spring_generator.md",
-    "./commands/scroll-reveal-libraries-aos_generator.md",
-    "./commands/scroll-reveal-libraries-config_builder.md"
+  "category": "bundle",
+  "bundle": true,
+  "includes": [
+    "react-spring-physics",
+    "animated-component-libraries",
+    "scroll-reveal-libraries",
+    "animejs",
+    "lottie-animations"
   ],
-  "agents": [
-    "./agents/animated-component-libraries-specialist.md",
-    "./agents/animation-components-integration.md",
-    "./agents/animejs-choreographer.md",
-    "./agents/lottie-animations-choreographer.md",
-    "./agents/react-spring-physics-choreographer.md",
-    "./agents/scroll-reveal-libraries-specialist.md"
-  ]
+  "skills": "skills/",
+  "commands": "commands/",
+  "agents": "agents/"
 }

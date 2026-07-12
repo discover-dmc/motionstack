@@ -1230,4 +1230,4 @@ console.log('Frame time:', instrumentation.frameTimeCounter.average);
 
 ## Version Notes
 
-This skill is based on Babylon.js 7.x. For latest features, consult the official documentation.
+This skill is based on Babylon.js 9.x (9.0 released March 2026, adding Clustered Lighting, area light emission textures, and the Node Particle Editor). Physics V2 (PhysicsAggregate/PhysicsBody/PhysicsShape) is the current API; PhysicsImpostor (V1) is deprecated. WebGPU has been supported since 5.0 and runs side by side with WebGL2, with automatic fallback: pass `new WebGPUEngine(canvas)` (after `await engine.initAsync()`) instead of `new Engine(canvas)` to opt in. For latest features, consult the official documentation.

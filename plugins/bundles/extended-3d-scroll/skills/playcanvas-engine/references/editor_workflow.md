@@ -289,42 +289,39 @@ Camera Component
 2. Name your script (e.g., `playerController`)
 3. Opens code editor
 
-**Script Template**:
+**Script Template** (ESM Script, engine v2.0+ — save as `playerController.mjs`):
 ```javascript
-var PlayerController = pc.createScript('playerController');
+import { Script, Vec3, KEY_W, KEY_SPACE } from 'playcanvas';
 
-// Attributes (editable in Editor)
-PlayerController.attributes.add('speed', {
-    type: 'number',
-    default: 10,
-    title: 'Movement Speed'
-});
+export class PlayerController extends Script {
+    static scriptName = 'playerController';
 
-PlayerController.attributes.add('jumpForce', {
-    type: 'number',
-    default: 5
-});
+    /** @attribute */
+    speed = 10;
 
-// Initialize
-PlayerController.prototype.initialize = function() {
-    this.velocity = new pc.Vec3();
-};
+    /** @attribute */
+    jumpForce = 5;
 
-// Update every frame
-PlayerController.prototype.update = function(dt) {
-    var forward = this.entity.forward;
-    var right = this.entity.right;
-
-    // Movement
-    if (this.app.keyboard.isPressed(pc.KEY_W)) {
-        this.entity.translate(forward.mulScalar(this.speed * dt));
+    initialize() {
+        this.velocity = new Vec3();
     }
 
-    if (this.app.keyboard.isPressed(pc.KEY_SPACE)) {
-        this.entity.rigidbody.applyImpulse(0, this.jumpForce, 0);
+    update(dt) {
+        const forward = this.entity.forward;
+
+        // Movement
+        if (this.app.keyboard.isPressed(KEY_W)) {
+            this.entity.translate(forward.clone().mulScalar(this.speed * dt));
+        }
+
+        if (this.app.keyboard.isPressed(KEY_SPACE)) {
+            this.entity.rigidbody.applyImpulse(0, this.jumpForce, 0);
+        }
     }
-};
+}
 ```
+
+Classic scripts (`pc.createScript`, global scope, `.attributes.add()`) were removed in engine v2.0.0. Existing pre-2.0 projects keep running; new scripts must use the ESM format above.
 
 ---
 
@@ -571,19 +568,19 @@ app.scenes.loadSceneHierarchy('scene.json', (err, root) => {
 
 ### Accessing Editor Attributes in Code
 
-**In Editor Script**:
+**In Editor Script** (ESM Script):
 ```javascript
-var MyScript = pc.createScript('myScript');
+import { Script, Entity } from 'playcanvas';
 
-MyScript.attributes.add('target', {
-  type: 'entity',
-  title: 'Target Entity'
-});
+export class MyScript extends Script {
+  static scriptName = 'myScript';
 
-MyScript.attributes.add('speed', {
-  type: 'number',
-  default: 10
-});
+  /** @attribute @type {Entity} */
+  target;
+
+  /** @attribute */
+  speed = 10;
+}
 ```
 
 **Accessing from Other Scripts**:

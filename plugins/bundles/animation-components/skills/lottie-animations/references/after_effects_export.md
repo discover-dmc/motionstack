@@ -325,7 +325,7 @@ Avoid animating:
 <html>
 <body>
   <div id="lottie"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.13.0/lottie.min.js"></script>
   <script>
     lottie.loadAnimation({
       container: document.getElementById('lottie'),

@@ -54,7 +54,7 @@ This meta-skill provides architectural patterns, best practices, and integration
 import { useEffect, useRef } from 'react'
 import { initThreeScene } from './three/scene'
 import { initScrollAnimations } from './animations/scroll'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 function App() {
   const canvasRef = useRef()
@@ -230,7 +230,7 @@ React Component Tree
 // App.jsx - Unified React approach
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Scene } from './components/Scene'
 import { Loader } from './components/Loader'
 
@@ -265,7 +265,7 @@ function App() {
 import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
-import { motion } from 'framer-motion-3d'
+import { useMotionValue, animate } from 'motion/react'
 
 export function Scene() {
   return (
@@ -282,24 +282,40 @@ export function Scene() {
   )
 }
 
+// framer-motion-3d is unmaintained; drive Three.js objects with Motion
+// values and sync them in useFrame instead of a <motion.mesh> wrapper.
 function AnimatedCube() {
+  const meshRef = useRef()
   const [hovered, setHovered] = useState(false)
   const [active, setActive] = useState(false)
+  const scale = useMotionValue(1)
+  const rotationY = useMotionValue(0)
+
+  const handleClick = () => {
+    setActive(!active)
+    animate(scale, active ? 1 : 1.5, { type: 'spring', stiffness: 200, damping: 20 })
+  }
+
+  const handleHover = (isHovered) => {
+    setHovered(isHovered)
+    if (isHovered) animate(rotationY, rotationY.get() + Math.PI * 2, { duration: 1, ease: 'easeInOut' })
+  }
+
+  useFrame(() => {
+    meshRef.current.scale.setScalar(scale.get())
+    meshRef.current.rotation.y = rotationY.get()
+  })
 
   return (
-    <motion.mesh
-      scale={active ? 1.5 : 1}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-      animate={{
-        rotateY: hovered ? Math.PI * 2 : 0
-      }}
-      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+    <mesh
+      ref={meshRef}
+      onClick={handleClick}
+      onPointerOver={() => handleHover(true)}
+      onPointerOut={() => handleHover(false)}
     >
       <boxGeometry args={[2, 2, 2]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-    </motion.mesh>
+    </mesh>
   )
 }
 
@@ -502,27 +518,54 @@ export function App() {
 
 ### 2. Gesture-Driven 3D Manipulation
 
-**R3F + Motion (Framer Motion 3D):**
+**R3F + Motion:** `framer-motion-3d` is unmaintained, so drive the mesh from a Motion value instead of wrapping it in a `<motion.mesh>`. An HTML drag handle overlays the canvas and writes to a shared Motion value; the mesh reads it inside `useFrame`.
 
 ```jsx
-import { motion } from 'framer-motion-3d'
+// App.jsx - HTML drag handle lives outside the Canvas
+import { Canvas } from '@react-three/fiber'
+import { motion, useMotionValue } from 'motion/react'
+import { DraggableObject } from './DraggableObject'
 
-function DraggableObject() {
+function App() {
+  const x = useMotionValue(0)
+
   return (
-    <motion.mesh
-      drag
-      dragElastic={0.1}
-      dragConstraints={{ left: -5, right: 5, top: 5, bottom: -5 }}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      animate={{
-        rotateY: [0, Math.PI * 2],
-        transition: { repeat: Infinity, duration: 4, ease: 'linear' }
-      }}
-    >
+    <div style={{ position: 'relative' }}>
+      <Canvas>
+        <DraggableObject x={x} />
+      </Canvas>
+      <motion.div
+        className="drag-handle"
+        style={{ x, position: 'absolute', touchAction: 'none' }}
+        drag="x"
+        dragElastic={0.1}
+        dragConstraints={{ left: -250, right: 250 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      />
+    </div>
+  )
+}
+```
+
+```jsx
+// DraggableObject.jsx - R3F mesh reads the Motion value each frame
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+
+export function DraggableObject({ x }) {
+  const meshRef = useRef()
+
+  useFrame((state) => {
+    meshRef.current.position.x = x.get() / 50 // map px drag to scene units
+    meshRef.current.rotation.y = state.clock.elapsedTime
+  })
+
+  return (
+    <mesh ref={meshRef}>
       <sphereGeometry args={[1, 32, 32]} />
       <meshStandardMaterial color="hotpink" />
-    </motion.mesh>
+    </mesh>
   )
 }
 ```
@@ -533,7 +576,7 @@ function DraggableObject() {
 
 ```jsx
 // store.js
-import create from 'zustand'
+import { create } from 'zustand'
 
 export const useStore = create((set) => ({
   selectedObject: null,
@@ -606,7 +649,7 @@ export function InteractiveObject({ id }) {
 
 ```javascript
 // store/scene.js
-import create from 'zustand'
+import { create } from 'zustand'
 
 export const useSceneStore = create((set, get) => ({
   // State
@@ -662,16 +705,18 @@ function Object3D({ id }) {
 
 ```javascript
 // Unified render loop with conditional rendering
-import { Clock } from 'three'
+// THREE.Clock is deprecated (r183); use THREE.Timer instead
+import { Timer } from 'three'
 
-const clock = new Clock()
+const timer = new Timer()
 let needsRender = true
 
-function animate() {
+function animate(timestamp) {
   requestAnimationFrame(animate)
 
-  const delta = clock.getDelta()
-  const elapsed = clock.getElapsedTime()
+  timer.update(timestamp)
+  const delta = timer.getDelta()
+  const elapsed = timer.getElapsed()
 
   // Only render when needed
   if (needsRender || controls.enabled) {
@@ -807,20 +852,7 @@ useEffect(() => {
 
 ## Resources
 
-This skill includes bundled resources for multi-library integration:
-
-### references/
-- `architecture_patterns.md` - Detailed architectural patterns and trade-offs
-- `performance_optimization.md` - Performance strategies across the stack
-- `state_management.md` - State management patterns for 3D applications
-
-### scripts/
-- `integration_helper.py` - Generate integration boilerplate for library combinations
-- `pattern_generator.py` - Scaffold common integration patterns
-
-### assets/
-- `starter_unified/` - Complete starter template combining R3F + GSAP + Motion
-- `examples/` - Real-world integration examples
+This skill is self-contained in this document — the architecture patterns, code examples, and decision matrix above cover integration guidance directly. For library-specific API detail, see the bundled references/scripts/assets in each Related Skill below.
 
 ---
 

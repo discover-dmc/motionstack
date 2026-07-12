@@ -2,9 +2,10 @@
 
 Complete API documentation for Zdog - a pseudo-3D engine for canvas and SVG.
 
-**Version**: 1.1.3
+**Version**: 1.1.3 (latest, released 2019)
 **License**: MIT
 **CDN**: `https://unpkg.com/zdog@1/dist/zdog.dist.min.js`
+**Maintenance**: Dormant, not archived. No v2 has shipped; treat the current API as stable/final rather than expecting updates.
 
 ---
 

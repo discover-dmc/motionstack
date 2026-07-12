@@ -139,7 +139,7 @@
 
 - [ ] **Merge static geometries**:
   ```javascript
-  import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+  import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
   const merged = mergeGeometries([geo1, geo2, geo3]);
   ```
 - [ ] **Use texture atlases** to combine multiple textures
@@ -147,9 +147,10 @@
 
 ### 🔧 Animation Optimization
 
-- [ ] **Use Clock.getDelta()** for frame-independent animations:
+- [ ] **Use Timer.getDelta()** for frame-independent animations (`THREE.Clock` is deprecated since r183):
   ```javascript
-  const delta = clock.getDelta();
+  timer.update(timestamp);
+  const delta = timer.getDelta();
   mixer.update(delta);
   ```
 - [ ] **Pause animations** when offscreen:
@@ -291,7 +292,7 @@
 
 - [ ] **Use Stats.js**:
   ```javascript
-  import Stats from 'three/examples/jsm/libs/stats.module.js';
+  import Stats from 'three/addons/libs/stats.module.js';
   const stats = new Stats();
   document.body.appendChild(stats.dom);
   ```

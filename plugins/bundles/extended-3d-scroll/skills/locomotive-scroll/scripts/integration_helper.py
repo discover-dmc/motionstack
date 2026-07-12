@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """
-Locomotive Scroll + GSAP ScrollTrigger Integration Helper
+Locomotive Scroll (v4) + GSAP ScrollTrigger Integration Helper
 
-Generates integration code for Locomotive Scroll with GSAP ScrollTrigger.
+Generates v4-style integration code (el/data-scroll-container + scrollerProxy).
+Locomotive Scroll v5 (current, Jan 2026) is built on Lenis and no longer needs
+scrollerProxy/pinType — see references/gsap_integration.md's "v5 Integration
+(Current)" section for that pattern. This helper still targets v4 for teams
+maintaining v4 projects.
 
 Usage:
     ./integration_helper.py                           # Interactive mode
@@ -138,7 +142,9 @@ gsap.to(sections, {
 
 def print_header():
     print("=" * 70)
-    print("Locomotive Scroll + GSAP ScrollTrigger Integration Helper")
+    print("Locomotive Scroll (v4) + GSAP ScrollTrigger Integration Helper")
+    print("v5 is current and uses initCustomTicker instead of scrollerProxy.")
+    print("See references/gsap_integration.md for the current pattern.")
     print("=" * 70)
     print()
 

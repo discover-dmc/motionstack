@@ -18,41 +18,41 @@ import argparse
 MAGIC_UI_COMPONENTS = {
     "grid-pattern": {
         "name": "Grid Pattern",
-        "install": "npx shadcn@latest add https://magicui.design/r/grid-pattern",
+        "install": "npx shadcn@latest add @magicui/grid-pattern",
         "deps": ["motion", "clsx", "tailwind-merge"],
         "css_required": False
     },
     "animated-grid-pattern": {
         "name": "Animated Grid Pattern",
-        "install": "npx shadcn@latest add https://magicui.design/r/animated-grid-pattern",
+        "install": "npx shadcn@latest add @magicui/animated-grid-pattern",
         "deps": ["motion", "clsx", "tailwind-merge"],
         "css_required": True,
         "css_keyframes": ["grid-fade"]
     },
     "shimmer-button": {
         "name": "Shimmer Button",
-        "install": "npx shadcn@latest add https://magicui.design/r/shimmer-button",
+        "install": "npx shadcn@latest add @magicui/shimmer-button",
         "deps": ["motion", "clsx", "tailwind-merge"],
         "css_required": True,
         "css_keyframes": ["shimmer-slide", "spin-around"]
     },
     "border-beam": {
         "name": "Border Beam",
-        "install": "npx shadcn@latest add https://magicui.design/r/border-beam",
+        "install": "npx shadcn@latest add @magicui/border-beam",
         "deps": ["motion", "clsx", "tailwind-merge"],
         "css_required": True,
         "css_keyframes": ["beam"]
     },
     "marquee": {
         "name": "Marquee",
-        "install": "npx shadcn@latest add https://magicui.design/r/marquee",
+        "install": "npx shadcn@latest add @magicui/marquee",
         "deps": ["motion", "clsx", "tailwind-merge"],
         "css_required": True,
         "css_keyframes": ["marquee", "marquee-vertical"]
     },
     "spinning-text": {
         "name": "Spinning Text",
-        "install": "npx shadcn@latest add https://magicui.design/r/spinning-text",
+        "install": "npx shadcn@latest add @magicui/spinning-text",
         "deps": ["motion", "clsx", "tailwind-merge"],
         "css_required": False
     },
@@ -68,49 +68,49 @@ MAGIC_UI_COMPONENTS = {
 REACT_BITS_COMPONENTS = {
     "blur-text": {
         "name": "BlurText",
-        "install": "Manual copy from reactbits.dev",
-        "deps": ["framer-motion"],
+        "install": "npx shadcn@latest add @react-bits/BlurText-TS-TW",
+        "deps": ["motion"],
         "path": "components/BlurText.jsx"
     },
     "count-up": {
         "name": "CountUp",
-        "install": "Manual copy from reactbits.dev",
-        "deps": ["framer-motion"],
+        "install": "npx shadcn@latest add @react-bits/CountUp-TS-TW",
+        "deps": ["motion"],
         "path": "components/CountUp.jsx"
     },
     "magnet": {
         "name": "Magnet",
-        "install": "Manual copy from reactbits.dev",
-        "deps": ["framer-motion"],
+        "install": "npx shadcn@latest add @react-bits/Magnet-TS-TW",
+        "deps": ["motion"],
         "path": "components/Magnet.jsx"
     },
     "dock": {
         "name": "Dock",
-        "install": "Manual copy from reactbits.dev",
-        "deps": ["framer-motion", "react-icons"],
+        "install": "npx shadcn@latest add @react-bits/Dock-TS-TW",
+        "deps": ["motion", "react-icons"],
         "path": "components/Dock.jsx"
     },
     "stepper": {
         "name": "Stepper",
-        "install": "Manual copy from reactbits.dev",
-        "deps": ["framer-motion"],
+        "install": "npx shadcn@latest add @react-bits/Stepper-TS-TW",
+        "deps": ["motion"],
         "path": "components/Stepper.jsx"
     },
     "particles": {
         "name": "Particles (WebGL)",
-        "install": "Manual copy from reactbits.dev",
+        "install": "npx shadcn@latest add @react-bits/Particles-TS-TW",
         "deps": ["ogl"],
         "path": "components/Particles.jsx"
     },
     "plasma": {
         "name": "Plasma",
-        "install": "Manual copy from reactbits.dev",
+        "install": "npx shadcn@latest add @react-bits/Plasma-TS-TW",
         "deps": ["ogl"],
         "path": "components/Plasma.jsx"
     },
     "aurora": {
         "name": "Aurora",
-        "install": "Manual copy from reactbits.dev",
+        "install": "npx shadcn@latest add @react-bits/Aurora-TS-TW",
         "deps": [],
         "path": "components/Aurora.jsx"
     }
@@ -181,10 +181,9 @@ def print_react_bits_instructions(component_key):
     print(f"React Bits: {comp['name']}")
     print(f"{'='*60}\n")
 
-    print("Step 1: Copy component code")
-    print(f"  Visit https://reactbits.dev")
-    print(f"  Find '{comp['name']}' component")
-    print(f"  Copy code to: {comp['path']}\n")
+    print("Step 1: Install component")
+    print(f"  {comp['install']}")
+    print(f"  (or copy code manually from https://reactbits.dev to {comp['path']})\n")
 
     if comp['deps']:
         print("Step 2: Install dependencies")

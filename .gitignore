@@ -161,3 +161,6 @@ test-results/
 # Backup files
 *.backup
 *~.nib
+
+# Skill distribution zips (attached to GitHub releases instead)
+.claude/skills/*.zip

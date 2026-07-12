@@ -9,6 +9,8 @@ description: Build declarative 3D scenes with React Three Fiber (R3F) - a React 
 
 React Three Fiber (R3F) is a React renderer for Three.js that brings declarative, component-based 3D development to React applications. Instead of imperatively creating and managing Three.js objects, you build 3D scenes using JSX components that map directly to Three.js objects.
 
+**Current versions**: `@react-three/fiber` v9 (9.6.1) requires React 19 and three.js 0.156+; `@react-three/drei` v10 (10.7.7) requires React 19 and three.js 0.159+. This skill targets three.js r185 to match the `threejs-webgl` skill. R3F v8 targeted React 18 and is legacy — use v9 for new projects.
+
 **When to Use This Skill**:
 - Building 3D experiences within React applications
 - Creating interactive product configurators or showcases
@@ -165,6 +167,7 @@ import { Suspense } from 'react'
 import { useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { TextureLoader } from 'three'
+import * as THREE from 'three'
 
 function Model() {
   const gltf = useLoader(GLTFLoader, '/model.glb')
@@ -173,6 +176,8 @@ function Model() {
 
 function TexturedMesh() {
   const texture = useLoader(TextureLoader, '/texture.jpg')
+  // R3F v9 no longer auto-converts color textures to sRGB — set it explicitly for color/albedo maps
+  texture.colorSpace = THREE.SRGBColorSpace
   return (
     <mesh>
       <boxGeometry />
@@ -670,29 +675,14 @@ function AnimatedBox() {
 }
 ```
 
-### With Framer Motion
+### With Motion (formerly Framer Motion)
 
-```jsx
-import { motion } from 'framer-motion-3d'
-
-function AnimatedSphere() {
-  return (
-    <motion.mesh
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      transition={{ duration: 1 }}
-    >
-      <sphereGeometry />
-      <meshStandardMaterial color="hotpink" />
-    </motion.mesh>
-  )
-}
-```
+`framer-motion-3d` is deprecated (unmaintained since early 2025) and does not support React 19 / R3F v9. Drive mesh animation from `useFrame` or GSAP instead (see "With GSAP" above); there is no maintained declarative-variants library for R3F meshes as of mid-2026.
 
 ### With Zustand (State Management)
 
 ```jsx
-import create from 'zustand'
+import { create } from 'zustand'
 
 const useStore = create((set) => ({
   color: 'orange',
@@ -1021,6 +1011,8 @@ Always wrap async operations in Suspense:
 
 ### 3. Use TypeScript
 
+Under React 19, function components accept `ref` as a normal prop — `forwardRef` is no longer required to expose a ref. Reach for `forwardRef`/`useImperativeHandle` only when a component needs to customize the exposed handle.
+
 ```typescript
 import { ThreeElements } from '@react-three/fiber'
 
@@ -1060,8 +1052,6 @@ Monitor re-renders and optimize components causing performance issues.
 
 ### References
 - `references/api_reference.md` - Complete R3F & Drei API documentation
-- `references/hooks_guide.md` - Detailed hooks usage and patterns
-- `references/drei_helpers.md` - Comprehensive Drei library guide
 
 ### Scripts
 - `scripts/component_generator.py` - Generate R3F component boilerplate

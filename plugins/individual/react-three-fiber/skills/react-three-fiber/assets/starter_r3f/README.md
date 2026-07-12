@@ -5,7 +5,7 @@ A minimal, production-ready starter template for building 3D experiences with Re
 ## Features
 
 - ⚡️ **Vite** - Fast build tool and dev server
-- ⚛️ **React 18** - Latest React with concurrent features
+- ⚛️ **React 19** - Latest React with concurrent features
 - 🎨 **React Three Fiber** - Declarative Three.js in React
 - 🛠️ **Drei** - Essential R3F helpers (OrbitControls, Environment, etc.)
 - 🎮 **Interactive Components** - Click and hover interactions

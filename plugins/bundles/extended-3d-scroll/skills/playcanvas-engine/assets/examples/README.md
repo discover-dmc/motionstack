@@ -340,64 +340,66 @@ app.mouse.on(pc.EVENT_MOUSEDOWN, (event) => {
 
 ### 3. Character Controller
 
-WASD character movement:
+WASD character movement (ESM Script, engine v2.0+):
 
 ```javascript
-var CharacterController = pc.createScript('characterController');
+import { Script, Vec3, math, KEY_W, KEY_A, KEY_S, KEY_D } from 'playcanvas';
 
-CharacterController.attributes.add('speed', {
-    type: 'number',
-    default: 5.0
-});
+export class CharacterController extends Script {
+    static scriptName = 'characterController';
 
-CharacterController.prototype.initialize = function() {
-    this.moveDirection = new pc.Vec3();
-};
+    /** @attribute */
+    speed = 5.0;
 
-CharacterController.prototype.update = function(dt) {
-    const keyboard = this.app.keyboard;
-
-    // Get camera direction
-    const camera = this.app.root.findByName('Camera');
-    const forward = camera.forward.clone();
-    const right = camera.right.clone();
-
-    // Flatten to horizontal
-    forward.y = 0;
-    forward.normalize();
-    right.y = 0;
-    right.normalize();
-
-    // Calculate movement
-    this.moveDirection.set(0, 0, 0);
-
-    if (keyboard.isPressed(pc.KEY_W)) {
-        this.moveDirection.add(forward);
-    }
-    if (keyboard.isPressed(pc.KEY_S)) {
-        this.moveDirection.sub(forward);
-    }
-    if (keyboard.isPressed(pc.KEY_A)) {
-        this.moveDirection.sub(right);
-    }
-    if (keyboard.isPressed(pc.KEY_D)) {
-        this.moveDirection.add(right);
+    initialize() {
+        this.moveDirection = new Vec3();
     }
 
-    // Apply movement
-    if (this.moveDirection.length() > 0) {
-        this.moveDirection.normalize();
-        this.moveDirection.scale(this.speed * dt);
+    update(dt) {
+        const keyboard = this.app.keyboard;
 
-        const pos = this.entity.getPosition();
-        pos.add(this.moveDirection);
-        this.entity.setPosition(pos);
+        // Get camera direction
+        const camera = this.app.root.findByName('Camera');
+        const forward = camera.forward.clone();
+        const right = camera.right.clone();
 
-        // Rotate to face movement direction
-        const angle = Math.atan2(this.moveDirection.x, this.moveDirection.z) * pc.math.RAD_TO_DEG;
-        this.entity.setEulerAngles(0, angle, 0);
+        // Flatten to horizontal
+        forward.y = 0;
+        forward.normalize();
+        right.y = 0;
+        right.normalize();
+
+        // Calculate movement
+        this.moveDirection.set(0, 0, 0);
+
+        if (keyboard.isPressed(KEY_W)) {
+            this.moveDirection.add(forward);
+        }
+        if (keyboard.isPressed(KEY_S)) {
+            this.moveDirection.sub(forward);
+        }
+        if (keyboard.isPressed(KEY_A)) {
+            this.moveDirection.sub(right);
+        }
+        if (keyboard.isPressed(KEY_D)) {
+            this.moveDirection.add(right);
+        }
+
+        // Apply movement
+        if (this.moveDirection.length() > 0) {
+            this.moveDirection.normalize();
+            this.moveDirection.scale(this.speed * dt);
+
+            const pos = this.entity.getPosition();
+            pos.add(this.moveDirection);
+            this.entity.setPosition(pos);
+
+            // Rotate to face movement direction
+            const angle = Math.atan2(this.moveDirection.x, this.moveDirection.z) * math.RAD_TO_DEG;
+            this.entity.setEulerAngles(0, angle, 0);
+        }
     }
-};
+}
 ```
 
 ---

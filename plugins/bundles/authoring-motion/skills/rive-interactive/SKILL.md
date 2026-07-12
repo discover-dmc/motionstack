@@ -165,7 +165,7 @@ export default function Dashboard() {
   const { rive, RiveComponent } = useRive({
     src: 'dashboard.riv',
     autoplay: true,
-    autoBind: false, // Manual binding for ViewModels
+    autoBind: false, // default; use useViewModel/useViewModelInstance for manual binding
   });
 
   // Get ViewModel and instance
@@ -207,9 +207,13 @@ export default function Dashboard() {
 **ViewModel Property Hooks**:
 - `useViewModelInstanceString` - Text properties
 - `useViewModelInstanceNumber` - Numeric properties
+- `useViewModelInstanceBoolean` - Boolean properties
 - `useViewModelInstanceColor` - Color properties (hex)
 - `useViewModelInstanceEnum` - Enum selection
 - `useViewModelInstanceTrigger` - Animation triggers
+- `useViewModelInstanceImage` - Image properties
+- `useViewModelInstanceList` - List/array properties
+- `useViewModelInstanceArtboard` - Nested artboard properties
 
 ### Pattern 4: Handling Rive Events
 
@@ -505,21 +509,32 @@ if (input) {
 
 **Problem**: ViewModel property doesn't update animation
 
-**Solution**:
-```jsx
-// ❌ Wrong: autoBind enabled
-const { rive } = useRive({
-  src: 'dashboard.riv',
-  autoplay: true,
-  // autoBind: true (default)
-});
+**Solution**: `autoBind` defaults to `false`. Either bind manually with `useViewModel`/`useViewModelInstance`, or set `autoBind: true` to skip those hooks and read/write `rive.viewModelInstance` directly.
 
-// ✅ Correct: Disable autoBind for ViewModels
+```jsx
+// ❌ Wrong: expecting a default view model instance to exist with no binding step
 const { rive } = useRive({
   src: 'dashboard.riv',
   autoplay: true,
-  autoBind: false, // Required for manual ViewModel control
 });
+// rive.viewModelInstance is null here — nothing was bound
+
+// ✅ Option A: manual binding (lets you pick a named ViewModel/instance)
+const { rive } = useRive({
+  src: 'dashboard.riv',
+  autoplay: true,
+  autoBind: false, // default, shown for clarity
+});
+const viewModel = useViewModel(rive, { useDefault: true });
+const viewModelInstance = useViewModelInstance(viewModel, { rive });
+
+// ✅ Option B: auto-binding (simplest, binds the default view model + instance)
+const { rive } = useRive({
+  src: 'dashboard.riv',
+  autoplay: true,
+  autoBind: true,
+});
+// rive?.viewModelInstance is now populated automatically
 ```
 
 ### Pitfall 3: Event Listener Not Firing

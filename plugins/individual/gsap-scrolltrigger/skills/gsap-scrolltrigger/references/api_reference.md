@@ -308,8 +308,10 @@ ScrollTrigger.batch(".element", {
   start: "top 80%"
 });
 
-// Match media queries
-ScrollTrigger.matchMedia({
+// Match media queries (use gsap.matchMedia, not the deprecated ScrollTrigger.matchMedia)
+let mm = gsap.matchMedia();
+
+mm.add({
   "(min-width: 800px)": function() {
     // Desktop animations
   },

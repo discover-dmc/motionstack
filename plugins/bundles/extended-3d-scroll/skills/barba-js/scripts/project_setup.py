@@ -41,9 +41,9 @@ def create_package_json(project_name: str) -> str:
   "author": "",
   "license": "MIT",
   "devDependencies": {{
-    "@barba/core": "^2.9.7",
-    "gsap": "^3.12.5",
-    "vite": "^5.0.0"
+    "@barba/core": "^2.10.3",
+    "gsap": "^3.13.0",
+    "vite": "^6.0.0"
   }}
 }}
 '''
@@ -96,7 +96,7 @@ def create_index_html(minimal: bool = False) -> str:
   </main>
 
   <footer class="site-footer">
-    <p>&copy; 2025 Barba.js Project</p>
+    <p>&copy; 2026 Barba.js Project</p>
   </footer>
 
   <div class="page-loader">Loading...</div>
@@ -141,7 +141,7 @@ def create_about_html() -> str:
   </main>
 
   <footer class="site-footer">
-    <p>&copy; 2025 Barba.js Project</p>
+    <p>&copy; 2026 Barba.js Project</p>
   </footer>
 
   <div class="page-loader">Loading...</div>
@@ -190,7 +190,7 @@ def create_contact_html() -> str:
   </main>
 
   <footer class="site-footer">
-    <p>&copy; 2025 Barba.js Project</p>
+    <p>&copy; 2026 Barba.js Project</p>
   </footer>
 
   <div class="page-loader">Loading...</div>

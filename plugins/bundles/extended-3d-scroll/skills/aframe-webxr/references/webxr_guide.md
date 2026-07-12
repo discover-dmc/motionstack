@@ -26,7 +26,7 @@ WebXR is the web standard for VR and AR experiences. A-Frame provides high-level
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
   </head>
   <body>
     <a-scene webxr="requiredFeatures: local-floor">
@@ -72,13 +72,13 @@ WebXR is the web standard for VR and AR experiences. A-Frame provides high-level
 
 ```html
 <!-- Show VR button (default) -->
-<a-scene vr-mode-ui="enabled: true"></a-scene>
+<a-scene xr-mode-ui="enabled: true"></a-scene>
 
 <!-- Hide VR button -->
-<a-scene vr-mode-ui="enabled: false"></a-scene>
+<a-scene xr-mode-ui="enabled: false"></a-scene>
 
 <!-- Custom enter VR button -->
-<a-scene vr-mode-ui="enterVRButton: #myEnterVRButton"></a-scene>
+<a-scene xr-mode-ui="enterVRButton: #myEnterVRButton"></a-scene>
 
 <button id="myEnterVRButton">Enter VR</button>
 ```
@@ -162,12 +162,11 @@ if (scene.checkHeadsetConnected()) {
   renderer="
     antialias: false;
     colorManagement: true;
-    sortObjects: false;
-    physicallyCorrectLights: true;
+    sortTransparentObjects: true;
     maxCanvasWidth: 1920;
     maxCanvasHeight: 1920
   "
-  vr-mode-ui="enabled: true">
+  xr-mode-ui="enabled: true">
 
   <!-- Lower poly models for VR -->
   <a-entity gltf-model="#low-poly-model"></a-entity>
@@ -188,7 +187,7 @@ if (scene.checkHeadsetConnected()) {
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
   </head>
   <body>
     <a-scene
@@ -669,8 +668,8 @@ Optimizations for Quest 2/3/Pro:
 
 ```html
 <a-scene
-  renderer="antialias: false; physicallyCorrectLights: false"
-  vr-mode-ui="enabled: true">
+  renderer="antialias: false; foveationLevel: 1"
+  xr-mode-ui="enabled: true">
 
   <!-- Use low-poly models -->
   <a-entity gltf-model="#low-poly-model"></a-entity>
@@ -690,7 +689,7 @@ Higher quality settings for PC VR:
 
 ```html
 <a-scene
-  renderer="antialias: true; colorManagement: true; physicallyCorrectLights: true"
+  renderer="antialias: true; colorManagement: true"
   fog="type: linear; color: #AAA; near: 10; far: 100">
 
   <!-- High-poly models allowed -->
@@ -858,7 +857,7 @@ AFRAME.registerComponent('throttled-rotation', {
 
 ```html
 <!-- Test without VR headset using desktop mode -->
-<a-scene vr-mode-ui="enabled: true">
+<a-scene xr-mode-ui="enabled: true">
   <!-- WASD to move, mouse to look -->
   <a-camera wasd-controls look-controls></a-camera>
 </a-scene>
@@ -962,7 +961,7 @@ scene.addEventListener('renderstart', () => {
 ## Resources
 
 - [WebXR Device API Specification](https://www.w3.org/TR/webxr/)
-- [A-Frame WebXR Documentation](https://aframe.io/docs/1.7.0/introduction/webxr.html)
+- [A-Frame WebXR Documentation](https://aframe.io/docs/1.8.0/introduction/webxr.html)
 - [Meta Quest Development](https://developer.oculus.com/)
 - [WebXR Samples](https://immersive-web.github.io/webxr-samples/)
 - [Mozilla Mixed Reality Blog](https://mixedreality.mozilla.org/)

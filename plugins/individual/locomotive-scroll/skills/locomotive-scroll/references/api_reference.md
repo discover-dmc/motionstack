@@ -2,6 +2,42 @@
 
 Complete API documentation for Locomotive Scroll.
 
+**Current version: v5.0.1.** v5 is a complete rewrite built on [Lenis](https://github.com/darkroomengineering/lenis). Everything below this note documents the **v4 API** (`el`, `smooth`, `data-scroll-container`, `scrollerProxy`, etc.) — kept for teams maintaining v4 projects. For v5, see [Locomotive Scroll v5 API](#locomotive-scroll-v5-api) below and the official docs at [scroll.locomotive.ca/docs](https://scroll.locomotive.ca/docs).
+
+## Locomotive Scroll v5 API
+
+### Constructor Options (v5)
+
+```javascript
+new LocomotiveScroll(options)
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `lenisOptions` | object | `{}` | Passed through to the underlying [Lenis](https://github.com/darkroomengineering/lenis) instance: `wrapper`, `content`, `lerp`, `duration`, `orientation`, `gestureOrientation`, `smoothWheel`, `smoothTouch`, `wheelMultiplier`, `touchMultiplier`, `easing`, etc. |
+| `triggerRootMargin` | string | `'-1px -1px -1px -1px'` | IntersectionObserver root margin for one-shot trigger detection (`data-scroll-call`, `data-scroll-class`) |
+| `rafRootMargin` | string | `'100% 100% 100% 100%'` | IntersectionObserver root margin for continuously-animated elements (`data-scroll-speed`) |
+| `autoStart` | boolean | `true` | Auto-start the internal requestAnimationFrame loop. Set `false` when driving the loop externally (e.g. GSAP's ticker) |
+| `scrollCallback` | function | — | Called on every scroll tick with `{ scroll, limit, velocity, direction, progress }` |
+| `initCustomTicker` | function | — | Receives a `render` callback to hook into an external ticker instead of `requestAnimationFrame` |
+| `destroyCustomTicker` | function | — | Cleans up the external ticker hook set up in `initCustomTicker` |
+
+No `el`/container option is required — v5 scrolls the document by default. To scroll a custom element, set `lenisOptions.wrapper` and `lenisOptions.content`.
+
+### Data Attributes (v5)
+
+Confirmed in the v5 docs: `data-scroll`, `data-scroll-speed`, `data-scroll-class`, `data-scroll-repeat`, `data-scroll-position`, `data-scroll-call`, `data-scroll-event-progress`.
+
+`data-scroll-container`, `data-scroll-section`, `data-scroll-sticky`, `data-scroll-target`, and `data-scroll-id` are **not** documented for v5 — treat as v4-only until confirmed against [scroll.locomotive.ca/docs/documentation/options](https://scroll.locomotive.ca/docs/documentation/options). Use native CSS `position: sticky` in place of `data-scroll-sticky`.
+
+### Instance Methods (v5)
+
+v5 proxies most navigation/lifecycle methods to Lenis: `scrollTo(target, options)`, `start()`, `stop()`, `destroy()`, `on(event, callback)`, `off(event, callback)`. Verify exact option shapes (e.g. `scrollTo`'s `offset`/`duration`/`easing`/`immediate`) against Lenis's API before relying on them, since Locomotive v5's public docs pages didn't enumerate every method signature at time of writing.
+
+---
+
+## Locomotive Scroll v4 API (Legacy)
+
 ## Table of Contents
 
 - [Constructor Options](#constructor-options)

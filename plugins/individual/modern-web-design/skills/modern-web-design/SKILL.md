@@ -1,27 +1,26 @@
 ---
 name: modern-web-design
-description: Modern web design trends, principles, and implementation patterns for 2024-2025. Use this skill when designing websites, creating interactive experiences, implementing design systems, ensuring accessibility, or building performance-first interfaces. Triggers on tasks involving modern design trends, micro-interactions, scrollytelling, bold minimalism, cursor UX, glassmorphism, accessibility compliance, performance optimization, or design system architecture. References animation skills (GSAP, Framer Motion, React Spring), 3D skills (Three.js, R3F, Babylon.js), and component libraries for implementation guidance.
+description: Modern web design trends, principles, and implementation patterns for 2025-2026. Use this skill when designing websites, creating interactive experiences, implementing design systems, ensuring accessibility, or building performance-first interfaces. Triggers on tasks involving modern design trends, micro-interactions, scrollytelling, bold minimalism, cursor UX, glassmorphism, native platform features (container queries, view transitions, popover, anchor positioning), accessibility compliance, performance optimization, or design system architecture. References animation skills (GSAP, Framer Motion, React Spring), 3D skills (Three.js, R3F, Babylon.js), and component libraries for implementation guidance.
 ---
 
 # Modern Web Design
 
 ## Overview
 
-Modern web design in 2024-2025 emphasizes performance, accessibility, and meaningful interactions. This skill provides comprehensive guidance on current design trends, implementation patterns, and best practices for creating engaging, accessible, and performant web experiences.
+Modern web design in 2025-2026 emphasizes performance, accessibility, and meaningful interactions — increasingly delivered with native platform features (container queries, view transitions, popover/anchor positioning) rather than JS libraries where the platform now covers the need. This skill provides comprehensive guidance on current design trends, implementation patterns, and best practices for creating engaging, accessible, and performant web experiences.
 
 This meta-skill synthesizes knowledge from all animation, interaction, and 3D skills in this repository to provide holistic design guidance.
 
-## Core Design Principles (2024-2025)
+## Core Design Principles (2025-2026)
 
 ### 1. Performance-First Design
 
 **Philosophy**: Design decisions should prioritize Core Web Vitals and user experience on all devices.
 
-**Key Metrics**:
+**Key Metrics** (INP replaced FID as the official responsiveness Core Web Vital in March 2024; FID is retired):
 - Largest Contentful Paint (LCP): < 2.5s
-- First Input Delay (FID): < 100ms
-- Cumulative Layout Shift (CLS): < 0.1
 - Interaction to Next Paint (INP): < 200ms
+- Cumulative Layout Shift (CLS): < 0.1
 
 **Implementation Guidelines**:
 - Defer non-critical animations until after page load
@@ -249,6 +248,47 @@ updateCursor();
 - Respect "Do Not Track"
 - GDPR/CCPA compliance
 
+### 8. Native Platform Features (Baseline 2026)
+
+**Philosophy**: Reach for platform CSS/HTML before a JS library — these are now safe to use without fallbacks in production.
+
+**Baseline widely available — use freely**:
+- Container queries (`@container`, size and style queries) — component-level responsive design without JS
+- `:has()` relational pseudo-class — parent/sibling selection without JS
+- Native CSS nesting — no preprocessor required
+- `color-mix()`, OKLCH color — already covered in the color system above
+- Popover API (`popover` attribute, `popovertarget`) and `<dialog>` — native tooltips, menus, and modals with built-in focus trapping, light-dismiss, and top-layer stacking
+- `@starting-style` + `transition-behavior: allow-discrete` — CSS-only entry/exit transitions, including animating `display: none`
+
+```css
+/* Native popover, no JS positioning library */
+[popover] {
+  border: none;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+/* Entry/exit transition without JS */
+[popover] {
+  opacity: 0;
+  transition: opacity 0.2s, display 0.2s allow-discrete;
+  @starting-style { opacity: 0; }
+}
+[popover]:popover-open {
+  opacity: 1;
+}
+```
+
+**Baseline 2026 but check target browsers**:
+- CSS anchor positioning (`anchor()`, `position-anchor`) — tether a popover/tooltip to its trigger without a JS positioning library (Chrome 125+, Safari 26, Firefox 132+/147+)
+
+**Not yet Baseline — verify support before relying on it**:
+- Scroll-driven animations (`animation-timeline: scroll()` / `view()`) — shipped in Chrome and Safari, still Firefox-only-behind-flag; keep GSAP ScrollTrigger for cross-browser scroll animation until Firefox ships
+- Cross-document View Transitions — Chrome/Safari only, no Firefox
+- CSS `if()` and custom `@function` — Chrome/Edge only, experimental
+
+**Related Skills**: `gsap-scrolltrigger` (fallback for scroll-driven animation until Firefox ships it), `motion-framer` (for animation logic beyond CSS)
+
 ## Common Design Patterns
 
 ### Pattern 1: Immersive Hero Section
@@ -425,7 +465,8 @@ barba.init({
 ```
 
 **Modern Alternatives**:
-- View Transitions API (Chrome 111+, progressive enhancement)
+- View Transitions API, same-document: Baseline widely available (Chrome, Firefox 144+, Safari 18+) — use directly, no fallback needed
+- View Transitions API, cross-document (MPA): Chrome/Edge and Safari only, Firefox unsupported — still needs progressive enhancement (`@supports (view-transition-name: none)`)
 - Framer Motion's AnimatePresence for React SPAs
 - Shared element transitions
 

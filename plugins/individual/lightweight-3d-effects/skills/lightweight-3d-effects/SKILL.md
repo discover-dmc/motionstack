@@ -19,6 +19,15 @@ This skill combines three powerful libraries for decorative 3D elements and micr
 - Build lightweight landing pages with visual depth
 - Add micro-interactions that enhance UX without performance impact
 
+## Maintenance Status (checked July 2026)
+
+All three libraries are stable but effectively dormant. None are archived, so they remain safe to use, but none receive active updates:
+- **Zdog**: last npm release 1.1.3 (2019). No v2 ever shipped despite the README's "beta" framing. Small, dependency-free, and functionally complete for pseudo-3D illustration work — fine to keep using, don't expect new features.
+- **Vanta.js**: last npm release 0.5.24 (~2021), flagged "discontinued" by Snyk. Pin the exact version (`vanta@0.5.24`), not `@latest` — a future publish could break the hard three.js r134 dependency (see below). If a project needs active maintenance, consider building a custom Three.js background instead (see `threejs-webgl` skill).
+- **Vanilla-Tilt.js**: last npm release 1.8.1 (Aug 2023). Most recently updated of the three; still a reasonable default for tilt effects.
+
+**Vanta/Three.js version lock**: Vanta 0.5.24 requires three.js r134 (`0.134.0`) specifically. Do not upgrade the three.js CDN version independently of Vanta without testing — newer three.js releases have broken Vanta's internal API usage in the past.
+
 ## Zdog - Pseudo-3D Illustrations
 
 ### Core Concepts

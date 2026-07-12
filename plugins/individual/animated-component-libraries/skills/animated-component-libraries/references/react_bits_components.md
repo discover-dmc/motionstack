@@ -1,14 +1,25 @@
 # React Bits Component Library Reference
 
-Complete reference for React Bits - 90+ animated React components with minimal dependencies.
+Complete reference for React Bits - 130+ animated React components with minimal dependencies.
 
 ## Installation
 
-React Bits uses a copy-paste installation model. Visit [reactbits.dev](https://reactbits.dev), browse components, and copy the code directly into your project.
+React Bits supports three installation paths. Each component page on [reactbits.dev](https://reactbits.dev) offers four variants (JS-CSS, JS-TW, TS-CSS, TS-TW) to match your stack.
+
+```bash
+# Via shadcn CLI
+npx shadcn@latest add @react-bits/BlurText-TS-TW
+
+# Via jsrepo CLI (alternative, also supported)
+npx jsrepo add react-bits/BlurText
+
+# Manual copy-paste (still supported): visit reactbits.dev, browse components,
+# pick a variant, and copy the code directly into your project.
+```
 
 **Common Dependencies**:
 ```bash
-npm install framer-motion  # For animation-heavy components
+npm install motion        # For animation-heavy components (package renamed from framer-motion)
 npm install ogl           # For WebGL components (Particles, Plasma, Aurora)
 npm install react-icons   # For icon components (Dock)
 ```

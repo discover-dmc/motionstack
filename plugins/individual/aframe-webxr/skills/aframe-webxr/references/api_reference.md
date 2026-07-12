@@ -1,6 +1,6 @@
 # A-Frame API Reference
 
-Complete reference for A-Frame 1.7.x core components, primitives, and systems.
+Complete reference for A-Frame 1.8.x core components, primitives, and systems.
 
 ## Table of Contents
 
@@ -36,7 +36,7 @@ The `<a-scene>` element represents the 3D scene and contains all entities.
   stats
   inspector
   embedded
-  vr-mode-ui="enabled: true"
+  xr-mode-ui="enabled: true"
   loading-screen="enabled: true"
   renderer="antialias: true; colorManagement: true"
   webxr="requiredFeatures: hit-test; optionalFeatures: dom-overlay">
@@ -52,7 +52,7 @@ The `<a-scene>` element represents the 3D scene and contains all entities.
 | `stats` | boolean | false | Show performance stats |
 | `inspector` | boolean | false | Enable inspector (Ctrl+Alt+I) |
 | `embedded` | boolean | false | Embed in page (no fullscreen) |
-| `vr-mode-ui` | object | - | VR mode button config |
+| `xr-mode-ui` | object | - | VR mode button config |
 | `loading-screen` | object | - | Loading screen config |
 | `renderer` | object | - | Three.js renderer settings |
 | `webxr` | object | - | WebXR configuration |
@@ -1206,7 +1206,7 @@ See Animation component for full list of easing functions.
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
   </head>
   <body>
     <a-scene>

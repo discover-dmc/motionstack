@@ -1,6 +1,8 @@
-# Locomotive Scroll Starter Template
+# Locomotive Scroll Starter Template (v4)
 
 Complete starter template demonstrating Locomotive Scroll features including smooth scrolling, parallax effects, sticky elements, viewport detection, and scroll events.
+
+**Targets v4** (pinned in `package.json`). Locomotive Scroll v5 (current, Jan 2026) is a rewrite built on Lenis with a different options/markup shape — see the skill's SKILL.md and `references/` for the v5 patterns (`lenisOptions`, no `data-scroll-container`/`data-scroll-sticky`, `initCustomTicker` for GSAP). This template still works for v4 projects.
 
 ## Features
 
@@ -300,7 +302,7 @@ const scroll = new LocomotiveScroll({
 ## Resources
 
 - [Locomotive Scroll GitHub](https://github.com/locomotivemtl/locomotive-scroll)
-- [Official Documentation](https://locomotivemtl.github.io/locomotive-scroll/)
+- [Official Documentation](https://scroll.locomotive.ca/docs)
 - [CodePen Examples](https://codepen.io/tag/locomotive-scroll)
 
 ## License
