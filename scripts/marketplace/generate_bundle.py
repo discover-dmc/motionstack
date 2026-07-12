@@ -75,9 +75,6 @@ class BundleGenerator:
         # Create bundle directory structure
         self._create_bundle_structure()
 
-        # Generate bundle manifest
-        self._generate_manifest()
-
         # Copy all skill content
         self._copy_skills()
 
@@ -86,6 +83,10 @@ class BundleGenerator:
 
         # Create bundle agents
         self._create_bundle_agents()
+
+        # Generate bundle manifest (must run last: commands/agents fields
+        # list the actual aggregated .md files, which must exist by now)
+        self._generate_manifest()
 
         print(f"✅ Bundle generated: {self.bundle_name}\n")
 
@@ -104,6 +105,9 @@ class BundleGenerator:
 
     def _generate_manifest(self):
         """Generate bundle plugin.json"""
+        command_paths = sorted(f"./commands/{p.name}" for p in (self.bundle_dir / "commands").glob("*.md"))
+        agent_paths = sorted(f"./agents/{p.name}" for p in (self.bundle_dir / "agents").glob("*.md"))
+
         manifest = {
             "name": self.bundle_name,
             "version": "1.0.0",
@@ -117,8 +121,8 @@ class BundleGenerator:
             "bundle": True,
             "includes": self.bundle_config["skills"],
             "skills": "./skills/",
-            "commands": "./commands/",
-            "agents": "./agents/"
+            "commands": command_paths,
+            "agents": agent_paths
         }
 
         manifest_path = self.bundle_dir / ".claude-plugin" / "plugin.json"

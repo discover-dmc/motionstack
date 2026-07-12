@@ -17,6 +17,11 @@
   ],
   "category": "3d-authoring",
   "skills": "./skills/",
-  "commands": "./commands/",
-  "agents": "./agents/"
+  "commands": [
+    "./commands/component_builder.md",
+    "./commands/project_generator.md"
+  ],
+  "agents": [
+    "./agents/spline-interactive-pipeline.md"
+  ]
 }

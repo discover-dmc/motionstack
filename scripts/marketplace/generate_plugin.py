@@ -122,9 +122,6 @@ class PluginGenerator:
         # Create plugin directory structure
         self._create_plugin_structure()
 
-        # Generate plugin manifest
-        self._generate_manifest()
-
         # Copy skill content
         self._copy_skill_content()
 
@@ -133,6 +130,10 @@ class PluginGenerator:
 
         # Generate agents
         self._generate_agents()
+
+        # Generate plugin manifest (must run last: commands/agents fields
+        # list the actual generated .md files, which must exist by now)
+        self._generate_manifest()
 
         print(f"✅ Plugin generated: {self.skill_name}\n")
 
@@ -160,6 +161,9 @@ class PluginGenerator:
             "tags": [self.skill_name]
         })
 
+        command_paths = sorted(f"./commands/{p.name}" for p in (self.plugin_dir / "commands").glob("*.md"))
+        agent_paths = sorted(f"./agents/{p.name}" for p in (self.plugin_dir / "agents").glob("*.md"))
+
         manifest = {
             "name": self.skill_name,
             "version": "1.0.0",
@@ -171,8 +175,8 @@ class PluginGenerator:
             "keywords": metadata["tags"],
             "category": metadata["category"],
             "skills": "./skills/",
-            "commands": "./commands/",
-            "agents": "./agents/"
+            "commands": command_paths,
+            "agents": agent_paths
         }
 
         manifest_path = self.plugin_dir / ".claude-plugin" / "plugin.json"

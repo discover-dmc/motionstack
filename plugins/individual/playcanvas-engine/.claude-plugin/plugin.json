@@ -17,6 +17,11 @@
   ],
   "category": "3d-graphics",
   "skills": "./skills/",
-  "commands": "./commands/",
-  "agents": "./agents/"
+  "commands": [
+    "./commands/component_builder.md",
+    "./commands/project_generator.md"
+  ],
+  "agents": [
+    "./agents/playcanvas-engine-architect.md"
+  ]
 }

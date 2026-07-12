@@ -183,10 +183,16 @@ class MarketplaceValidator:
                 self.errors.append(f"{plugin_name}: plugin.json name '{manifest.get('name')}' doesn't match directory name")
 
             # Schema checks: catch the class of bug that silently broke installs before
-            # (path fields without './' prefix, author as a string instead of an object)
-            for path_field in ("skills", "commands", "agents"):
+            # (path fields without './' prefix, author as a string instead of an object,
+            # commands/agents given as a bare directory string instead of a file-path array)
+            for path_field, allow_dir_string in (("skills", True), ("commands", False), ("agents", False)):
                 value = manifest.get(path_field)
                 if value is None:
+                    continue
+                if isinstance(value, str) and not allow_dir_string:
+                    self.errors.append(
+                        f"{plugin_name}: plugin.json '{path_field}' must be an array of individual .md file paths, not a directory string '{value}'"
+                    )
                     continue
                 paths = value if isinstance(value, list) else [value]
                 for p in paths:

@@ -18,6 +18,11 @@
   ],
   "category": "2d-graphics",
   "skills": "./skills/",
-  "commands": "./commands/",
-  "agents": "./agents/"
+  "commands": [
+    "./commands/particle_builder.md",
+    "./commands/sprite_generator.md"
+  ],
+  "agents": [
+    "./agents/pixijs-2d-architect.md"
+  ]
 }
